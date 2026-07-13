@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics - Intermediate Examination (Class 12)</title>
+    
+    <!-- Google Fonts: Kalam -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax for rendering LaTeX equations -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --paper-color: #ffffff;
+            --text-color: #1f2937;
+            --accent-color: #2563eb;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Kalam', cursive, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--paper-color);
+            padding: 40px 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header Styles */
+        .exam-header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .exam-header h1 {
+            font-size: 2.2rem;
+            color: #111827;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .exam-header h2 {
+            font-size: 1.5rem;
+            color: #374151;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .exam-meta {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        /* Instructions Section */
+        .instructions {
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 40px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            color: var(--accent-color);
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            font-size: 1.1rem;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        /* Section Styles */
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            padding: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .section-instruction {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 25px;
+            color: #4b5563;
+        }
+
+        .marks-info {
+            text-align: right;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #dc2626;
+        }
+
+        /* Questions Styles */
+        .question-block {
+            margin-bottom: 30px;
+            break-inside: avoid;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-left: 30px;
+            font-size: 1.15rem;
+        }
+
+        .option {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Short/Long Answer styling */
+        .subjective-list {
+            list-style: none;
+            counter-reset: subjective-counter;
+        }
+
+        .subjective-list li {
+            position: relative;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            padding-left: 35px;
+        }
+
+        .subjective-list li::before {
+            counter-increment: subjective-counter;
+            content: counter(subjective-counter) ". ";
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+        
+        .long-answer-list {
+            counter-reset: long-answer-counter 20; /* Starts at 21 */
+        }
+        .long-answer-list li::before {
+            counter-increment: long-answer-counter;
+            content: counter(long-answer-counter) ". ";
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            .exam-header h1 {
+                font-size: 1.8rem;
+            }
+            .exam-header h2 {
+                font-size: 1.3rem;
+            }
+            .exam-meta {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .question-text, .subjective-list li {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- Header -->
+    <header class="exam-header">
+        <h1>बिहार विद्यालय परीक्षा समिति</h1>
+        <h2>इण्टरमीडिएट परीक्षा (कक्षा - 12)<br>INTERMEDIATE EXAMINATION (CLASS - 12)</h2>
+        <h3>विषय : भौतिक शास्त्र (Physics)</h3>
+        <p>(सैद्धांतिक / Theory)</p>
+
+        <div class="exam-meta">
+            <span>कुल प्रश्नों की संख्या : $70+20+5=95$</span>
+            <span>पूर्णांक : 70</span>
+            <span>कुल मुद्रित पृष्ठों की संख्या : 8</span>
+            <span>समय : 3 घंटे 15 मिनट</span>
+        </div>
+    </header>
+
+    <!-- Instructions -->
+    <section class="instructions">
+        <h3>परीक्षार्थियों के लिए निर्देश (Instructions for Candidates):</h3>
+        <ol>
+            <li>परीक्षार्थी यथासंभव अपने शब्दों में ही उत्तर दें।</li>
+            <li>दाहिनी ओर हाशिये पर दिये हुए अंक पूर्णांक निर्दिष्ट करते हैं।</li>
+            <li>इस प्रश्न-पत्र को ध्यानपूर्वक पढ़ने के लिए 15 मिनट का अतिरिक्त समय दिया गया है।</li>
+            <li>यह प्रश्न-पत्र तीन खण्डों में है: खण्ड-अ, खण्ड-ब, और खण्ड-स।</li>
+        </ol>
+    </section>
+
+    <!-- SECTION A -->
+    <h2 class="section-title">खण्ड - अ / SECTION - A<br><small style="font-size: 1.2rem; font-weight: normal;">(वस्तुनिष्ठ प्रश्न / Objective Type Questions)</small></h2>
+    
+    <p class="section-instruction">निर्देशः प्रश्न संख्या 1 से 70 तक के प्रत्येक प्रश्न के साथ चार विकल्प दिए गए हैं, जिनमें से एक सही है। अपने द्वारा चुने गए सही विकल्प को OMR शीट पर चिह्नित करें। किन्हीं 35 प्रश्नों के उत्तर दें।</p>
+    <div class="marks-info">अंक: $(35 \times 1 = 35$ अंक)</div>
+
+    <div class="objective-questions">
+        
+        <!-- Question 1 -->
+        <div class="question-block">
+            <div class="question-text"><span>1.</span> विद्युत फ्लक्स (Electric Flux) का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> Wb</div>
+                <div class="option"><span>(B)</span> V-m</div>
+                <div class="option"><span>(C)</span> $V/m$</div>
+                <div class="option"><span>(D)</span> N/C</div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-block">
+            <div class="question-text"><span>2.</span> निर्वात की चुम्बकशीलता $(\mu_{0})$ का मान होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $4\pi\times10^{-7}T~mA^{-1}$</div>
+                <div class="option"><span>(B)</span> $4\pi\times10^{-6}T~mA^{-1}$</div>
+                <div class="option"><span>(C)</span> $4\pi\times10^{-5}TmA^{-1}$</div>
+                <div class="option"><span>(D)</span> $4\pi\times10^{-9}T~mA^{-1}$</div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-block">
+            <div class="question-text"><span>3.</span> प्रकाश के व्यतिकरण (Interference of Light) का कारण है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> कलांतर</div>
+                <div class="option"><span>(B)</span> पथांतर</div>
+                <div class="option"><span>(C)</span> वेग</div>
+                <div class="option"><span>(D)</span> तरंगदैर्ध्य</div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-block">
+            <div class="question-text"><span>4.</span> इलेक्ट्रॉन पर आवेश (Charge) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $1.6\times10^{-19}C$</div>
+                <div class="option"><span>(B)</span> $-1.6\times10^{-19}C$</div>
+                <div class="option"><span>(C)</span> $1.6\times10^{19}C$</div>
+                <div class="option"><span>(D)</span> $-1.6\times10^{19}C$</div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-block">
+            <div class="question-text"><span>5.</span> NAND गेट का बूलियन व्यंजक (Boolean expression) है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $Y=A\cdot B$</div>
+                <div class="option"><span>(B)</span> $Y=A+B$</div>
+                <div class="option"><span>(C)</span> $Y=\overline{A\cdot B}$</div>
+                <div class="option"><span>(D)</span> $Y=\overline{A+B}$</div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-block">
+            <div class="question-text"><span>6.</span> विद्युत चुम्बकीय तरंगों की प्रकृति होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> अनुप्रस्थ</div>
+                <div class="option"><span>(B)</span> अनुदैर्ध्य</div>
+                <div class="option"><span>(C)</span> दोनों</div>
+                <div class="option"><span>(D)</span> इनमें से कोई नहीं</div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-block">
+            <div class="question-text"><span>7.</span> लेंस की क्षमता का मात्रक होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> जूल</div>
+                <div class="option"><span>(B)</span> डायोप्टर</div>
+                <div class="option"><span>(C)</span> वाट</div>
+                <div class="option"><span>(D)</span> कैंडेला</div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-block">
+            <div class="question-text"><span>8.</span> प्रकाश वर्ष (Light year) किस भौतिक राशि का मात्रक है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> दूरी</div>
+                <div class="option"><span>(B)</span> समय</div>
+                <div class="option"><span>(C)</span> ऊर्जा</div>
+                <div class="option"><span>(D)</span> प्रकाश की तीव्रता</div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-block">
+            <div class="question-text"><span>9.</span> $\alpha$-कण (Alpha particle) है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> हीलियम का नाभिक</div>
+                <div class="option"><span>(B)</span> इलेक्ट्रॉन</div>
+                <div class="option"><span>(C)</span> प्रोटॉन</div>
+                <div class="option"><span>(D)</span> न्यूट्रॉन</div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-block">
+            <div class="question-text"><span>10.</span> स्व-प्रेरकत्व (Self-inductance) का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> वेबर</div>
+                <div class="option"><span>(B)</span> ओम</div>
+                <div class="option"><span>(C)</span> हेनरी</div>
+                <div class="option"><span>(D)</span> गॉस</div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-block">
+            <div class="question-text"><span>11.</span> संधारित्र की धारिता (Capacitance) का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> वोल्ट (V)</div>
+                <div class="option"><span>(B)</span> न्यूटन (N)</div>
+                <div class="option"><span>(C)</span> फैराड (F)</div>
+                <div class="option"><span>(D)</span> एम्पीयर</div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-block">
+            <div class="question-text"><span>12.</span> विद्युत परिपथ की शक्ति (Power) होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $V\cdot R$</div>
+                <div class="option"><span>(B)</span> $V^{2}\cdot R$</div>
+                <div class="option"><span>(C)</span> $V^{2}/R$</div>
+                <div class="option"><span>(D)</span> $V^{2}\cdot R\cdot I$</div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-block">
+            <div class="question-text"><span>13.</span> आदर्श एमीटर (Ideal Ammeter) का प्रतिरोध होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> शून्य (Zero)</div>
+                <div class="option"><span>(B)</span> बहुत कम</div>
+                <div class="option"><span>(C)</span> बहुत अधिक</div>
+                <div class="option"><span>(D)</span> अनंत (Infinite)</div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-block">
+            <div class="question-text"><span>14.</span> किर्कहॉफ का बिंदु नियम (Point Rule) पालन करता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> ऊर्जा संरक्षण का</div>
+                <div class="option"><span>(B)</span> आवेश संरक्षण का</div>
+                <div class="option"><span>(C)</span> संवेग संरक्षण का</div>
+                <div class="option"><span>(D)</span> द्रव्यमान संरक्षण का</div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-block">
+            <div class="question-text"><span>15.</span> चुम्बकीय क्षेत्र $(\vec{B})$ में स्थित $\vec{m}$ चुम्बकीय आघूर्ण वाले धारा पाश द्वारा अनुभूत बल आघूर्ण $(\vec{\tau})$ है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $\vec{\tau}=\vec{m}\times\vec{B}$</div>
+                <div class="option"><span>(B)</span> $\vec{\tau}=\vec{B}\times\vec{m}$</div>
+                <div class="option"><span>(C)</span> $\vec{\tau}=\vec{m}\cdot\vec{B}$</div>
+                <div class="option"><span>(D)</span> $\tau=m/B$</div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-block">
+            <div class="question-text"><span>16.</span> पृथ्वी के चुम्बकीय ध्रुव पर नमन कोण (Angle of dip) का मान होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $0^{\circ}$</div>
+                <div class="option"><span>(B)</span> $45^{\circ}$</div>
+                <div class="option"><span>(C)</span> $90^{\circ}$</div>
+                <div class="option"><span>(D)</span> $180^{\circ}$</div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-block">
+            <div class="question-text"><span>17.</span> लेंज का नियम संबद्ध है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आवेश से</div>
+                <div class="option"><span>(B)</span> द्रव्यमान से</div>
+                <div class="option"><span>(C)</span> ऊर्जा से</div>
+                <div class="option"><span>(D)</span> संवेग से</div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-block">
+            <div class="question-text"><span>18.</span> L-R परिपथ का शक्ति गुणांक (Power factor) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $R+\omega L$</div>
+                <div class="option"><span>(B)</span> $R/\sqrt{R^{2}+\omega^{2}L^{2}}$</div>
+                <div class="option"><span>(C)</span> $\sqrt{R^{2}+\omega^{2}L^{2}}/R$</div>
+                <div class="option"><span>(D)</span> $\omega L/R$</div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-block">
+            <div class="question-text"><span>19.</span> प्रत्यावर्ती धारा के शिखर मान $(I_{0})$ और वर्ग माध्य मूल मान $(I_{rms})$ में संबंध है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $I_{0}=\sqrt{2}I_{rms}$</div>
+                <div class="option"><span>(B)</span> $I_{rms}=\sqrt{2}I_{0}$</div>
+                <div class="option"><span>(C)</span> $I_{0}=I_{rms}$</div>
+                <div class="option"><span>(D)</span> $I_{rms}=I_{0}/2$</div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-block">
+            <div class="question-text"><span>20.</span> विद्युत चुम्बकीय तरंग के संचरण की दिशा होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $\vec{B}$ के समानांतर</div>
+                <div class="option"><span>(B)</span> $\vec{E}$ के समानांतर</div>
+                <div class="option"><span>(C)</span> $\vec{B} \times \vec{E}$ के समानांतर</div>
+                <div class="option"><span>(D)</span> $\vec{E}\times\vec{B}$ के समानांतर</div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question-block">
+            <div class="question-text"><span>21.</span> हीरा का अपवर्तनांक करीब होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> 1.00</div>
+                <div class="option"><span>(B)</span> 1.50</div>
+                <div class="option"><span>(C)</span> 2.42</div>
+                <div class="option"><span>(D)</span> 4.14</div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-block">
+            <div class="question-text"><span>22.</span> प्रकाश के अनुप्रस्थ तरंग प्रकृति की पुष्टि करता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> व्यतिकरण</div>
+                <div class="option"><span>(B)</span> परावर्तन</div>
+                <div class="option"><span>(C)</span> ध्रुवण</div>
+                <div class="option"><span>(D)</span> वर्ण-विक्षेपण</div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-block">
+            <div class="question-text"><span>23.</span> सामान्य समायोजन के लिए खगोलीय दूरदर्शक की आवर्धन क्षमता होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $-f_{o}/f_{e}$</div>
+                <div class="option"><span>(B)</span> $-f_{o}\times f_{e}$</div>
+                <div class="option"><span>(C)</span> $-f_{e}/f_{o}$</div>
+                <div class="option"><span>(D)</span> $-f_{o}+f_{e}$</div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-block">
+            <div class="question-text"><span>24.</span> इलेक्ट्रॉन वोल्ट (eV) द्वारा मापा जाता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आवेश</div>
+                <div class="option"><span>(B)</span> विभवांतर</div>
+                <div class="option"><span>(C)</span> धारा</div>
+                <div class="option"><span>(D)</span> ऊर्जा</div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-block">
+            <div class="question-text"><span>25.</span> हाइड्रोजन स्पेक्ट्रम की कौन सी श्रेणी दृश्य भाग (Visible region) में पड़ती है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> लाइमन श्रेणी</div>
+                <div class="option"><span>(B)</span> बामर श्रेणी</div>
+                <div class="option"><span>(C)</span> पाश्चन श्रेणी</div>
+                <div class="option"><span>(D)</span> ब्रैकेट श्रेणी</div>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-block">
+            <div class="question-text"><span>26.</span> जितने समय में किसी रेडियोऐक्टिव पदार्थ की राशि अपने प्रारंभिक परिमाण की आधी हो जाती है, उसे कहते हैं :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> औसत आयु</div>
+                <div class="option"><span>(B)</span> अर्द्ध आयु</div>
+                <div class="option"><span>(C)</span> क्षय नियतांक</div>
+                <div class="option"><span>(D)</span> आवर्त काल</div>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-block">
+            <div class="question-text"><span>27.</span> 'NOR' गेट के लिए बूलियन व्यंजक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $Y=A\cdot B$</div>
+                <div class="option"><span>(B)</span> $Y=\overline{A\cdot B}$</div>
+                <div class="option"><span>(C)</span> $Y=A+B$</div>
+                <div class="option"><span>(D)</span> $Y=\overline{A+B}$</div>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-block">
+            <div class="question-text"><span>28.</span> दशमिक संख्या 25 का द्विआधारी (Binary) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $(1100)_2$</div>
+                <div class="option"><span>(B)</span> $(1001)_2$</div>
+                <div class="option"><span>(C)</span> $(11001)_2$</div>
+                <div class="option"><span>(D)</span> $(11101)_2$</div>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-block">
+            <div class="question-text"><span>29.</span> आयाम मॉडुलन सूचकांक का मान होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> हमेशा शून्य</div>
+                <div class="option"><span>(B)</span> 0 और 1 के बीच</div>
+                <div class="option"><span>(C)</span> 1 और $\infty$ के बीच</div>
+                <div class="option"><span>(D)</span> हमेशा 1</div>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-block">
+            <div class="question-text"><span>30.</span> स्थिर विभवांतर पर किसी विद्युत परिपथ का प्रतिरोध आधा कर दिया जाता है, उत्पन्न ऊष्मा का मान होगा :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आधा</div>
+                <div class="option"><span>(B)</span> दोगुना</div>
+                <div class="option"><span>(C)</span> चार गुना</div>
+                <div class="option"><span>(D)</span> समान रहेगा</div>
+            </div>
+        </div>
+
+        <!-- Question 31 -->
+        <div class="question-block">
+            <div class="question-text"><span>31.</span> प्रत्यावर्ती धारा परिपथ में यथार्थ माध्य शक्ति का व्यंजक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $P_{av}=E_{rms}\cos\phi$</div>
+                <div class="option"><span>(B)</span> $P_{av}=I_{rms}\cos\phi$</div>
+                <div class="option"><span>(C)</span> $P_{av}=E_{rms}I_{rms}\cos\phi$</div>
+                <div class="option"><span>(D)</span> $P_{av}=E_{rms}I_{rms}\sin\phi$</div>
+            </div>
+        </div>
+
+        <!-- Question 32 -->
+        <div class="question-block">
+            <div class="question-text"><span>32.</span> शक्ति गुणांक (Power factor) के लिए निम्नलिखित में कौन संबंध सही है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आभासी माध्य शक्ति / यथार्थ माध्य शक्ति</div>
+                <div class="option"><span>(B)</span> यथार्थ माध्य शक्ति / आभासी माध्य शक्ति</div>
+                <div class="option"><span>(C)</span> आभासी माध्य शक्ति $\times$ यथार्थ माध्य शक्ति</div>
+                <div class="option"><span>(D)</span> यथार्थ माध्य शक्ति $+$ आभासी माध्य शक्ति</div>
+            </div>
+        </div>
+
+        <!-- Question 33 -->
+        <div class="question-block">
+            <div class="question-text"><span>33.</span> कार्बन प्रतिरोध के हरे रंग (Green color) के कोड का मान है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> 3</div>
+                <div class="option"><span>(B)</span> 4</div>
+                <div class="option"><span>(C)</span> 5</div>
+                <div class="option"><span>(D)</span> 6</div>
+            </div>
+        </div>
+
+        <!-- Question 34 -->
+        <div class="question-block">
+            <div class="question-text"><span>34.</span> चुम्बकीय क्षेत्र $(\vec{B})$ का ऊर्जा घनत्व (Energy density) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $B^{2}/\mu_{0}$</div>
+                <div class="option"><span>(B)</span> $B^{2}/2\mu_{0}$</div>
+                <div class="option"><span>(C)</span> $B/2\mu_{0}$</div>
+                <div class="option"><span>(D)</span> $2B^{2}/\mu_{0}$</div>
+            </div>
+        </div>
+
+        <!-- Question 35 -->
+        <div class="question-block">
+            <div class="question-text"><span>35.</span> ताप बढ़ने के साथ अर्द्धचालक का प्रतिरोध :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> बढ़ता है</div>
+                <div class="option"><span>(B)</span> घटता है</div>
+                <div class="option"><span>(C)</span> अपरिवर्तित रहता है</div>
+                <div class="option"><span>(D)</span> पहले बढ़ता है फिर घटता है</div>
+            </div>
+        </div>
+
+        <!-- Question 36 -->
+        <div class="question-block">
+            <div class="question-text"><span>36.</span> अपचायी ट्रांसफॉर्मर (Step-down transformer) में कौन-सी राशि घटती है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> धारा</div>
+                <div class="option"><span>(B)</span> वोल्टेज</div>
+                <div class="option"><span>(C)</span> शक्ति</div>
+                <div class="option"><span>(D)</span> आवृत्ति</div>
+            </div>
+        </div>
+
+        <!-- Question 37 -->
+        <div class="question-block">
+            <div class="question-text"><span>37.</span> रेडियोऐक्टिव परमाणु के लिए कौन सा संबंध सही है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> अर्द्ध आयु = औसत आयु</div>
+                <div class="option"><span>(B)</span> अर्द्ध आयु = $2 \times$ औसत आयु</div>
+                <div class="option"><span>(C)</span> अर्द्ध आयु = $0.693 \times$ औसत आयु</div>
+                <div class="option"><span>(D)</span> अर्द्ध आयु = $1.093 \times$ औसत आयु</div>
+            </div>
+        </div>
+
+        <!-- Question 38 -->
+        <div class="question-block">
+            <div class="question-text"><span>38.</span> निम्नलिखित में कौन विद्युत चुम्बकीय तरंग नहीं है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> प्रकाश तरंगें</div>
+                <div class="option"><span>(B)</span> एक्स किरणें</div>
+                <div class="option"><span>(C)</span> ध्वनि तरंगें</div>
+                <div class="option"><span>(D)</span> अवरक्त किरणें</div>
+            </div>
+        </div>
+
+        <!-- Question 39 -->
+        <div class="question-block">
+            <div class="question-text"><span>39.</span> पारदर्शी माध्यम हीरा के लिए क्रांतिक कोण (Critical angle) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $48.75^{\circ}$</div>
+                <div class="option"><span>(B)</span> $41.14^{\circ}$</div>
+                <div class="option"><span>(C)</span> $37.31^{\circ}$</div>
+                <div class="option"><span>(D)</span> $24.41^{\circ}$</div>
+            </div>
+        </div>
+
+        <!-- Question 40 -->
+        <div class="question-block">
+            <div class="question-text"><span>40.</span> फोटॉन की ऊर्जा बराबर होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $h\nu$</div>
+                <div class="option"><span>(B)</span> $h\nu/c$</div>
+                <div class="option"><span>(C)</span> $h/\nu$</div>
+                <div class="option"><span>(D)</span> $hc/\nu$</div>
+            </div>
+        </div>
+
+        <!-- Question 41 -->
+        <div class="question-block">
+            <div class="question-text"><span>41.</span> चुम्बकन क्षेत्र की तीव्रता (H) बराबर होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $B_{0}/\mu_{0}$</div>
+                <div class="option"><span>(B)</span> $\mu_{0}/B_{0}$</div>
+                <div class="option"><span>(C)</span> $\mu_{0}B_{0}$</div>
+                <div class="option"><span>(D)</span> $\sqrt{\mu_{0}B_{0}}$</div>
+            </div>
+        </div>
+
+        <!-- Question 42 -->
+        <div class="question-block">
+            <div class="question-text"><span>42.</span> निम्नलिखित में कौन ऊंचाई ट्रांसफॉर्मर (Step-up transformer) के लिए सही है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $V_{s} &lt; V_{p}$</div>
+                <div class="option"><span>(B)</span> $V_{s} > V_{p}$</div>
+                <div class="option"><span>(C)</span> $V_{s} = V_{p}$</div>
+                <div class="option"><span>(D)</span> $V_{s} \ll V_{p}$</div>
+            </div>
+        </div>
+
+        <!-- Question 43 -->
+        <div class="question-block">
+            <div class="question-text"><span>43.</span> दिष्ट धारा (D.C.) के लिए प्रेरणिक प्रतिघात (Inductive reactance) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> शून्य</div>
+                <div class="option"><span>(B)</span> अनंत</div>
+                <div class="option"><span>(C)</span> $\omega L$</div>
+                <div class="option"><span>(D)</span> $1/\omega L$</div>
+            </div>
+        </div>
+
+        <!-- Question 44 -->
+        <div class="question-block">
+            <div class="question-text"><span>44.</span> धारावाही कुण्डली का विद्युत चुम्बकीय आघूर्ण होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $NI/A$</div>
+                <div class="option"><span>(B)</span> $NIA$</div>
+                <div class="option"><span>(C)</span> $N/IA$</div>
+                <div class="option"><span>(D)</span> शून्य</div>
+            </div>
+        </div>
+
+        <!-- Question 45 -->
+        <div class="question-block">
+            <div class="question-text"><span>45.</span> विद्युत तीव्रता का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> N m</div>
+                <div class="option"><span>(B)</span> $N/C$</div>
+                <div class="option"><span>(C)</span> N C</div>
+                <div class="option"><span>(D)</span> V m</div>
+            </div>
+        </div>
+
+        <!-- Question 46 -->
+        <div class="question-block">
+            <div class="question-text"><span>46.</span> निम्नलिखित में से किस भौतिक राशि का पुनर्वितरण प्रकाश के व्यतिकरण में होता है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आवृत्ति</div>
+                <div class="option"><span>(B)</span> तीव्रता</div>
+                <div class="option"><span>(C)</span> तरंगदैर्ध्य</div>
+                <div class="option"><span>(D)</span> चाल</div>
+            </div>
+        </div>
+
+        <!-- Question 47 -->
+        <div class="question-block">
+            <div class="question-text"><span>47.</span> बोर (Bohr) का आवृत्ति शर्त होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $E_{1}-E_{2}=h\nu$</div>
+                <div class="option"><span>(B)</span> $E_{1}+E_{2}=h\nu$</div>
+                <div class="option"><span>(C)</span> $E_{1}-E_{2}=h/\nu$</div>
+                <div class="option"><span>(D)</span> $E_{1}\cdot E_{2}=h\nu$</div>
+            </div>
+        </div>
+
+        <!-- Question 48 -->
+        <div class="question-block">
+            <div class="question-text"><span>48.</span> 1 amu (परमाणु द्रव्यमान इकाई) बराबर होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $1.66\times10^{-27}kg$</div>
+                <div class="option"><span>(B)</span> $1.66\times10^{-24}kg$</div>
+                <div class="option"><span>(C)</span> $1.66\times10^{-31}kg$</div>
+                <div class="option"><span>(D)</span> $1.66\times10^{-19}kg$</div>
+            </div>
+        </div>
+
+        <!-- Question 49 -->
+        <div class="question-block">
+            <div class="question-text"><span>49.</span> द्वि-आधारी संख्या $(1001)_{2}$ की दशमिक संख्या होती है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> 12</div>
+                <div class="option"><span>(B)</span> 10</div>
+                <div class="option"><span>(C)</span> 9</div>
+                <div class="option"><span>(D)</span> 8</div>
+            </div>
+        </div>
+
+        <!-- Question 50 -->
+        <div class="question-block">
+            <div class="question-text"><span>50.</span> जब प्रकाश एक माध्यम से दूसरे माध्यम में प्रवेश करता है तो कौन-सी राशि नहीं बदलती है?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> तरंगदैर्ध्य</div>
+                <div class="option"><span>(B)</span> वेग</div>
+                <div class="option"><span>(C)</span> आवृत्ति</div>
+                <div class="option"><span>(D)</span> आयाम</div>
+            </div>
+        </div>
+
+        <!-- Question 51 -->
+        <div class="question-block">
+            <div class="question-text"><span>51.</span> ब्रूस्टर का नियम है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $\mu=\sin i_{p}$</div>
+                <div class="option"><span>(B)</span> $\mu=\cos i_{p}$</div>
+                <div class="option"><span>(C)</span> $\mu=\tan i_{p}$</div>
+                <div class="option"><span>(D)</span> $\mu=\cot i_{p}$</div>
+            </div>
+        </div>
+
+        <!-- Question 52 -->
+        <div class="question-block">
+            <div class="question-text"><span>52.</span> एक फैराडे (Faraday) बराबर होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> 9650 C</div>
+                <div class="option"><span>(B)</span> 96500 C</div>
+                <div class="option"><span>(C)</span> $9.65\times10^{4}C$</div>
+                <div class="option"><span>(D)</span> B और C दोनों</div>
+            </div>
+        </div>
+
+        <!-- Question 53 -->
+        <div class="question-block">
+            <div class="question-text"><span>53.</span> चुम्बकीय फ्लक्स का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> Tesla</div>
+                <div class="option"><span>(B)</span> Weber</div>
+                <div class="option"><span>(C)</span> Henry</div>
+                <div class="option"><span>(D)</span> Faraday</div>
+            </div>
+        </div>
+
+        <!-- Question 54 -->
+        <div class="question-block">
+            <div class="question-text"><span>54.</span> दो विद्युत आवेशों के बीच लगने वाले बल को नियंत्रित करने वाले नियम को कहा जाता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> फैराडे का नियम</div>
+                <div class="option"><span>(B)</span> एम्पीयर का नियम</div>
+                <div class="option"><span>(C)</span> कूलॉम का नियम</div>
+                <div class="option"><span>(D)</span> ओम का नियम</div>
+            </div>
+        </div>
+
+        <!-- Question 55 -->
+        <div class="question-block">
+            <div class="question-text"><span>55.</span> विद्युत द्विध्रुव आघूर्ण (Electric Dipole Moment) का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> Cm</div>
+                <div class="option"><span>(B)</span> $C/m$</div>
+                <div class="option"><span>(C)</span> $Cm^{2}$</div>
+                <div class="option"><span>(D)</span> $C^{2}m$</div>
+            </div>
+        </div>
+
+        <!-- Question 56 -->
+        <div class="question-block">
+            <div class="question-text"><span>56.</span> एक आवेशित चालक की सतह के किसी बिंदु पर विद्युत क्षेत्र की तीव्रता :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> शून्य होती है</div>
+                <div class="option"><span>(B)</span> सतह के लंबवत होती है</div>
+                <div class="option"><span>(C)</span> सतह के स्पर्शीय होती है</div>
+                <div class="option"><span>(D)</span> सतह से $45^{\circ}$ पर होती है</div>
+            </div>
+        </div>
+
+        <!-- Question 57 -->
+        <div class="question-block">
+            <div class="question-text"><span>57.</span> इलेक्ट्रॉन का विशिष्ट आवेश (Specific charge) होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $1.8\times10^{11}C/kg$</div>
+                <div class="option"><span>(B)</span> $1.8\times10^{-19}C/kg$</div>
+                <div class="option"><span>(C)</span> $1.9\times10^{-19}C/kg$</div>
+                <div class="option"><span>(D)</span> $1.6\times10^{19}C/kg$</div>
+            </div>
+        </div>
+
+        <!-- Question 58 -->
+        <div class="question-block">
+            <div class="question-text"><span>58.</span> विद्युतीय परिपथ के किसी बिंदु पर सभी धाराओं का बीजगणितीय योग होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> शून्य</div>
+                <div class="option"><span>(B)</span> अनंत</div>
+                <div class="option"><span>(C)</span> धनात्मक</div>
+                <div class="option"><span>(D)</span> ऋणात्मक</div>
+            </div>
+        </div>
+
+        <!-- Question 59 -->
+        <div class="question-block">
+            <div class="question-text"><span>59.</span> गतिशील आवेश (Moving charge) उत्पन्न करता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> केवल विद्युत क्षेत्र</div>
+                <div class="option"><span>(B)</span> केवल चुम्बकीय क्षेत्र</div>
+                <div class="option"><span>(C)</span> विद्युत एवं चुम्बकीय क्षेत्र दोनों</div>
+                <div class="option"><span>(D)</span> इनमें से कोई नहीं</div>
+            </div>
+        </div>
+
+        <!-- Question 60 -->
+        <div class="question-block">
+            <div class="question-text"><span>60.</span> आदर्श वोल्टमीटर का प्रतिरोध होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> शून्य</div>
+                <div class="option"><span>(B)</span> बहुत कम</div>
+                <div class="option"><span>(C)</span> बहुत अधिक</div>
+                <div class="option"><span>(D)</span> अनंत</div>
+            </div>
+        </div>
+
+        <!-- Question 61 -->
+        <div class="question-block">
+            <div class="question-text"><span>61.</span> चुम्बकीय ध्रुव प्राबल्य (Magnetic pole strength) का S.I. मात्रक है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> N</div>
+                <div class="option"><span>(B)</span> $N/Am$</div>
+                <div class="option"><span>(C)</span> Am</div>
+                <div class="option"><span>(D)</span> T</div>
+            </div>
+        </div>
+
+        <!-- Question 62 -->
+        <div class="question-block">
+            <div class="question-text"><span>62.</span> चुम्बकीय विषुवत रेखा पर नमन कोण का मान होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $0^{\circ}$</div>
+                <div class="option"><span>(B)</span> $90^{\circ}$</div>
+                <div class="option"><span>(C)</span> $45^{\circ}$</div>
+                <div class="option"><span>(D)</span> $60^{\circ}$</div>
+            </div>
+        </div>
+
+        <!-- Question 63 -->
+        <div class="question-block">
+            <div class="question-text"><span>63.</span> निर्वात में विद्युत चुम्बकीय तरंग की चाल का सूत्र है:</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $c=\sqrt{\mu_{0}\epsilon_{0}}$</div>
+                <div class="option"><span>(B)</span> $c=1/\sqrt{\mu_{0}\epsilon_{0}}$</div>
+                <div class="option"><span>(C)</span> $c=\mu_{0}\epsilon_{0}$</div>
+                <div class="option"><span>(D)</span> $c=1/\mu_{0}\epsilon_{0}$</div>
+            </div>
+        </div>
+
+        <!-- Question 64 -->
+        <div class="question-block">
+            <div class="question-text"><span>64.</span> मृगमरीचिका (Mirage) का कारण है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> अपवर्तन</div>
+                <div class="option"><span>(B)</span> व्यतिकरण</div>
+                <div class="option"><span>(C)</span> पूर्ण आंतरिक परावर्तन</div>
+                <div class="option"><span>(D)</span> विवर्तन</div>
+            </div>
+        </div>
+
+        <!-- Question 65 -->
+        <div class="question-block">
+            <div class="question-text"><span>65.</span> दो उत्तल लेंस जो संपर्क में हैं, का समतुल्य लेंस होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> उत्तल</div>
+                <div class="option"><span>(B)</span> अवतल</div>
+                <div class="option"><span>(C)</span> बेलनाकार</div>
+                <div class="option"><span>(D)</span> समतल-अवतल</div>
+            </div>
+        </div>
+
+        <!-- Question 66 -->
+        <div class="question-block">
+            <div class="question-text"><span>66.</span> प्रकाश के रंग का कारण है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> इसकी आवृत्ति</div>
+                <div class="option"><span>(B)</span> इसका वेग</div>
+                <div class="option"><span>(C)</span> इसकी कला</div>
+                <div class="option"><span>(D)</span> इसका आयाम</div>
+            </div>
+        </div>
+
+        <!-- Question 67 -->
+        <div class="question-block">
+            <div class="question-text"><span>67.</span> प्लांक नियतांक (Planck's constant) की विमा (Dimension) है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $ML^{2}T^{-1}$</div>
+                <div class="option"><span>(B)</span> $ML^{2}T^{-2}$</div>
+                <div class="option"><span>(C)</span> $MLT^{-1}$</div>
+                <div class="option"><span>(D)</span> $MLT^{-2}$</div>
+            </div>
+        </div>
+
+        <!-- Question 68 -->
+        <div class="question-block">
+            <div class="question-text"><span>68.</span> प्रकाश-विद्युत प्रभाव की खोज सर्वप्रथम किसने की थी?</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> आइंस्टीन</div>
+                <div class="option"><span>(B)</span> हर्ज</div>
+                <div class="option"><span>(C)</span> मिलिकन</div>
+                <div class="option"><span>(D)</span> हॉलवैश</div>
+            </div>
+        </div>
+
+        <!-- Question 69 -->
+        <div class="question-block">
+            <div class="question-text"><span>69.</span> नाभिक का घनत्व लगभग होता है :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> $2.29\times10^{7}kg/m^{3}$</div>
+                <div class="option"><span>(B)</span> $2.29\times10^{-17}kg/m^{3}$</div>
+                <div class="option"><span>(C)</span> $2.29\times10^{17}kg/m^{3}$</div>
+                <div class="option"><span>(D)</span> $2.29\times10^{27}kg/m^{3}$</div>
+            </div>
+        </div>
+
+        <!-- Question 70 -->
+        <div class="question-block">
+            <div class="question-text"><span>70.</span> X-किरणें हैं :</div>
+            <div class="options-grid">
+                <div class="option"><span>(A)</span> गतिमान इलेक्ट्रॉन</div>
+                <div class="option"><span>(B)</span> गतिमान धनात्मक आयन</div>
+                <div class="option"><span>(C)</span> गतिमान ऋणात्मक आयन</div>
+                <div class="option"><span>(D)</span> विद्युत चुम्बकीय तरंगें</div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr style="margin: 40px 0; border: none; border-top: 2px dashed #cbd5e1;">
+
+    <!-- SECTION B -->
+    <h2 class="section-title">खण्ड - ब / SECTION - B<br><small style="font-size: 1.2rem; font-weight: normal;">(लघु उत्तरीय प्रश्न / Short Answer Type Questions)</small></h2>
+    
+    <p class="section-instruction">निर्देशः प्रश्न संख्या 1 से 20 तक लघु उत्तरीय प्रश्न हैं। किन्हीं 10 प्रश्नों के उत्तर दें। प्रत्येक प्रश्न के लिए 2 अंक निर्धारित हैं।</p>
+    <div class="marks-info">अंक: $(10 \times 2 = 20$ अंक)</div>
+
+    <ul class="subjective-list">
+        <li>विद्युत क्षेत्र रेखाओं के किन्हीं दो गुणों को लिखें।</li>
+        <li>लॉरेंट्ज बल (Lorentz force) क्या है? इसका व्यंजक लिखें।</li>
+        <li>शंट (Shunt) क्या है? इसके दो उपयोग लिखें।</li>
+        <li>पूर्ण आंतरिक परावर्तन (Total internal reflection) की शर्तें क्या हैं?</li>
+        <li>प्रकाश के ध्रुवण (Polarization of light) से आप क्या समझते हैं?</li>
+        <li>एक्स-किरणों (X-rays) के किन्हीं दो उपयोगों को लिखें।</li>
+        <li>n-प्रकार एवं p-प्रकार के अर्द्धचालक में क्या अंतर है?</li>
+        <li>OR गेट की सत्यता सारणी (Truth table) एवं प्रतीक (Symbol) बनाएँ।</li>
+        <li>फ्लेमिंग के वामहस्त नियम (Fleming's left-hand rule) को लिखें।</li>
+        <li>पेल्टियर प्रभाव (Peltier effect) क्या है?</li>
+        <li>कार्य फलन (Work function) को परिभाषित करें।</li>
+        <li>अल्फा क्षय ($\alpha$-decay) क्या है? समझायें।</li>
+        <li>एक गोलीय चालक की धारिता का व्यंजक प्राप्त करें।</li>
+        <li>बायो-सावर्ट का नियम (Biot-Savart Law) लिखें।</li>
+        <li>फैराडे के विद्युत चुम्बकीय प्रेरण के नियम लिखें।</li>
+        <li>भंवर धाराएं (Eddy currents) क्या हैं?</li>
+        <li>अपवर्तनांक (Refractive index) की परिभाषा दें।</li>
+        <li>निकट दृष्टि दोष (Myopia) क्या है? इसे कैसे दूर किया जाता है?</li>
+        <li>बोर (Bohr) के परमाणु मॉडल की किन्हीं दो मान्यताओं को लिखें।</li>
+        <li>समस्थानिक (Isotopes) और समभारिक (Isobars) को उदाहरण सहित परिभाषित करें।</li>
+    </ul>
+
+    <hr style="margin: 40px 0; border: none; border-top: 2px dashed #cbd5e1;">
+
+    <!-- SECTION C -->
+    <h2 class="section-title">खण्ड - स / SECTION - C<br><small style="font-size: 1.2rem; font-weight: normal;">(दीर्घ उत्तरीय प्रश्न / Long Answer Type Questions)</small></h2>
+    
+    <p class="section-instruction">निर्देशः प्रश्न संख्या 21 से 25 तक 5 दीर्घ उत्तरीय प्रश्न हैं। किन्हीं 3 प्रश्नों के उत्तर देना अनिवार्य है। प्रत्येक प्रश्न के लिए 5 अंक निर्धारित हैं।</p>
+    <div class="marks-info">अंक: $(3 \times 5 = 15$ अंक)</div>
+
+    <ul class="subjective-list long-answer-list">
+        <li>गॉस के प्रमेय (Gauss's Theorem) को लिखें और सिद्ध करें। इसकी सहायता से एक अनंत लंबाई के सीधे आवेशित तार के कारण विद्युत क्षेत्र का व्यंजक प्राप्त करें।</li>
+        <li>साइक्लोट्रॉन (Cyclotron) के सिद्धांत, बनावट एवं कार्य-विधि का सचित्र वर्णन करें। इसकी क्या सीमाएं हैं?</li>
+        <li>ट्रांसफार्मर (Transformer) क्या है? इसके सिद्धांत और कार्य-विधि को समझाएं। ट्रांसफार्मर में ऊर्जा क्षय (Energy loss) के विभिन्न कारणों का उल्लेख करें।</li>
+        <li>हाइगेंस के तरंग सिद्धांत (Huygens' Wave Theory) के आधार पर प्रकाश के परावर्तन अथवा अपवर्तन के नियमों को सिद्ध करें।</li>
+        <li>L-C-R श्रेणी परिपथ के लिए प्रतिबाधा (Impedance) का व्यंजक प्राप्त करें। अनुनाद (Resonance) की स्थिति में आवृत्ति का सूत्र ज्ञात करें।</li>
+    </ul>
+
+    <div style="text-align: center; font-size: 1.5rem; font-weight: 700; color: #2563eb; margin-top: 50px;">
+        - BEST OF LUCK -
+    </div>
+
+</div>
+
+</body>
+</html>

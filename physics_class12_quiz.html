@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Class 12 Physics MCQ Quiz - Digital Study Book</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax for Mathematical Formulas -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --accent-bg: #eff6ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Kalam', cursive, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out;
+        }
+
+        .splash-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            padding: 0 20px;
+        }
+
+        .splash-subtitle {
+            font-size: 1.5rem;
+            color: #93c5fd;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .splash-btn {
+            background-color: white;
+            color: var(--primary-dark);
+            padding: 16px 40px;
+            font-size: 1.5rem;
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .splash-btn:hover, .splash-btn:active {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background-color: #f8fafc;
+        }
+
+        /* Main Content */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed #cbd5e1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+        }
+
+        /* Quiz Card */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            break-inside: avoid;
+        }
+
+        .q-number {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .q-text-en {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .q-text-hi {
+            font-size: 1.3rem;
+            color: #475569;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option {
+            background: #f8fafc;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .option:hover {
+            border-color: #93c5fd;
+            background-color: var(--accent-bg);
+        }
+
+        .opt-label {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            min-width: 25px;
+        }
+
+        .opt-content {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.2rem;
+        }
+
+        .opt-en {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .opt-hi {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* End Message */
+        .end-message {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            padding: 40px 0;
+            border-top: 2px dashed #cbd5e1;
+            margin-top: 40px;
+        }
+
+        /* Landscape adjustment for mobile */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .question-card {
+                padding: 20px;
+            }
+            .q-text-en { font-size: 1.2rem; }
+            .q-text-hi { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 class="splash-title">Class 12 Physics</h1>
+        <p class="splash-subtitle">Bilingual MCQ Quiz (English & Hindi)</p>
+        <button class="splash-btn" onclick="startReading()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Continue Reading
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <div class="header">
+            <h1>Physics Final MCQ Review</h1>
+            <p>50 Important Questions for Board Examination</p>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card">
+            <div class="q-number">Q1</div>
+            <div class="q-text-en">What is the SI unit of electric charge?</div>
+            <div class="q-text-hi">विद्युत आवेश का SI मात्रक क्या है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Coulomb</span><span class="opt-hi">कूलॉम</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Ampere</span><span class="opt-hi">एम्पीयर</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Volt</span><span class="opt-hi">वोल्ट</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Ohm</span><span class="opt-hi">ओम</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card">
+            <div class="q-number">Q2</div>
+            <div class="q-text-en">The value of absolute permittivity of free space is:</div>
+            <div class="q-text-hi">मुक्त आकाश की निरपेक्ष परावैद्युतांक का मान है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$8.85 \times 10^{-12} \text{ C}^2/\text{Nm}^2$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$9 \times 10^9 \text{ Nm}^2/\text{C}^2$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$1.6 \times 10^{-19} \text{ C}$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Zero</span><span class="opt-hi">शून्य</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card">
+            <div class="q-number">Q3</div>
+            <div class="q-text-en">The electric field intensity inside a charged hollow spherical conductor is:</div>
+            <div class="q-text-hi">एक आवेशित खोखले गोलाकार चालक के अंदर विद्युत क्षेत्र की तीव्रता होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Uniform</span><span class="opt-hi">एकसमान</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Zero</span><span class="opt-hi">शून्य</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Variable</span><span class="opt-hi">परिवर्तनशील</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Infinite</span><span class="opt-hi">अनंत</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card">
+            <div class="q-number">Q4</div>
+            <div class="q-text-en">The capacitance of a parallel plate capacitor depends upon:</div>
+            <div class="q-text-hi">समांतर पट्टिका संधारित्र की धारिता किस पर निर्भर करती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Thickness of plates</span><span class="opt-hi">प्लेटों की मोटाई</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Mass of plates</span><span class="opt-hi">प्लेटों का द्रव्यमान</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Area of plates</span><span class="opt-hi">प्लेटों का क्षेत्रफल</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Density of plates</span><span class="opt-hi">प्लेटों का घनत्व</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card">
+            <div class="q-number">Q5</div>
+            <div class="q-text-en">The dimensional formula of electric potential is:</div>
+            <div class="q-text-hi">विद्युत विभव का विमीय सूत्र है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$ML^2T^{-3}A^{-1}$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$MLT^{-2}A^{-1}$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$M^0L^0T^0$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$ML^2T^{-2}A^{-2}$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="question-card">
+            <div class="q-number">Q6</div>
+            <div class="q-text-en">Ohm's law is valid for which of the following?</div>
+            <div class="q-text-hi">ओम का नियम निम्नलिखित में से किसके लिए मान्य है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Semiconductors</span><span class="opt-hi">अर्धचालक</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Insulators</span><span class="opt-hi">कुचालक</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Ohmic conductors</span><span class="opt-hi">ओमिक चालक</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Vacuum tubes</span><span class="opt-hi">वैक्यूम ट्यूब</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="question-card">
+            <div class="q-number">Q7</div>
+            <div class="q-text-en">Kirchhoff's first law (junction rule) is based on the conservation of:</div>
+            <div class="q-text-hi">किर्कहॉफ का प्रथम नियम (संधि नियम) किसके संरक्षण पर आधारित है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Energy</span><span class="opt-hi">ऊर्जा</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Momentum</span><span class="opt-hi">संवेग</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Mass</span><span class="opt-hi">द्रव्यमान</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Charge</span><span class="opt-hi">आवेश</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 8 -->
+        <div class="question-card">
+            <div class="q-number">Q8</div>
+            <div class="q-text-en">The specific resistance (resistivity) of a metallic wire depends on its:</div>
+            <div class="q-text-hi">एक धात्विक तार का विशिष्ट प्रतिरोध (प्रतिरोधकता) उसके किस पर निर्भर करता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Length</span><span class="opt-hi">लंबाई</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Cross-sectional area</span><span class="opt-hi">अनुप्रस्थ काट का क्षेत्रफल</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Material</span><span class="opt-hi">पदार्थ</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Mass</span><span class="opt-hi">द्रव्यमान</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 9 -->
+        <div class="question-card">
+            <div class="q-number">Q9</div>
+            <div class="q-text-en">In the color coding of carbon resistors, what is the value of the color yellow?</div>
+            <div class="q-text-hi">कार्बन प्रतिरोधकों की रंग कोडिंग में, पीले रंग का मान क्या होता है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">2</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">3</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">4</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">5</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 10 -->
+        <div class="question-card">
+            <div class="q-number">Q10</div>
+            <div class="q-text-en">Which instrument is most accurate for measuring electromotive force (EMF) of a cell?</div>
+            <div class="q-text-hi">सेल के विद्युत वाहक बल (EMF) को मापने के लिए कौन सा उपकरण सबसे सटीक है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Voltmeter</span><span class="opt-hi">वोल्टमीटर</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Ammeter</span><span class="opt-hi">एमीटर</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Galvanometer</span><span class="opt-hi">गैल्वेनोमीटर</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Potentiometer</span><span class="opt-hi">विभवमापी</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 11 -->
+        <div class="question-card">
+            <div class="q-number">Q11</div>
+            <div class="q-text-en">What is the SI unit of magnetic field induction?</div>
+            <div class="q-text-hi">चुंबकीय क्षेत्र प्रेरण का SI मात्रक क्या है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Gauss</span><span class="opt-hi">गॉस</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Tesla</span><span class="opt-hi">टेस्ला</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Oersted</span><span class="opt-hi">ओटेंड</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Weber</span><span class="opt-hi">वेबर</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 12 -->
+        <div class="question-card">
+            <div class="q-number">Q12</div>
+            <div class="q-text-en">The magnetic force experienced by a moving charge in a magnetic field is maximum when the angle between velocity and magnetic field is:</div>
+            <div class="q-text-hi">चुंबकीय क्षेत्र में गतिमान आवेश द्वारा अनुभव किया जाने वाला चुंबकीय बल अधिकतम होता है जब वेग और चुंबकीय क्षेत्र के बीच का कोण होता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">0 degrees</span><span class="opt-hi">0 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">45 degrees</span><span class="opt-hi">45 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">90 degrees</span><span class="opt-hi">90 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">180 degrees</span><span class="opt-hi">180 डिग्री</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 13 -->
+        <div class="question-card">
+            <div class="q-number">Q13</div>
+            <div class="q-text-en">At the magnetic poles of the Earth, the angle of dip is:</div>
+            <div class="q-text-hi">पृथ्वी के चुंबकीय ध्रुवों पर, नति कोण कितना होता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">0 degrees</span><span class="opt-hi">0 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">30 degrees</span><span class="opt-hi">30 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">45 degrees</span><span class="opt-hi">45 डिग्री</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">90 degrees</span><span class="opt-hi">90 डिग्री</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 14 -->
+        <div class="question-card">
+            <div class="q-number">Q14</div>
+            <div class="q-text-en">The SI unit of magnetic flux is:</div>
+            <div class="q-text-hi">चुंबकीय फ्लक्स का SI मात्रक है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Weber</span><span class="opt-hi">वेबर</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Tesla</span><span class="opt-hi">टेस्ला</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Faraday</span><span class="opt-hi">फैराडे</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Henry</span><span class="opt-hi">हेनरी</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 15 -->
+        <div class="question-card">
+            <div class="q-number">Q15</div>
+            <div class="q-text-en">Which of the following is a diamagnetic substance?</div>
+            <div class="q-text-hi">निम्नलिखित में से कौन सा एक प्रतिचुंबकीय पदार्थ है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Iron</span><span class="opt-hi">लोहा</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Cobalt</span><span class="opt-hi">कोबाल्ट</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Bismuth</span><span class="opt-hi">बिस्मथ</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Nickel</span><span class="opt-hi">निकल</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 16 -->
+        <div class="question-card">
+            <div class="q-number">Q16</div>
+            <div class="q-text-en">Faraday's laws of electromagnetic induction are a consequence of the conservation of:</div>
+            <div class="q-text-hi">विद्युत चुम्बकीय प्रेरण के फैराडे के नियम किसके संरक्षण का परिणाम हैं:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Charge</span><span class="opt-hi">आवेश</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Energy</span><span class="opt-hi">ऊर्जा</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Magnetic field</span><span class="opt-hi">चुंबकीय क्षेत्र</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Momentum</span><span class="opt-hi">संवेग</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 17 -->
+        <div class="question-card">
+            <div class="q-number">Q17</div>
+            <div class="q-text-en">Lenz's law is used to find the:</div>
+            <div class="q-text-hi">लेंज के नियम का उपयोग क्या ज्ञात करने के लिए किया जाता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Magnitude of induced EMF</span><span class="opt-hi">प्रेरित EMF का परिमाण</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Direction of induced current</span><span class="opt-hi">प्रेरित धारा की दिशा</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Value of magnetic flux</span><span class="opt-hi">चुंबकीय फ्लक्स का मान</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Self-inductance</span><span class="opt-hi">स्व-प्रेरकत्व</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 18 -->
+        <div class="question-card">
+            <div class="q-number">Q18</div>
+            <div class="q-text-en">The SI unit of self-inductance is:</div>
+            <div class="q-text-hi">स्व-प्रेरकत्व का SI मात्रक है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Ohm</span><span class="opt-hi">ओम</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Farad</span><span class="opt-hi">फैराड</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Weber</span><span class="opt-hi">वेबर</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Henry</span><span class="opt-hi">हेनरी</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 19 -->
+        <div class="question-card">
+            <div class="q-number">Q19</div>
+            <div class="q-text-en">Eddy currents are produced when:</div>
+            <div class="q-text-hi">भंवर धाराएं कब उत्पन्न होती हैं:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">A metal is kept in a steady magnetic field</span><span class="opt-hi">धातु को स्थिर चुंबकीय क्षेत्र में रखा जाता है</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">A metal is kept in a varying magnetic field</span><span class="opt-hi">धातु को परिवर्ती चुंबकीय क्षेत्र में रखा जाता है</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Current passes through a wire</span><span class="opt-hi">तार से धारा प्रवाहित होती है</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Voltage is constant</span><span class="opt-hi">वोल्टेज स्थिर रहता है</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 20 -->
+        <div class="question-card">
+            <div class="q-number">Q20</div>
+            <div class="q-text-en">A transformer works on the principle of:</div>
+            <div class="q-text-hi">एक ट्रांसफार्मर किस सिद्धांत पर कार्य करता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Self-induction</span><span class="opt-hi">स्व-प्रेरण</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Mutual induction</span><span class="opt-hi">अन्योन्य प्रेरण</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Lorentz force</span><span class="opt-hi">लॉरेंज बल</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Ampere's law</span><span class="opt-hi">एम्पीयर का नियम</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 21 -->
+        <div class="question-card">
+            <div class="q-number">Q21</div>
+            <div class="q-text-en">The relation between peak value and RMS value of an alternating current is:</div>
+            <div class="q-text-hi">प्रत्यावर्ती धारा के शिखर मान और RMS मान के बीच का संबंध है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$I_{rms} = I_0$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$I_{rms} = I_0 / 2$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$I_{rms} = I_0 / \sqrt{2}$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$I_{rms} = \sqrt{2} I_0$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 22 -->
+        <div class="question-card">
+            <div class="q-number">Q22</div>
+            <div class="q-text-en">The power factor of a purely resistive circuit is:</div>
+            <div class="q-text-hi">एक शुद्ध प्रतिरोधी परिपथ का शक्ति गुणांक होता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Zero</span><span class="opt-hi">शून्य</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">0.5</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">1</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Infinity</span><span class="opt-hi">अनंत</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 23 -->
+        <div class="question-card">
+            <div class="q-number">Q23</div>
+            <div class="q-text-en">In a series LCR circuit at resonance, the impedance is:</div>
+            <div class="q-text-hi">अनुनाद पर एक श्रेणी LCR परिपथ में, प्रतिबाधा होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Maximum</span><span class="opt-hi">अधिकतम</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Minimum</span><span class="opt-hi">न्यूनतम</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Zero</span><span class="opt-hi">शून्य</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Infinite</span><span class="opt-hi">अनंत</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 24 -->
+        <div class="question-card">
+            <div class="q-number">Q24</div>
+            <div class="q-text-en">Choke coil is a device used to control alternating current with:</div>
+            <div class="q-text-hi">चोक कुंडली एक उपकरण है जिसका उपयोग प्रत्यावर्ती धारा को नियंत्रित करने के लिए किया जाता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">High power loss</span><span class="opt-hi">उच्च शक्ति हानि</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Minimum power loss</span><span class="opt-hi">न्यूनतम शक्ति हानि</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Maximum resistance</span><span class="opt-hi">अधिकतम प्रतिरोध</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Zero inductance</span><span class="opt-hi">शून्य प्रेरकत्व</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 25 -->
+        <div class="question-card">
+            <div class="q-number">Q25</div>
+            <div class="q-text-en">A step-up transformer increases the:</div>
+            <div class="q-text-hi">एक उच्चायी ट्रांसफार्मर बढ़ाता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Current</span><span class="opt-hi">धारा</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Voltage</span><span class="opt-hi">वोल्टेज</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Power</span><span class="opt-hi">शक्ति</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Frequency</span><span class="opt-hi">आवृत्ति</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 26 -->
+        <div class="question-card">
+            <div class="q-number">Q26</div>
+            <div class="q-text-en">Snell's law relates to which phenomenon of light?</div>
+            <div class="q-text-hi">स्नेल का नियम प्रकाश की किस घटना से संबंधित है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Reflection</span><span class="opt-hi">परावर्तन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Refraction</span><span class="opt-hi">अपवर्तन</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Interference</span><span class="opt-hi">व्यतिकरण</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Diffraction</span><span class="opt-hi">विवर्तन</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 27 -->
+        <div class="question-card">
+            <div class="q-number">Q27</div>
+            <div class="q-text-en">Total internal reflection can occur only when light travels from:</div>
+            <div class="q-text-hi">पूर्ण आंतरिक परावर्तन केवल तभी हो सकता है जब प्रकाश यात्रा करता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Rarer to denser medium</span><span class="opt-hi">विरल से सघन माध्यम में</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Denser to rarer medium</span><span class="opt-hi">सघन से विरल माध्यम में</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Vacuum to air</span><span class="opt-hi">निर्वात से हवा में</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Any medium to another</span><span class="opt-hi">किसी भी माध्यम से दूसरे में</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 28 -->
+        <div class="question-card">
+            <div class="q-number">Q28</div>
+            <div class="q-text-en">An air bubble inside water behaves like a:</div>
+            <div class="q-text-hi">पानी के अंदर हवा का बुलबुला कैसा व्यवहार करता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Convex lens</span><span class="opt-hi">उत्तल लेंस</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Concave lens</span><span class="opt-hi">अवतल लेंस</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Plano-convex lens</span><span class="opt-hi">समतलोत्तल लेंस</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Glass slab</span><span class="opt-hi">कांच का स्लैब</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 29 -->
+        <div class="question-card">
+            <div class="q-number">Q29</div>
+            <div class="q-text-en">What is the SI unit of the power of a lens?</div>
+            <div class="q-text-hi">लेंस की क्षमता का SI मात्रक क्या है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Meter</span><span class="opt-hi">मीटर</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Watt</span><span class="opt-hi">वाट</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Diopter</span><span class="opt-hi">डायोप्टर</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Joule</span><span class="opt-hi">जूल</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 30 -->
+        <div class="question-card">
+            <div class="q-number">Q30</div>
+            <div class="q-text-en">The refractive index of a diamond is approximately:</div>
+            <div class="q-text-hi">हीरे का अपवर्तनांक लगभग कितना होता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">1.33</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">1.50</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">2.42</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">3.00</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 31 -->
+        <div class="question-card">
+            <div class="q-number">Q31</div>
+            <div class="q-text-en">Huygens' wave theory of light cannot explain:</div>
+            <div class="q-text-hi">प्रकाश का हाइगेंस का तरंग सिद्धांत क्या नहीं समझा सकता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Reflection</span><span class="opt-hi">परावर्तन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Refraction</span><span class="opt-hi">अपवर्तन</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Diffraction</span><span class="opt-hi">विवर्तन</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Photoelectric effect</span><span class="opt-hi">प्रकाश विद्युत प्रभाव</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 32 -->
+        <div class="question-card">
+            <div class="q-number">Q32</div>
+            <div class="q-text-en">The phenomenon of interference is exhibited by:</div>
+            <div class="q-text-hi">व्यतिकरण की घटना किसके द्वारा प्रदर्शित की जाती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Longitudinal waves only</span><span class="opt-hi">केवल अनुदैर्ध्य तरंगों</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Transverse waves only</span><span class="opt-hi">केवल अनुप्रस्थ तरंगों</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Both types of waves</span><span class="opt-hi">दोनों प्रकार की तरंगों</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Neither type of wave</span><span class="opt-hi">किसी भी प्रकार की तरंग नहीं</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 33 -->
+        <div class="question-card">
+            <div class="q-number">Q33</div>
+            <div class="q-text-en">In Young's double-slit experiment, the fringe width is directly proportional to:</div>
+            <div class="q-text-hi">यंग के द्विक-स्लिट प्रयोग में, फ्रिंज चौड़ाई किसके सीधे अनुक्रमानुपाती होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Slit separation</span><span class="opt-hi">स्लिट के बीच की दूरी</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Wavelength of light</span><span class="opt-hi">प्रकाश की तरंगदैर्ध्य</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Frequency of light</span><span class="opt-hi">प्रकाश की आवृत्ति</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Intensity of light</span><span class="opt-hi">प्रकाश की तीव्रता</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 34 -->
+        <div class="question-card">
+            <div class="q-number">Q34</div>
+            <div class="q-text-en">The polarization of light confirms its:</div>
+            <div class="q-text-hi">प्रकाश का ध्रुवण इसकी किस प्रकृति की पुष्टि करता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Corpuscular nature</span><span class="opt-hi">कणिका प्रकृति</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Longitudinal wave nature</span><span class="opt-hi">अनुदैर्ध्य तरंग प्रकृति</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Transverse wave nature</span><span class="opt-hi">अनुप्रस्थ तरंग प्रकृति</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Dual nature</span><span class="opt-hi">दोहरी प्रकृति</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 35 -->
+        <div class="question-card">
+            <div class="q-number">Q35</div>
+            <div class="q-text-en">Brewster's law states the relation between:</div>
+            <div class="q-text-hi">ब्रूस्टर का नियम किसके बीच संबंध बताता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Refractive index and polarizing angle</span><span class="opt-hi">अपवर्तनांक और ध्रुवण कोण</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Wavelength and frequency</span><span class="opt-hi">तरंगदैर्ध्य और आवृत्ति</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Energy and mass</span><span class="opt-hi">ऊर्जा और द्रव्यमान</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Electric and magnetic fields</span><span class="opt-hi">विद्युत और चुंबकीय क्षेत्र</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 36 -->
+        <div class="question-card">
+            <div class="q-number">Q36</div>
+            <div class="q-text-en">The minimum energy required to eject an electron from a metal surface is called:</div>
+            <div class="q-text-hi">धातु की सतह से एक इलेक्ट्रॉन को बाहर निकालने के लिए आवश्यक न्यूनतम ऊर्जा कहलाती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Kinetic energy</span><span class="opt-hi">गतिज ऊर्जा</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Potential energy</span><span class="opt-hi">स्थितिज ऊर्जा</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Work function</span><span class="opt-hi">कार्य फलन</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Threshold energy</span><span class="opt-hi">देहली ऊर्जा</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 37 -->
+        <div class="question-card">
+            <div class="q-number">Q37</div>
+            <div class="q-text-en">According to Einstein's photoelectric equation, the maximum kinetic energy of emitted electrons depends linearly on:</div>
+            <div class="q-text-hi">आइंस्टीन के प्रकाश विद्युत समीकरण के अनुसार, उत्सर्जित इलेक्ट्रॉनों की अधिकतम गतिज ऊर्जा रैखिक रूप से किस पर निर्भर करती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Intensity of incident light</span><span class="opt-hi">आपतित प्रकाश की तीव्रता</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Frequency of incident light</span><span class="opt-hi">आपतित प्रकाश की आवृत्ति</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Wavelength of incident light</span><span class="opt-hi">आपतित प्रकाश की तरंगदैर्ध्य</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Time of illumination</span><span class="opt-hi">रोशनी के समय</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 38 -->
+        <div class="question-card">
+            <div class="q-number">Q38</div>
+            <div class="q-text-en">The rest mass of a photon is:</div>
+            <div class="q-text-hi">एक फोटॉन का विराम द्रव्यमान होता है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Zero</span><span class="opt-hi">शून्य</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Infinity</span><span class="opt-hi">अनंत</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$1.67 \times 10^{-27} \text{ kg}$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$9.1 \times 10^{-31} \text{ kg}$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 39 -->
+        <div class="question-card">
+            <div class="q-number">Q39</div>
+            <div class="q-text-en">The de Broglie wavelength associated with a particle of momentum $p$ is:</div>
+            <div class="q-text-hi">$p$ संवेग वाले कण से जुड़ी डी ब्रोग्ली तरंगदैर्ध्य है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$h/p$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$hp$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$p/h$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$h/p^2$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 40 -->
+        <div class="question-card">
+            <div class="q-number">Q40</div>
+            <div class="q-text-en">Which phenomenon demonstrates the particle nature of electromagnetic radiation?</div>
+            <div class="q-text-hi">कौन सी घटना विद्युत चुम्बकीय विकिरण की कण प्रकृति को प्रदर्शित करती है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Diffraction</span><span class="opt-hi">विवर्तन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Interference</span><span class="opt-hi">व्यतिकरण</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Polarization</span><span class="opt-hi">ध्रुवण</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Photoelectric effect</span><span class="opt-hi">प्रकाश विद्युत प्रभाव</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 41 -->
+        <div class="question-card">
+            <div class="q-number">Q41</div>
+            <div class="q-text-en">The radius of the nth permitted orbit of an electron in a hydrogen atom is proportional to:</div>
+            <div class="q-text-hi">हाइड्रोजन परमाणु में एक इलेक्ट्रॉन की nth अनुमत कक्षा की त्रिज्या किसके अनुक्रमानुपाती होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$n$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$1/n$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$n^2$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$1/n^2$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 42 -->
+        <div class="question-card">
+            <div class="q-number">Q42</div>
+            <div class="q-text-en">In a hydrogen atom, which series of spectral lines lies in the visible region?</div>
+            <div class="q-text-hi">हाइड्रोजन परमाणु में, वर्णक्रमीय रेखाओं की कौन सी श्रेणी दृश्य क्षेत्र में स्थित है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Lyman series</span><span class="opt-hi">लाइमैन श्रेणी</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Balmer series</span><span class="opt-hi">बामर श्रेणी</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Paschen series</span><span class="opt-hi">पाश्चन श्रेणी</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Brackett series</span><span class="opt-hi">ब्रैकेट श्रेणी</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 43 -->
+        <div class="question-card">
+            <div class="q-number">Q43</div>
+            <div class="q-text-en">The energy of an electron in the ground state of a hydrogen atom is:</div>
+            <div class="q-text-hi">हाइड्रोजन परमाणु की मूल अवस्था में एक इलेक्ट्रॉन की ऊर्जा होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">13.6 eV</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">-13.6 eV</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">3.4 eV</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">-3.4 eV</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 44 -->
+        <div class="question-card">
+            <div class="q-number">Q44</div>
+            <div class="q-text-en">What is an alpha particle?</div>
+            <div class="q-text-hi">एक अल्फा कण क्या है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">An electron</span><span class="opt-hi">एक इलेक्ट्रॉन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">A proton</span><span class="opt-hi">एक प्रोटॉन</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">A helium nucleus</span><span class="opt-hi">एक हीलियम नाभिक</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">A hydrogen nucleus</span><span class="opt-hi">एक हाइड्रोजन नाभिक</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 45 -->
+        <div class="question-card">
+            <div class="q-number">Q45</div>
+            <div class="q-text-en">Isotopes are atoms of the same element having the same:</div>
+            <div class="q-text-hi">समस्थानिक एक ही तत्व के परमाणु होते हैं जिनमें समान होती है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Atomic mass</span><span class="opt-hi">परमाणु द्रव्यमान</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Number of neutrons</span><span class="opt-hi">न्यूट्रॉन की संख्या</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Atomic number</span><span class="opt-hi">परमाणु क्रमांक</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Number of nucleons</span><span class="opt-hi">न्यूक्लियॉन की संख्या</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 46 -->
+        <div class="question-card">
+            <div class="q-number">Q46</div>
+            <div class="q-text-en">The relationship between the half-life ($T$) and the decay constant ($\lambda$) is:</div>
+            <div class="q-text-hi">अर्ध-आयु ($T$) और क्षय नियतांक ($\lambda$) के बीच का संबंध है:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">$T = \lambda / 0.693$</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">$T = 0.693 / \lambda$</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">$T = 0.693 \cdot \lambda$</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">$T = 1 / \lambda$</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 47 -->
+        <div class="question-card">
+            <div class="q-number">Q47</div>
+            <div class="q-text-en">In a p-type semiconductor, the majority charge carriers are:</div>
+            <div class="q-text-hi">एक p-प्रकार के अर्धचालक में, बहुसंख्यक आवेश वाहक होते हैं:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Electrons</span><span class="opt-hi">इलेक्ट्रॉन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Holes</span><span class="opt-hi">छिद्र</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Protons</span><span class="opt-hi">प्रोटॉन</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Neutrons</span><span class="opt-hi">न्यूट्रॉन</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 48 -->
+        <div class="question-card">
+            <div class="q-number">Q48</div>
+            <div class="q-text-en">The depletion region of a p-n junction diode contains:</div>
+            <div class="q-text-hi">p-n संधि डायोड के अवक्षय क्षेत्र में होते हैं:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Only electrons</span><span class="opt-hi">केवल इलेक्ट्रॉन</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Only holes</span><span class="opt-hi">केवल छिद्र</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Immobile ions</span><span class="opt-hi">अचल आयन</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Both electrons and holes</span><span class="opt-hi">इलेक्ट्रॉन और छिद्र दोनों</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 49 -->
+        <div class="question-card">
+            <div class="q-number">Q49</div>
+            <div class="q-text-en">Which diode is specifically designed to operate in the reverse breakdown region?</div>
+            <div class="q-text-hi">किस डायोड को विशेष रूप से रिवर्स ब्रेकडाउन क्षेत्र में काम करने के लिए डिज़ाइन किया गया है?</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Light Emitting Diode</span><span class="opt-hi">प्रकाश उत्सर्जक डायोड</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Photodiode</span><span class="opt-hi">फोटोडायोड</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">Zener diode</span><span class="opt-hi">जेनर डायोड</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">Solar cell</span><span class="opt-hi">सौर सेल</span></div></div>
+            </div>
+        </div>
+
+        <!-- Question 50 -->
+        <div class="question-card">
+            <div class="q-number">Q50</div>
+            <div class="q-text-en">For a NOR logic gate, the output is HIGH only when:</div>
+            <div class="q-text-hi">NOR लॉजिक गेट के लिए, आउटपुट केवल तभी उच्च (HIGH) होता है जब:</div>
+            <div class="options-grid">
+                <div class="option"><span class="opt-label">A.</span><div class="opt-content"><span class="opt-en">Both inputs are LOW</span><span class="opt-hi">दोनों इनपुट निम्न (LOW) हों</span></div></div>
+                <div class="option"><span class="opt-label">B.</span><div class="opt-content"><span class="opt-en">Both inputs are HIGH</span><span class="opt-hi">दोनों इनपुट उच्च (HIGH) हों</span></div></div>
+                <div class="option"><span class="opt-label">C.</span><div class="opt-content"><span class="opt-en">One input is HIGH</span><span class="opt-hi">एक इनपुट उच्च (HIGH) हो</span></div></div>
+                <div class="option"><span class="opt-label">D.</span><div class="opt-content"><span class="opt-en">One input is LOW</span><span class="opt-hi">एक इनपुट निम्न (LOW) हो</span></div></div>
+            </div>
+        </div>
+
+        <div class="end-message">
+            End of Quiz. Good Luck!
+        </div>
+    </div>
+
+    <!-- Interactive Script -->
+    <script>
+        function startReading() {
+            const splashScreen = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // Attempt to request fullscreen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            }
+
+            // Attempt to lock orientation to landscape (primarily works on mobile browsers)
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch((err) => {
+                    console.log(`Error attempting to lock orientation: ${err.message}`);
+                });
+            }
+
+            // Smooth transition
+            splashScreen.style.opacity = '0';
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Slight delay before fading in content to ensure MathJax rendering doesn't jump
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                }, 50);
+            }, 600);
+        }
+    </script>
+</body>
+</html>

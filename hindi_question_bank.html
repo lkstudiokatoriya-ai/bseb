@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BSEB Class 12 Hindi - Digital Study Book</title>
+    
+    <!-- Google Fonts: Kalam -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --paper-bg: #fdfbf7;
+            --text-main: #2c2724;
+            --text-muted: #5e564d;
+            --accent-color: #8b211a; /* Deep Red for headings */
+            --accent-light: #e5d9c5;
+            --border-color: #d3cabc;
+            --answer-color: #1e5a32; /* Deep Green for answers */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Kalam', cursive, sans-serif;
+            background-color: #e9e4d8;
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #2c2724, #4a3f35);
+            color: #fdfbf7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out;
+        }
+
+        .splash-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 0 20px;
+            color: #f4c272;
+        }
+
+        .splash-subtitle {
+            font-size: 1.5rem;
+            color: #e5d9c5;
+            margin-bottom: 50px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .splash-btn {
+            background-color: #fdfbf7;
+            color: #8b211a;
+            padding: 16px 45px;
+            font-size: 1.5rem;
+            font-family: 'Kalam', cursive;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .splash-btn:hover, .splash-btn:active {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background-color: #ffffff;
+        }
+
+        /* Main Content Book Container */
+        #main-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--paper-bg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            border-left: 12px solid #5e4b3c; /* Book spine effect */
+            position: relative;
+        }
+
+        .page {
+            padding: 50px 60px;
+            border-bottom: 2px dashed var(--border-color);
+        }
+        
+        .page:last-child {
+            border-bottom: none;
+        }
+
+        /* Cover Page Elements */
+        .cover-page {
+            text-align: center;
+            padding: 80px 40px;
+        }
+
+        .board-name {
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .exam-title {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subject-title {
+            font-size: 2.2rem;
+            background-color: var(--accent-color);
+            color: white;
+            display: inline-block;
+            padding: 5px 25px;
+            border-radius: 50px;
+            margin: 20px 0;
+        }
+
+        .book-details {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 40px;
+        }
+
+        .highlight-box {
+            background-color: var(--accent-light);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            color: #5e4b3c;
+            font-weight: 700;
+        }
+
+        /* Table of Contents */
+        .toc-title {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .toc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.3rem;
+        }
+
+        .toc-table td {
+            padding: 12px 5px;
+            border-bottom: 1px dotted var(--border-color);
+        }
+
+        .toc-table .ch-num { width: 5%; font-weight: 700; }
+        .toc-table .ch-name { width: 85%; }
+        .toc-table .pg-num { width: 10%; text-align: right; font-weight: 700; color: var(--accent-color); }
+        .toc-sub { padding-left: 40px !important; color: var(--text-muted); font-size: 1.15rem; }
+
+        /* Section Headings */
+        .section-header {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .instruction {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            background: var(--accent-light);
+            padding: 10px 15px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Question Styles - Book Format */
+        .q-block {
+            margin-bottom: 30px;
+            break-inside: avoid;
+        }
+
+        .q-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .bseb-tag {
+            font-size: 1rem;
+            color: #78716c;
+            font-weight: normal;
+            background: #e7e5e4;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .options {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            padding-left: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .answer {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--answer-color);
+            padding-left: 20px;
+        }
+
+        /* Grammar & Subjective Styles */
+        .grammar-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .grammar-item {
+            font-size: 1.4rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grammar-item .g-ans {
+            color: var(--answer-color);
+            font-weight: 700;
+            padding-left: 25px;
+        }
+
+        .subjective-ans {
+            font-size: 1.3rem;
+            color: #3f3f46;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: rgba(229, 217, 197, 0.3);
+            border-radius: 8px;
+            border-left: 3px solid var(--border-color);
+            text-align: justify;
+        }
+
+        .sub-header {
+            font-size: 1.6rem;
+            color: #5e4b3c;
+            margin: 30px 0 15px 0;
+            font-weight: 700;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #main-content { margin: 0; border-left: none; border-radius: 0; }
+            .page { padding: 30px 20px; }
+            .exam-title { font-size: 2.2rem; }
+            .subject-title { font-size: 1.8rem; }
+            .splash-title { font-size: 2.5rem; }
+            .options { flex-direction: column; gap: 5px; }
+            .toc-table { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 767px) and (orientation: landscape) {
+            .page { padding: 20px 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 class="splash-title">ब्रह्मास्त्र प्रश्न बैंक</h1>
+        <p class="splash-subtitle">BSEB Class 12 Hindi - Digital Study Book</p>
+        <button class="splash-btn" onclick="startReading()">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            Continue Reading
+        </button>
+    </div>
+
+    <!-- Main Content Container -->
+    <div id="main-content">
+        
+        <!-- COVER PAGE -->
+        <div class="page cover-page">
+            <div class="board-name">बिहार विद्यालय परीक्षा समिति (BSEB)</div>
+            <div class="exam-title">इंटरमीडिएट (12वीं) परीक्षा - 2026</div>
+            <div class="subject-title">हिंदी (100 अंक)</div>
+            <div class="book-details">
+                दिगंत भाग - 2 एवं व्याकरण<br>
+                <strong>ब्रह्मास्त्र प्रश्न बैंक</strong><br>
+                (Chapter-wise Objective & Subjective Questions)
+            </div>
+            
+            <div class="highlight-box">
+                विगत वर्षों (2015-2025) के अति महत्वपूर्ण प्रश्नों का संग्रह<br>
+                छात्रों के बोर्ड परीक्षा में 95%+ अंक प्राप्त करने हेतु विशेष रूप से तैयार
+            </div>
+        </div>
+
+        <!-- TABLE OF CONTENTS -->
+        <div class="page">
+            <h2 class="toc-title">अनुक्रम (Index)</h2>
+            <table class="toc-table">
+                <tr>
+                    <td class="ch-num">1</td>
+                    <td class="ch-name">खंड - अ : वस्तुनिष्ठ प्रश्न (Objective Questions) - गद्य खंड</td>
+                    <td class="pg-num">2</td>
+                </tr>
+                <tr>
+                    <td class="ch-num">2</td>
+                    <td class="ch-name">खंड - ब : वस्तुनिष्ठ प्रश्न (Objective Questions) - पद्य खंड</td>
+                    <td class="pg-num">3</td>
+                </tr>
+                <tr>
+                    <td class="ch-num">3</td>
+                    <td class="ch-name">खंड - स : हिंदी व्याकरण (Hindi Grammar VVI)</td>
+                    <td class="pg-num">3</td>
+                </tr>
+                <tr>
+                    <td class="ch-num"></td>
+                    <td class="ch-name toc-sub">3.1 संधि विच्छेद (Sandhi Vichched)</td>
+                    <td class="pg-num">3</td>
+                </tr>
+                <tr>
+                    <td class="ch-num"></td>
+                    <td class="ch-name toc-sub">3.2 पर्यायवाची एवं विलोम शब्द (Synonyms & Antonyms)</td>
+                    <td class="pg-num">3</td>
+                </tr>
+                <tr>
+                    <td class="ch-num"></td>
+                    <td class="ch-name toc-sub">3.3 मुहावरे (Idioms)</td>
+                    <td class="pg-num">4</td>
+                </tr>
+                <tr>
+                    <td class="ch-num">4</td>
+                    <td class="ch-name">खंड - द : विषयनिष्ठ प्रश्न (Subjective Questions)</td>
+                    <td class="pg-num">5</td>
+                </tr>
+                <tr>
+                    <td class="ch-num"></td>
+                    <td class="ch-name toc-sub">4.1 लघु उत्तरीय प्रश्न (Short Answer Type - 2 Marks)</td>
+                    <td class="pg-num">5</td>
+                </tr>
+                <tr>
+                    <td class="ch-num"></td>
+                    <td class="ch-name toc-sub">4.2 दीर्घ उत्तरीय प्रश्न (Long Answer Type - 5 Marks)</td>
+                    <td class="pg-num">5</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SECTION A: GADHYA KHAND -->
+        <div class="page">
+            <h2 class="section-header">1. खंड - अ : वस्तुनिष्ठ प्रश्न (Objective Questions) - गद्य खंड</h2>
+            <div class="instruction">निर्देशः प्रत्येक प्रश्न के चार विकल्प दिए गए हैं, जिनमें से एक सही है। (प्रत्येक 1 अंक)</div>
+
+            <div class="q-block">
+                <div class="q-text">1. 'बातचीत' शीर्षक निबंध के निबंधकार कौन हैं? <span class="bseb-tag">BSEB 2019, 2021, 2024</span></div>
+                <div class="options">
+                    <span>(A) जयप्रकाश नारायण</span>
+                    <span>(B) मोहन राकेश</span>
+                    <span>(C) नामवर सिंह</span>
+                    <span>(D) बालकृष्ण भट्ट</span>
+                </div>
+                <div class="answer">उत्तरः (D) बालकृष्ण भट्ट</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">2. 'उसने कहा था' कहानी के कहानीकार कौन हैं? <span class="bseb-tag">BSEB 2018, 2020, 2023</span></div>
+                <div class="options">
+                    <span>(A) बालकृष्ण भट्ट</span>
+                    <span>(B) भगत सिंह</span>
+                    <span>(C) चंद्रधर शर्मा गुलेरी</span>
+                    <span>(D) रामधारी सिंह दिनकर</span>
+                </div>
+                <div class="answer">उत्तरः (C) चंद्रधर शर्मा गुलेरी</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">3. 'संपूर्ण क्रांति' का नारा किसने दिया था? <span class="bseb-tag">BSEB 2015, 2021, 2022</span></div>
+                <div class="options">
+                    <span>(A) दिनकर</span>
+                    <span>(B) जयप्रकाश नारायण</span>
+                    <span>(C) मोरारजी देसाई</span>
+                    <span>(D) इनमें से कोई नहीं</span>
+                </div>
+                <div class="answer">उत्तर: (B) जयप्रकाश नारायण</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">4. 'अर्धनारीश्वर' किसकी रचना है? <span class="bseb-tag">BSEB 2017, 2020, 2024</span></div>
+                <div class="options">
+                    <span>(A) रामधारी सिंह दिनकर</span>
+                    <span>(B) बालकृष्ण भट्ट</span>
+                    <span>(C) मलयज</span>
+                    <span>(D) मोहन राकेश</span>
+                </div>
+                <div class="answer">उत्तरः (A) रामधारी सिंह दिनकर</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">5. 'रोज' कहानी की नायिका कौन है? <span class="bseb-tag">BSEB 2019, 2022</span></div>
+                <div class="options">
+                    <span>(A) सालवती</span>
+                    <span>(B) लीलावती</span>
+                    <span>(C) मालती</span>
+                    <span>(D) चंपा</span>
+                </div>
+                <div class="answer">उत्तरः (C) मालती</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">6. 'एक लेख और एक पत्र' में भगत सिंह ने किसको पत्र लिखा था? <span class="bseb-tag">BSEB 2018, 2021</span></div>
+                <div class="options">
+                    <span>(A) सुखदेव</span>
+                    <span>(B) राजगुरु</span>
+                    <span>(C) बिस्मिल</span>
+                    <span>(D) अशफाक</span>
+                </div>
+                <div class="answer">उत्तरः (A) सुखदेव</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">7. 'ओ सदानीरा' निबंध किस नदी को आधार बनाकर लिखा गया है? <span class="bseb-tag">BSEB 2017, 2023</span></div>
+                <div class="options">
+                    <span>(A) गंगा</span>
+                    <span>(B) गंडक</span>
+                    <span>(C) कोसी</span>
+                    <span>(D) कमला</span>
+                </div>
+                <div class="answer">उत्तर: (B) गंडक</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">8. 'सिपाही की माँ' एकांकी के एकांकीकार कौन हैं? <span class="bseb-tag">BSEB 2020, 2024</span></div>
+                <div class="options">
+                    <span>(A) अज्ञेय</span>
+                    <span>(B) मोहन राकेश</span>
+                    <span>(C) जगदीशचंद्र माथुर</span>
+                    <span>(D) बालकृष्ण भट्ट</span>
+                </div>
+                <div class="answer">उत्तर: (B) मोहन राकेश</div>
+            </div>
+        </div>
+
+        <!-- SECTION B: PADHYA KHAND -->
+        <div class="page">
+            <h2 class="section-header">2. खंड - ब : वस्तुनिष्ठ प्रश्न (Objective Questions) - पद्य खंड</h2>
+
+            <div class="q-block">
+                <div class="q-text">9. 'करबक' के रचयिता कौन हैं? <span class="bseb-tag">BSEB 2016, 2019, 2022</span></div>
+                <div class="options">
+                    <span>(A) सूरदास</span>
+                    <span>(B) कबीरदास</span>
+                    <span>(C) जायसी</span>
+                    <span>(D) तुलसीदास</span>
+                </div>
+                <div class="answer">उत्तरः (C) जायसी</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">10. सूरदास किस धारा के कवि हैं? <span class="bseb-tag">BSEB 2018, 2023</span></div>
+                <div class="options">
+                    <span>(A) रामाश्रयी</span>
+                    <span>(B) कृष्णाश्रयी</span>
+                    <span>(C) प्रेमाश्रयी</span>
+                    <span>(D) ज्ञानाश्रयी</span>
+                </div>
+                <div class="answer">उत्तरः (B) कृष्णाश्रयी</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">11. 'छप्पय' शीर्षक के रचयिता कौन हैं? <span class="bseb-tag">BSEB 2017, 2021</span></div>
+                <div class="options">
+                    <span>(A) सूरदास</span>
+                    <span>(B) कबीरदास</span>
+                    <span>(C) नाभादास</span>
+                    <span>(D) तुलसीदास</span>
+                </div>
+                <div class="answer">उत्तरः (C) नाभादास</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">12. 'तुमुल कोलाहल कलह में' कविता के कवि कौन हैं? <span class="bseb-tag">BSEB 2020, 2024</span></div>
+                <div class="options">
+                    <span>(A) जयशंकर प्रसाद</span>
+                    <span>(B) सुमित्रानंदन पंत</span>
+                    <span>(C) महादेवी वर्मा</span>
+                    <span>(D) निराला</span>
+                </div>
+                <div class="answer">उत्तरः (A) जयशंकर प्रसाद</div>
+            </div>
+        </div>
+
+        <!-- SECTION C: GRAMMAR -->
+        <div class="page">
+            <h2 class="section-header">3. खंड - स : हिंदी व्याकरण (Hindi Grammar VVI)</h2>
+
+            <h3 class="sub-header">3.1 संधि विच्छेद (Sandhi Vichched)</h3>
+            <div class="grammar-grid">
+                <div class="grammar-item">
+                    13. 'विद्यालय' का संधि विच्छेद है: <span class="bseb-tag">2018, 2022</span>
+                    <span class="g-ans">उत्तरः विद्या + आलय</span>
+                </div>
+                <div class="grammar-item">
+                    14. 'निश्चय' का संधि विच्छेद है: <span class="bseb-tag">2019, 2023</span>
+                    <span class="g-ans">उत्तरः निः + चय</span>
+                </div>
+                <div class="grammar-item">
+                    15. 'उद्घाटन' का संधि विच्छेद है: <span class="bseb-tag">2020, 2024</span>
+                    <span class="g-ans">उत्तर: उत् + घाटन</span>
+                </div>
+            </div>
+
+            <h3 class="sub-header">3.2 पर्यायवाची एवं विलोम शब्द (Synonyms & Antonyms)</h3>
+            <div class="grammar-grid">
+                <div class="grammar-item">
+                    16. 'अमृत' का पर्यायवाची शब्द हैः
+                    <span class="g-ans">उत्तरः सुधा, पीयूष</span>
+                </div>
+                <div class="grammar-item">
+                    17. 'आकाश' का पर्यायवाची शब्द हैः
+                    <span class="g-ans">उत्तरः नभ, गगन, अंबर</span>
+                </div>
+                <div class="grammar-item">
+                    18. 'आदर' का विलोम शब्द है:
+                    <span class="g-ans">उत्तरः अनादर / निरादर</span>
+                </div>
+                <div class="grammar-item">
+                    19. 'अनुराग' का विलोम शब्द है: <span class="bseb-tag">2021, 2024</span>
+                    <span class="g-ans">उत्तरः विराग</span>
+                </div>
+            </div>
+
+            <h3 class="sub-header">3.3 मुहावरे (Idioms)</h3>
+            <div class="grammar-grid">
+                <div class="grammar-item">
+                    20. 'आसमान टूटना' मुहावरे का अर्थ है: <span class="bseb-tag">2019</span>
+                    <span class="g-ans">उत्तरः अचानक मुसीबत आना</span>
+                </div>
+                <div class="grammar-item">
+                    21. 'हाथ मलना' मुहावरे का अर्थ है: <span class="bseb-tag">2022</span>
+                    <span class="g-ans">उत्तरः पछताना</span>
+                </div>
+                <div class="grammar-item">
+                    22. 'श्रीगणेश करना' मुहावरे का अर्थ है: <span class="bseb-tag">2023</span>
+                    <span class="g-ans">उत्तरः आरंभ करना</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION D: SUBJECTIVE -->
+        <div class="page">
+            <h2 class="section-header">4. खंड - द : विषयनिष्ठ प्रश्न (Subjective Questions)</h2>
+            
+            <h3 class="sub-header">4.1 लघु उत्तरीय प्रश्न (Short Answer Type - 2 Marks)</h3>
+            <div class="instruction">निर्देशः किन्हीं 5 प्रश्नों के उत्तर दें। प्रत्येक प्रश्न 2 अंक का है।</div>
+
+            <div class="q-block">
+                <div class="q-text">प्र 1. अगर हममें वाक्शक्ति न होती तो क्या होता? <span class="bseb-tag">BSEB 2018, 2021</span></div>
+                <div class="subjective-ans">
+                    <strong>उत्तरः</strong> यदि हममें वाक्शक्ति (बोलने की क्षमता) न होती तो यह पूरी सृष्टि गूंगी प्रतीत होती। सभी लोग चुपचाप बैठे रहते और हम अपने सुख-दुख एक-दूसरे से कह-सुन नहीं पाते। मनुष्य का सामाजिक जीवन असंभव हो जाता।
+                </div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">प्र 2. लहना सिंह का परिचय अपने शब्दों में दें। <span class="bseb-tag">BSEB 2017, 2022</span></div>
+                <div class="subjective-ans">
+                    <strong>उत्तरः</strong> लहना सिंह 'उसने कहा था' कहानी का मुख्य पात्र और नायक है। वह एक बहादुर, निडर और सच्चा सिख सैनिक है। वह अपने प्रेम (सूबेदारनी) के प्रति पूरी तरह समर्पित है और उसके द्वारा दिए गए वचन को निभाने के लिए अपने प्राणों का बलिदान दे देता है।
+                </div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">प्र 3. जयप्रकाश नारायण कम्युनिस्ट पार्टी में क्यों नहीं शामिल हुए? <span class="bseb-tag">BSEB 2019, 2023</span></div>
+                <div class="subjective-ans">
+                    <strong>उत्तरः</strong> जयप्रकाश नारायण जब अमेरिका से लौटे तो वे घोर मार्क्सवादी थे, लेकिन भारत लौटने पर वे कम्युनिस्ट पार्टी में शामिल नहीं हुए क्योंकि उस समय भारत गुलाम था। लेनिन का विचार था कि गुलाम देशों के मार्क्सवादियों को वहाँ की आज़ादी की लड़ाई से अलग नहीं रहना चाहिए, भले ही उस लड़ाई का नेतृत्व पूंजीपति वर्ग कर रहा हो। इसलिए वे कांग्रेस में शामिल हुए।
+                </div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">प्र 4. मालती के घर का वातावरण कैसा था? ('रोज' कहानी के आधार पर) <span class="bseb-tag">BSEB 2020, 2024</span></div>
+                <div class="subjective-ans">
+                    <strong>उत्तरः</strong> मालती के घर का वातावरण बहुत ही उदास, नीरस और यंत्रवत (मशीन जैसा) था। उसके जीवन में कोई उत्साह या खुशी नहीं थी। वह सुबह से रात तक घर के कामों में मशीन की तरह लगी रहती थी और उसके पति महेश्वर के पास भी उसके लिए समय नहीं था।
+                </div>
+            </div>
+
+            <h3 class="sub-header">4.2 दीर्घ उत्तरीय प्रश्न (Long Answer Type - 5 Marks)</h3>
+
+            <div class="q-block">
+                <div class="q-text">प्र 5. 'उसने कहा था' कहानी का सारांश लिखें। <span class="bseb-tag">BSEB 2016, 2021, 2024</span></div>
+                <div class="subjective-ans">
+                    <strong>उत्तर (संक्षेप में):</strong> 'उसने कहा था' चंद्रधर शर्मा गुलेरी द्वारा रचित एक अमर कहानी है जो सच्चे प्रेम और कर्तव्य-निष्ठा पर आधारित है। कहानी की शुरुआत अमृतसर के भीड़-भाड़ वाले बाजार से होती है जहाँ 12 साल का लड़का (लहना सिंह) 8 साल की लड़की से मिलता है और पूछता है, "तेरी कुड़माई (सगाई) हो गई?"<br><br>
+                    सालों बाद लहना सिंह सेना में भर्ती हो जाता है। वह सूबेदार हजारा सिंह के यहाँ जाता है, जहाँ उसे पता चलता है कि सूबेदारनी वही बचपन वाली लड़की है। सूबेदारनी लहना सिंह से अपने पति और बेटे (बोधा सिंह) की युद्ध में रक्षा करने की भीख मांगती है (यही 'उसने कहा था')। लहना सिंह मोर्चे पर अपनी जान पर खेलकर सूबेदार और उसके बेटे की जान बचाता है और खुद शहीद हो जाता है। यह कहानी निःस्वार्थ प्रेम और बलिदान का सर्वोच्च उदाहरण है।
+                </div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">प्र 6. 'अर्धनारीश्वर' निबंध में दिनकर जी के विचारों को स्पष्ट करें।</div>
+                <div class="subjective-ans">
+                    <strong>उत्तर (संक्षेप में):</strong> रामधारी सिंह दिनकर जी ने 'अर्धनारीश्वर' निबंध के माध्यम से यह संदेश दिया है कि नर और नारी एक समान हैं। शिव और पार्वती का अर्धनारीश्वर रूप इस बात का प्रतीक है कि पुरुष और स्त्री एक-दूसरे के पूरक हैं। दिनकर जी का मानना है कि पुरुष में दया, क्षमा, ममता जैसे 'स्त्री' के गुण आ जाने से वह पूर्ण बनता है, और स्त्री में साहस और वीरता जैसे 'पुरुष' के गुण आ जाने से उसकी मर्यादा कम नहीं होती। समाज के सर्वांगीण विकास के लिए दोनों का समान अधिकार और सम्मान आवश्यक है।
+                </div>
+            </div>
+
+            <div class="footer-note">
+                यह एक संक्षिप्त और अति महत्वपूर्ण प्रश्नों का संग्रह (Sample Template) है।<br>
+                इस प्रारूप का उपयोग करके 300+ पेजों का पूरा प्रश्न बैंक आसानी से संकलित किया जा सकता है।
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Interactive Script -->
+    <script>
+        function startReading() {
+            const splashScreen = document.getElementById('splash-screen');
+            const mainContent = document.getElementById('main-content');
+            
+            // Request fullscreen on user interaction
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch((err) => {
+                    console.log(`Fullscreen error: ${err.message}`);
+                });
+            }
+
+            // Attempt to lock orientation to landscape (primarily for mobile devices)
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch((err) => {
+                    console.log(`Orientation lock error: ${err.message}`);
+                });
+            }
+
+            // Fade transition
+            splashScreen.style.opacity = '0';
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Slight delay for fade-in effect
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                }, 50);
+            }, 600);
+        }
+    </script>
+</body>
+</html>
