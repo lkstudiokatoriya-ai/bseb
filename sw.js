@@ -1,10 +1,9 @@
 /* =========================================================
    BSEB Student Portal
    Production Service Worker
-   File: sw.js
 ========================================================= */
 
-const CACHE_NAME = "bseb-student-portal-v1.0.0";
+const CACHE_NAME = "bseb-v1.0.0";
 
 const ASSETS = [
   "./",
@@ -19,7 +18,6 @@ const ASSETS = [
   "./modelpaper.html",
   "./downloads.html",
   "./about.html",
-  "./offline.html",
   "./manifest.json",
 
   "./banner1.jpg",
@@ -40,110 +38,99 @@ const ASSETS = [
   "./about.png",
   "./my.png",
 
-  "./icons/icon-72.png",
-  "./icons/icon-96.png",
-  "./icons/icon-128.png",
-  "./icons/icon-144.png",
-  "./icons/icon-152.png",
   "./icons/icon-192.png",
-  "./icons/icon-384.png",
   "./icons/icon-512.png"
 ];
 
-/* Install */
+/* INSTALL */
 
 self.addEventListener("install", event => {
 
-    event.waitUntil(
+  self.skipWaiting();
 
-        caches.open(CACHE_NAME)
+  event.waitUntil(
 
-        .then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
 
-    );
-
-    self.skipWaiting();
+  );
 
 });
 
-/* Activate */
+/* ACTIVATE */
 
 self.addEventListener("activate", event => {
 
-    event.waitUntil(
+  event.waitUntil(
 
-        caches.keys().then(keys => {
+    caches.keys().then(keys =>
 
-            return Promise.all(
+      Promise.all(
 
-                keys.map(key => {
+        keys.map(key => {
 
-                    if(key !== CACHE_NAME){
+          if (key !== CACHE_NAME) {
 
-                        return caches.delete(key);
+            return caches.delete(key);
 
-                    }
-
-                })
-
-            );
+          }
 
         })
 
-    );
+      )
 
-    self.clients.claim();
+    )
+
+  );
+
+  self.clients.claim();
 
 });
 
-/* Fetch */
+/* FETCH */
 
 self.addEventListener("fetch", event => {
 
-    if(event.request.method !== "GET") return;
+  if (event.request.method !== "GET") return;
 
-    event.respondWith(
+  event.respondWith(
 
-        caches.match(event.request)
+    caches.match(event.request)
 
-        .then(cacheResponse => {
+      .then(response => {
 
-            if(cacheResponse){
+        if (response) {
 
-                return cacheResponse;
+          return response;
+
+        }
+
+        return fetch(event.request)
+
+          .then(networkResponse => {
+
+            const copy = networkResponse.clone();
+
+            caches.open(CACHE_NAME)
+
+              .then(cache => cache.put(event.request, copy));
+
+            return networkResponse;
+
+          })
+
+          .catch(() => {
+
+            if (event.request.mode === "navigate") {
+
+              return caches.match("./offline.html") || caches.match("./index.html");
 
             }
 
-            return fetch(event.request)
+          });
 
-            .then(networkResponse => {
+      })
 
-                const responseClone = networkResponse.clone();
-
-                caches.open(CACHE_NAME)
-
-                .then(cache => {
-
-                    cache.put(event.request,responseClone);
-
-                });
-
-                return networkResponse;
-
-            })
-
-            .catch(() => {
-
-                if(event.request.mode === "navigate"){
-
-                    return caches.match("./offline.html");
-
-                }
-
-            });
-
-        })
-
-    );
+  );
 
 });
