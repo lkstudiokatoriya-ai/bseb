@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="BSEB Results - Bihar Board Student Portal">
+    <title>BSEB Results</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255, 255, 255, 0.6);
+            --skeleton-2: rgba(255, 255, 255, 0.9);
+            --search-bg: rgba(255, 255, 255, 0.8);
+            --info-bg: rgba(59, 130, 246, 0.1);
+            --info-border: rgba(59, 130, 246, 0.3);
+            --info-text: #1d4ed8;
+            
+            --safe-bottom: 85px;
+            --header-height: 135px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(15, 23, 42, 0.5);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(30, 41, 59, 0.7);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0, 0, 0, 0.3);
+                --skeleton-2: rgba(255, 255, 255, 0.08);
+                --search-bg: rgba(0, 0, 0, 0.45);
+                --info-bg: rgba(59, 130, 246, 0.15);
+                --info-border: rgba(59, 130, 246, 0.3);
+                --info-text: #93c5fd;
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+        input { font: inherit; outline: none; border: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; border: none !important; box-shadow: none !important; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .back-btn:active { transform: scale(0.95); }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 30px;
+            background: var(--search-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--accent-color), 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
+        
+        /* Pure CSS Search Icon Placeholder */
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .search-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 8px;
+            height: 2px;
+            background: var(--text-secondary);
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+
+        /* =========================================================
+           MAIN CONTENT & INFORMATION CARD
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 15px) 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 768px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .info-card {
+            background: var(--info-bg);
+            border: 1px solid var(--info-border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--info-text);
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Pure CSS Info Icon */
+        .info-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--info-text);
+            color: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .info-icon::before { content: 'i'; font-family: serif; font-style: italic; color: white;}
+
+        .info-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* =========================================================
+           RESULT CARDS
+           ========================================================= */
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        /* Pure CSS Trophy/Result Icon */
+        .result-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--accent-gradient);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(78, 84, 200, 0.3);
+        }
+        .result-icon::before {
+            content: '100';
+            color: white;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .result-icon.inter::before { content: '12th'; }
+        .result-icon.matric::before { content: '10th'; }
+
+        .card-info {
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            margin-top: 5px;
+        }
+
+        .btn-check {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 6px 20px rgba(78, 84, 200, 0.4);
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-check:active { transform: scale(0.98); opacity: 0.9; }
+
+        /* Pure CSS External Link Arrow */
+        .external-icon {
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-bottom: none;
+            border-left: none;
+            position: relative;
+        }
+        .external-icon::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 14px;
+            height: 2px;
+            background: white;
+            transform: rotate(-45deg);
+            transform-origin: top right;
+        }
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .empty-state.active { display: flex; }
+        
+        /* Pure CSS Illustration */
+        .illustration {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .ill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            animation: rotate 15s linear infinite;
+        }
+        .ill-document {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 65px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            opacity: 0.5;
+        }
+        .ill-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+        }
+        .ill-cross::before, .ill-cross::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--text-primary);
+            border-radius: 2px;
+        }
+        .ill-cross::before { transform: translateY(-50%) rotate(45deg); }
+        .ill-cross::after { transform: translateY(-50%) rotate(-45deg); }
+        
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .empty-state h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+        .empty-state p { font-size: 0.95rem; color: var(--text-secondary); font-weight: 500; }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        /* Highlight Home since Result is a core dashboard module */
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        /* Desktop Adjustments */
+        @media (min-width: 768px) {
+            .result-card { padding: 30px; }
+            .card-title { font-size: 1.4rem; }
+            .card-desc { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header class="glass">
+        <div class="header-top">
+            <!-- Using pure HTML entity for back arrow to avoid SVGs/Icons -->
+            <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+                &#10094;
+            </a>
+            <h1 class="page-title">Results</h1>
+        </div>
+        <div class="search-container">
+            <div class="search-icon"></div>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search result portals...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Information Card -->
+        <div class="info-card glass" id="infoCard">
+            <div class="info-icon"></div>
+            <div class="info-text">
+                Please keep your Roll Code and Roll Number ready before checking your result.
+            </div>
+        </div>
+
+        <!-- Results List -->
+        <div id="resultList" class="result-list">
+            <!-- Premium Skeleton Loaders -->
+            <div class="result-card glass skeleton">
+                <div class="card-header">
+                    <div class="result-icon"></div>
+                    <div class="card-info">
+                        <div class="card-title">Loading...</div>
+                        <div class="card-desc">Fetching official portal links...</div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn-check"></div></div>
+            </div>
+            <div class="result-card glass skeleton">
+                <div class="card-header">
+                    <div class="result-icon"></div>
+                    <div class="card-info">
+                        <div class="card-title">Loading...</div>
+                        <div class="card-desc">Fetching official portal links...</div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn-check"></div></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="illustration">
+                <div class="ill-circle"></div>
+                <div class="ill-document"></div>
+                <div class="ill-cross"></div>
+            </div>
+            <h3>No Result Available</h3>
+            <p>We couldn't find any result portal matching your search.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <!-- Highlight Home per portal hierarchy -->
+        <a href="index.html" class="nav-item active ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="help.html" class="nav-item ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // RESULT DATA
+            // ==========================================
+            const resultsData = [
+                {
+                    id: "matric",
+                    title: "BSEB Class 10th Result",
+                    description: "Check Bihar Board Matric Result.",
+                    url: "https://result.biharboardonline.org/",
+                    iconClass: "matric"
+                },
+                {
+                    id: "inter",
+                    title: "BSEB Class 12th Result",
+                    description: "Check Bihar Board Intermediate Result.",
+                    url: "https://intermediate.biharboardonline.com/",
+                    iconClass: "inter"
+                }
+            ];
+
+            const resultList = document.getElementById('resultList');
+            const searchInput = document.getElementById('searchInput');
+            const emptyState = document.getElementById('emptyState');
+            const infoCard = document.getElementById('infoCard');
+
+            // ==========================================
+            // RENDER FUNCTION
+            // ==========================================
+            function renderResults(data) {
+                resultList.innerHTML = ''; 
+                
+                if (data.length === 0) {
+                    emptyState.classList.add('active');
+                    infoCard.style.display = 'none'; // Hide info box when no results match
+                    return;
+                }
+                
+                emptyState.classList.remove('active');
+                infoCard.style.display = 'flex';
+
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'result-card glass';
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="result-icon ${item.iconClass}"></div>
+                            <div class="card-info">
+                                <h3 class="card-title">${item.title}</h3>
+                                <p class="card-desc">${item.description}</p>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-check ripple-target" onclick="window.open('${item.url}', '_blank')">
+                                Check Result <span class="external-icon"></span>
+                            </button>
+                        </div>
+                    `;
+                    resultList.appendChild(card);
+                });
+
+                attachRipples(); // Bind ripple effect to new buttons
+            }
+
+            // Simulate Premium Skeleton Loader Delay (UX Enhancement)
+            setTimeout(() => {
+                renderResults(resultsData);
+            }, 800);
+
+
+            // ==========================================
+            // SEARCH FUNCTIONALITY (Instant Filter)
+            // ==========================================
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const filtered = resultsData.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query)
+                );
+                renderResults(filtered);
+            });
+
+            // ==========================================
+            // RIPPLE EFFECT SYSTEM
+            // ==========================================
+            function attachRipples() {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    // Prevent duplicate bindings
+                    target.removeEventListener('mousedown', createRipple);
+                    target.removeEventListener('touchstart', createRipple);
+                    
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            }
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if (event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) existingRipple.remove();
+
+                button.appendChild(circle);
+                setTimeout(() => circle.remove(), 600);
+            }
+
+            // Initial binding for static nav elements
+            attachRipples();
+        });
+    </script>
+</body>
+</html>

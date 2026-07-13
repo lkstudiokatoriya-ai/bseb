@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="About BSEB Student Portal and Developer Lalan Kumar">
+    <title>About Us</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255, 255, 255, 0.5);
+            --skeleton-2: rgba(255, 255, 255, 0.9);
+            
+            --safe-bottom: 85px;
+            --header-height: 70px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(15, 23, 42, 0.5);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(30, 41, 59, 0.6);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0, 0, 0, 0.3);
+                --skeleton-2: rgba(255, 255, 255, 0.08);
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; border: none !important; box-shadow: none !important; background: transparent !important; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+            border-radius: inherit;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .back-btn:active { transform: scale(0.95); }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* =========================================================
+           MAIN CONTENT
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 20px) 20px calc(var(--safe-bottom) + 20px) 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 25px 20px;
+            border-radius: 24px;
+        }
+
+        .profile-img-wrapper {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            padding: 4px;
+            background: var(--accent-gradient);
+            margin-bottom: 15px;
+            box-shadow: 0 8px 25px rgba(78, 84, 200, 0.4);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--card-bg);
+            background: var(--card-bg); /* Fallback bg */
+        }
+
+        .profile-section h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .profile-section p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Generic Card Style */
+        .info-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* About Text */
+        .about-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Developer Info List */
+        .dev-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .dev-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .dev-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .dev-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Social Media Buttons */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 5px;
+        }
+        .social-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 10px;
+            border-radius: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+            gap: 8px;
+        }
+        .social-btn:active { transform: scale(0.95); }
+        .social-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 8px;
+            /* Using background color as a visual fallback if image is missing */
+            background: rgba(0,0,0,0.05); 
+        }
+        .social-btn span {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            gap: 8px;
+        }
+        /* Pure CSS bullet point for features */
+        .feature-item::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            flex-shrink: 0;
+        }
+
+        /* Version & Copyright */
+        .footer-info {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 10px;
+        }
+        .app-version {
+            display: inline-block;
+            background: var(--glass-bg);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 15px;
+        }
+        .copyright {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="glass">
+        <!-- Using pure HTML entity for back arrow -->
+        <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+            &#10094;
+        </a>
+        <h1 class="page-title">About Us</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        
+        <!-- Profile Section -->
+        <section class="profile-section glass skeleton-load">
+            <div class="profile-img-wrapper">
+                <!-- Using inline CSS to hide broken image icon and show fallback color if image is missing -->
+                <img src="my.png" alt="Profile Image" class="profile-img" onerror="this.style.opacity='0'; this.parentElement.style.background='var(--accent-gradient)';">
+            </div>
+            <h2>BSEB Student Portal</h2>
+            <p>Educational Platform</p>
+            <span class="premium-badge">Premium Design</span>
+        </section>
+
+        <!-- About Card -->
+        <section class="info-card skeleton-load">
+            <h3 class="section-title">About This Portal</h3>
+            <p class="about-text">
+                This platform is designed to help Bihar Board students easily access syllabus, notices, exam routine, admit cards, results, model papers, notes, quizzes and downloads from one place using a modern mobile-friendly interface.
+            </p>
+        </section>
+
+        <!-- Developer Info Card -->
+        <section class="info-card skeleton-load">
+            <h3 class="section-title">Developer Information</h3>
+            <ul class="dev-list">
+                <li class="dev-item">
+                    <span class="dev-label">Developer Name</span>
+                    <span class="dev-value">Lalan Kumar</span>
+                </li>
+                <li class="dev-item">
+                    <span class="dev-label">Phone</span>
+                    <span class="dev-value">+91 9296783086</span>
+                </li>
+                <li class="dev-item">
+                    <span class="dev-label">Email</span>
+                    <span class="dev-value">lkstudiokatoriya@gmail.com</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Social Media Links -->
+        <section class="info-card skeleton-load">
+            <h3 class="section-title">Connect With Us</h3>
+            <div class="social-grid">
+                <a href="#" class="social-btn ripple-target">
+                    <img src="placeholder_instagram.png" alt="Instagram" onerror="this.style.display='none'">
+                    <span>Instagram</span>
+                </a>
+                <a href="#" class="social-btn ripple-target">
+                    <img src="placeholder_facebook.png" alt="Facebook" onerror="this.style.display='none'">
+                    <span>Facebook</span>
+                </a>
+                <a href="#" class="social-btn ripple-target">
+                    <img src="placeholder_whatsapp.png" alt="WhatsApp" onerror="this.style.display='none'">
+                    <span>WhatsApp</span>
+                </a>
+                <a href="#" class="social-btn ripple-target">
+                    <img src="placeholder_telegram.png" alt="Telegram" onerror="this.style.display='none'">
+                    <span>Telegram</span>
+                </a>
+                <a href="mailto:lkstudiokatoriya@gmail.com" class="social-btn ripple-target">
+                    <img src="placeholder_email.png" alt="Email" onerror="this.style.display='none'">
+                    <span>Email</span>
+                </a>
+                <a href="tel:+919296783086" class="social-btn ripple-target">
+                    <img src="placeholder_phone.png" alt="Phone" onerror="this.style.display='none'">
+                    <span>Phone</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="info-card skeleton-load">
+            <h3 class="section-title">App Features</h3>
+            <div class="features-grid">
+                <div class="feature-item">Fast Loading</div>
+                <div class="feature-item">Mobile Friendly</div>
+                <div class="feature-item">PWA Ready</div>
+                <div class="feature-item">Smart Study</div>
+                <div class="feature-item">Unlimited Notes</div>
+                <div class="feature-item">Premium UI</div>
+                <div class="feature-item">Dark Mode</div>
+                <div class="feature-item">Responsive Design</div>
+            </div>
+        </section>
+
+        <!-- Version & Copyright -->
+        <footer class="footer-info skeleton-load">
+            <div class="app-version">Version 1.0.0</div>
+            <div class="copyright">
+                © 2026 BSEB Student Portal<br>
+                All Rights Reserved.
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <a href="index.html" class="nav-item ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="help.html" class="nav-item ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // 1. SKELETON LOADING EFFECT REMOVAL
+            // ==========================================
+            // Applies a brief skeleton load to dynamic-feeling components for a premium feel
+            const skeletons = document.querySelectorAll('.skeleton-load');
+            
+            // Add skeleton class initially
+            skeletons.forEach(el => el.classList.add('skeleton'));
+
+            // Remove it after a slight delay
+            setTimeout(() => {
+                skeletons.forEach(el => el.classList.remove('skeleton'));
+            }, 600);
+
+
+            // ==========================================
+            // 2. RIPPLE EFFECT SYSTEM
+            // ==========================================
+            function attachRipples() {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            }
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                // Remove existing ripples
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+
+                button.appendChild(circle);
+
+                setTimeout(() => {
+                    circle.remove();
+                }, 600);
+            }
+
+            attachRipples();
+        });
+    </script>
+</body>
+</html>
