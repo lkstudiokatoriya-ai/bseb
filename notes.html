@@ -686,13 +686,11 @@
                         <div class="card-actions">
                             <button class="btn btn-primary ripple-target" onclick="openSmartStudy('${item.title}', '${item.url}', '${item.type}')">
                                 📖 Open Now
-                            </button>
-                            <button class="btn btn-secondary ripple-target" onclick="downloadFile('${item.title}')">
-                                ⬇
-                            </button>
-                            <button class="btn btn-secondary ripple-target" onclick="shareFile('${item.title}')">
-                                ↗
-                            </button>
+                           <button class="btn btn-secondary ripple-target"
+        onclick="shareFile('${item.title}', '${item.url}')"
+        aria-label="Share">
+    📤 Share
+</button>
                         </div>
                     `;
                     studyList.appendChild(card);
@@ -723,32 +721,29 @@
             // ==========================================
             // FILE ACTIONS (Share, Download)
             // ==========================================
-            window.shareFile = async (title) => {
-                if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: title,
-                            text: `Check out this study material: ${title} on BSEB Portal.`,
-                            url: window.location.href
-                        });
-                    } catch (err) {
-                        console.log('Error sharing:', err);
-                    }
-                } else {
-                    alert('Sharing is not supported on this browser.');
-                }
-            };
+            window.shareFile = async (title, url) => {
 
-            window.downloadFile = (title) => {
-                // Mock download logic
-                const a = document.createElement('a');
-                a.href = '#'; 
-                a.download = title;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            };
+    const shareData = {
+        title: title,
+        text: `📚 ${title}\n\nStudy Material - BSEB Student Portal`,
+        url: url || window.location.href
+    };
 
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+        } catch (err) {
+            console.log("Share cancelled");
+        }
+    } else {
+        try {
+            await navigator.clipboard.writeText(shareData.url);
+            alert("🔗 Link copied successfully!");
+        } catch (err) {
+            prompt("Copy this link:", shareData.url);
+        }
+    }
+};
 
             // ==========================================
             // SMART STUDY VIEWER (Fullscreen & Orientation)
