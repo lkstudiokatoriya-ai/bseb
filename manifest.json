@@ -1,0 +1,132 @@
+{
+  "name": "BSEB Student Portal",
+  "short_name": "BSEB",
+  "description": "Modern BSEB Student Portal for Syllabus, Latest Notice, Exam Routine, Admit Card, Results, Model Papers, Notes & Quiz, Downloads and Study Materials.",
+  "lang": "en-IN",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+
+  "icons": [
+    {
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Study",
+      "short_name": "Study",
+      "url": "./notes.html",
+      "icons": [
+        {
+          "src": "study.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Latest Notice",
+      "short_name": "Notice",
+      "url": "./latest.html",
+      "icons": [
+        {
+          "src": "latest.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Results",
+      "short_name": "Result",
+      "url": "./result.html",
+      "icons": [
+        {
+          "src": "result.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Help",
+      "short_name": "Help",
+      "url": "./help.html",
+      "icons": [
+        {
+          "src": "help.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+
+  "categories": [
+    "education",
+    "books",
+    "productivity"
+  ]
+}
