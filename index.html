@@ -392,29 +392,7 @@
             .card h3 { font-size: 0.85rem; }
             .card p { font-size: 0.7rem; }
         }
-        .drawer-menu {
-    padding: 20px;
-}
-.drawer-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.drawer-menu li {
-    margin-bottom: 15px;
-}
-.drawer-menu .menu-item {
-    display: block;
-    padding: 12px 15px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1rem;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-}
-.drawer-menu .menu-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
+        
         
     </style>
     <link rel="manifest" href="manifest.json">
@@ -431,22 +409,34 @@
     </header>
 
     <!-- Drawer Menu & Overlay -->
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <nav class="drawer-nav">
-    <ul class="menu-list">
-        <li><a href="index.html" class="menu-link active"><i class="icon-home"></i> <span>Home</span></a></li>
-        <li><a href="notes.html" class="menu-link"><i class="icon-book"></i> <span>Study Material</span></a></li>
-        <li><a href="syllabus.html" class="menu-link"><i class="icon-file"></i> <span>Syllabus</span></a></li>
-        <li><a href="latest.html" class="menu-link"><i class="icon-bell"></i> <span>Latest Notice</span></a></li>
-        <li><a href="about.html" class="menu-link"><i class="icon-phone"></i> <span>Contact Us</span></a></li>
-    </ul>
-    </nav>
-    
+    <div class="drawer-overlay" id="drawerOverlay"></div>    
     <aside class="drawer glass" id="drawer">
         <button class="drawer-close ripple-target" id="drawerClose" aria-label="Close Menu">
             &times;
         </button>
-        <!-- Future Drawer Items can go here -->
+        <div class="menu-list">
+
+<a href="index.html" class="menu-item">🏠 Home</a>
+
+<a href="syllabus.html" class="menu-item">📚 Syllabus</a>
+
+<a href="latest.html" class="menu-item">📢 Latest Notice</a>
+
+<a href="exam.html" class="menu-item">📝 Exam Routine</a>
+
+<a href="admit.html" class="menu-item">🎫 Admit Card</a>
+
+<a href="result.html" class="menu-item">🏆 Result</a>
+
+<a href="notes.html" class="menu-item">📖 Notes</a>
+
+<a href="downloads.html" class="menu-item">⬇ Downloads</a>
+
+<a href="help.html" class="menu-item">❓ Help</a>
+
+<a href="about.html" class="menu-item">ℹ About Us</a>
+
+        </div>
     </aside>
 
     <!-- Main Content -->
@@ -735,23 +725,7 @@
                 console.log('PWA was installed');
             });
         });
-    </script>
-    <script>
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js');
-    });
-}
-        document.querySelectorAll('.menu-link').forEach(link => {
-    link.addEventListener('click', function() {
-        document.querySelector('.menu-link.active')?.classList.remove('active');
-        this.classList.add('active');
-        
-        // Optional: Close drawer automatically after click on mobile
-        // document.getElementById('drawer').classList.remove('open');
-    });
-});
-        
+           
     </script>
 </body>
 </html>
