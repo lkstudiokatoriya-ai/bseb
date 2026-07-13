@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Exam Pattern 2026 Notes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #e0e5ec;
+            font-family: 'Kalam', cursive;
+            font-size: 19px;
+            color: #1a428a; /* Blue ink */
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Portrait Overlay Overlay */
+        #portrait-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #fdfbf7;
+            z-index: 10000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #portrait-overlay p {
+            font-size: 24px;
+            color: #d12020;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-family: 'Kalam', cursive;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #1a428a;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .btn-back {
+            background-color: #d12020;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media screen and (orientation: portrait) {
+            #portrait-overlay { display: flex; }
+            #notebook-container { display: none; }
+        }
+
+        /* Notebook Container */
+        #notebook-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            gap: 20px;
+        }
+
+        /* A4 Page Styling */
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #fcfcf9;
+            background-image: 
+                radial-gradient(#e5e1d8 1px, transparent 1px),
+                linear-gradient(90deg, rgba(200,200,200,0.1) 0%, rgba(255,255,255,0) 5%);
+            background-size: 20px 20px, 100% 100%;
+            position: relative;
+            padding: 25mm 20mm 25mm 35mm; /* Extra left padding for spirals */
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            border-radius: 2px 8px 8px 2px;
+            overflow: visible;
+        }
+
+        /* Spiral Binding Simulation */
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10mm;
+            bottom: 0;
+            width: 15mm;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 15px,
+                #888 15px,
+                #e0e0e0 18px,
+                #555 20px,
+                transparent 21px,
+                transparent 30px
+            );
+            z-index: 10;
+        }
+        
+        .page::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 8mm; bottom: 0; width: 6mm;
+            background: repeating-radial-gradient(
+                circle at center,
+                #333 0,
+                #444 3px,
+                transparent 4px,
+                transparent 30px
+            );
+            background-size: 100% 30px;
+            z-index: 9;
+        }
+
+        /* Typography & Colors */
+        h1, h2, h3, .red-heading {
+            color: #d12020; /* Red ink */
+            margin-bottom: 15px;
+            margin-top: 20px;
+            break-after: avoid;
+            page-break-after: avoid;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 28px; text-align: center; text-decoration: underline; text-decoration-color: rgba(209, 32, 32, 0.4); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+        h2 { font-size: 24px; border-bottom: 2px dashed rgba(209,32,32,0.3); display: inline-block; }
+        h3 { font-size: 20px; }
+
+        p, li, td, th {
+            color: #1a428a; /* Blue ink */
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .highlight-yellow {
+            background-color: rgba(255, 235, 59, 0.6);
+            padding: 0 5px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .bold-blue {
+            font-weight: bold;
+        }
+
+        /* Lists */
+        ul {
+            list-style-type: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Quotes / Important notes */
+        .quote-box {
+            border: 2px solid #1a428a;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; /* Hand-drawn box */
+            padding: 15px 20px;
+            margin: 15px 0;
+            background-color: rgba(26, 66, 138, 0.03);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* Educational Labels / Callouts */
+        .callout {
+            display: inline-block;
+            background-color: #d12020;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 12px 0 12px 0;
+            font-size: 16px;
+            margin-bottom: 10px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        th, td {
+            border: 1px solid #1a428a;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            color: #d12020;
+            font-weight: bold;
+            background-color: rgba(209, 32, 32, 0.05);
+        }
+        table, th, td {
+            border-radius: 2px;
+            border: 2px solid #1a428a;
+            border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><path d='M1 1 Q 50 5, 99 1 Q 95 50, 99 99 Q 50 95, 1 99 Q 5 50, 1 1' stroke='%231a428a' fill='none' stroke-width='2'/></svg>") 2 stretch;
+        }
+
+        /* Flowcharts (CSS Trees) */
+        .tree-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .tree {
+            text-align: center;
+        }
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-left: 0;
+        }
+        .tree li {
+            float: left; text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+        .tree li::before, .tree li::after{
+            content: '';
+            position: absolute; top: 0; right: 50%;
+            border-top: 2px solid #1a428a;
+            width: 50%; height: 20px;
+        }
+        .tree li::after{
+            right: auto; left: 50%;
+            border-left: 2px solid #1a428a;
+        }
+        .tree li:only-child::after, .tree li:only-child::before {
+            display: none;
+        }
+        .tree li:only-child{ padding-top: 0;}
+        .tree li:first-child::before, .tree li:last-child::after{
+            border: 0 none;
+        }
+        .tree li:first-child::after{
+            border-radius: 5px 0 0 0;
+        }
+        .tree li:last-child::before{
+            border-right: 2px solid #1a428a;
+            border-radius: 0 5px 0 0;
+        }
+        .tree ul ul::before{
+            content: '';
+            position: absolute; top: 0; left: 50%;
+            border-left: 2px solid #1a428a;
+            width: 0; height: 20px;
+        }
+        .tree-node {
+            border: 2px solid #1a428a;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #1a428a;
+            font-weight: bold;
+            display: inline-block;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            background-color: #fff;
+            position: relative;
+        }
+        .tree-node .highlight-yellow { margin-top: 5px; display: inline-block; }
+
+        /* Step Arrows Simulation */
+        .step-down {
+            text-align: center;
+            font-size: 24px;
+            color: #d12020;
+            margin: 5px 0;
+            break-inside: avoid;
+        }
+        
+        .formula-box {
+            text-align: center;
+            border: 2px dashed #d12020;
+            padding: 15px;
+            margin: 15px auto;
+            width: max-content;
+            border-radius: 10px;
+            background: #fff;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .hr-line {
+            text-align: center;
+            margin: 20px 0;
+            color: #d12020;
+            opacity: 0.5;
+        }
+
+        /* SVG Containers */
+        .svg-container {
+            width: 100%;
+            text-align: center;
+            margin: 20px 0;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        /* Print Specific Styling */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                background: none;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+                border: none;
+                border-radius: 0;
+                background: #fff;
+            }
+            .page::before, .page::after {
+                display: none; /* Hide spirals in PDF */
+            }
+            #portrait-overlay { display: none !important; }
+            #notebook-container { display: block; }
+        }
+
+        /* Safe constraints */
+        .section {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="portrait-overlay">
+        <p>📱 बेहतर अनुभव के लिए कृपया अपने डिवाइस को Landscape Mode में घुमाएँ।</p>
+        <div class="btn-group">
+            <button class="btn" onclick="enterLandscape()">Continue →</button>
+            <button class="btn btn-back" onclick="window.history.back()">Back</button>
+        </div>
+    </div>
+
+    <div id="notebook-container">
+
+        <div class="page">
+            <div class="callout">Premium Study Notes</div>
+            <h1>बिहार बोर्ड कक्षा 12 (2026) – Physics</h1>
+            <h1>Exam Pattern एवं Marks Distribution</h1>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Chapter : Physics Exam Pattern (2026)</h2>
+
+            <h3 class="red-heading">परिचय</h3>
+            <p>भौतिकी (<span class="highlight-yellow">Physics</span>) विज्ञान की वह शाखा है जिसमें <span class="highlight-yellow">प्रकृति (Nature)</span> तथा उसके नियमों का अध्ययन किया जाता है।</p>
+
+            <div class="quote-box">
+                <p class="bold-blue">Physics = Study of Nature (प्रकृति का अध्ययन)</p>
+            </div>
+
+            <p>Physics में अधिकांश प्रश्न <span class="highlight-yellow">Concept Based</span>, <span class="highlight-yellow">Calculation Based</span> तथा <span class="highlight-yellow">Derivation Based</span> होते हैं। यदि अवधारणाएँ (Concepts) स्पष्ट हों तो यह विषय अत्यंत सरल हो जाता है।</p>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">2026 बोर्ड परीक्षा का लक्ष्य</h2>
+            <div class="callout">Target (लक्ष्य)</div>
+            <ul>
+                <li>कुल अंक : <span class="highlight-yellow">450+</span></li>
+                <li>Physics में लक्ष्य : <span class="highlight-yellow">95+ Marks</span></li>
+                <li>Concept आधारित तैयारी</li>
+                <li>नियमित अभ्यास</li>
+                <li>NCERT एवं बोर्ड पैटर्न पर फोकस</li>
+            </ul>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Bihar Board Physics Exam Overview</h2>
+            <table>
+                <tr>
+                    <th>विवरण</th>
+                    <th>अंक</th>
+                </tr>
+                <tr>
+                    <td>कुल परीक्षा</td>
+                    <td><span class="highlight-yellow">100 Marks</span></td>
+                </tr>
+                <tr>
+                    <td>Theory (सैद्धांतिक)</td>
+                    <td><span class="highlight-yellow">70 Marks</span></td>
+                </tr>
+                <tr>
+                    <td>Practical (प्रायोगिक)</td>
+                    <td><span class="highlight-yellow">30 Marks</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page">
+            <h2 class="red-heading">Marks Distribution</h2>
+            
+            <div class="tree-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="tree-node">Physics<br><span class="highlight-yellow">(100 Marks)</span></div>
+                            <ul>
+                                <li>
+                                    <div class="tree-node">Theory<br><span class="highlight-yellow">(70 Marks)</span></div>
+                                </li>
+                                <li>
+                                    <div class="tree-node">Practical<br><span class="highlight-yellow">(30 Marks)</span></div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Practical Examination (30 Marks)</h2>
+            <p>Practical परीक्षा बोर्ड परीक्षा से पहले आयोजित की जाती है।</p>
+            <p>इसके लिए बिहार बोर्ड अलग से:</p>
+            <ul>
+                <li>Admit Card जारी करता है।</li>
+                <li>Practical Centre निर्धारित करता है।</li>
+            </ul>
+
+            <h3 class="red-heading">Practical Marks Distribution</h3>
+            <table>
+                <tr>
+                    <th>भाग</th>
+                    <th>अंक</th>
+                </tr>
+                <tr>
+                    <td>Practical Experiment</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td>Viva + Oral Test / Written Practical</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Practical Copy / Record File</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td><strong>कुल</strong></td>
+                    <td><strong><span class="highlight-yellow">30</span></strong></td>
+                </tr>
+            </table>
+
+            <h3 class="red-heading">1. Practical Experiment (15 Marks)</h3>
+            <p>परीक्षा केन्द्र पर विद्यार्थी से प्रयोग (Experiment) कराया जाता है।</p>
+            <p>इसी के आधार पर <span class="highlight-yellow">15 अंक</span> दिए जाते हैं।</p>
+
+            <h3 class="red-heading">2. Viva / Oral Examination (10 Marks)</h3>
+            <p>प्रयोग से संबंधित प्रश्न पूछे जाते हैं। इसमें शामिल हो सकता है—</p>
+            <ul>
+                <li>उपकरणों की पहचान</li>
+                <li>सिद्धांत</li>
+                <li>सूत्र</li>
+                <li>प्रयोग की प्रक्रिया</li>
+                <li>परिणाम</li>
+            </ul>
+            <p>इस भाग के लिए <span class="highlight-yellow">10 अंक</span> निर्धारित हैं。</p>
+        </div>
+
+        <div class="page">
+            <h3 class="red-heading">3. Practical Record File (5 Marks)</h3>
+            <p>विद्यार्थी द्वारा तैयार की गई Practical Copy जमा कराई जाती है।</p>
+            <p>इस पर <span class="highlight-yellow">5 अंक</span> दिए जाते हैं।</p>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Practical Marks Flowchart</h2>
+            <div class="tree-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="tree-node">Practical<br>(30 Marks)</div>
+                            <ul>
+                                <li><div class="tree-node">Experiment<br><span class="highlight-yellow">→ 15 Marks</span></div></li>
+                                <li><div class="tree-node">Viva / Oral<br><span class="highlight-yellow">→ 10 Marks</span></div></li>
+                                <li><div class="tree-node">Practical Copy<br><span class="highlight-yellow">→ 5 Marks</span></div></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <div class="callout">Most Important</div>
+            <h2 class="red-heading">Practical में अच्छे अंक कैसे प्राप्त करें?</h2>
+            <ul>
+                <li>Practical File साफ-सुथरी रखें।</li>
+                <li>सभी प्रयोग पूरे करें।</li>
+                <li>Viva की तैयारी करें।</li>
+                <li>शिक्षक के निर्देशों का पालन करें।</li>
+                <li>विद्यालय में नियमित उपस्थिति रखें।</li>
+                <li>अच्छा व्यवहार एवं अनुशासन बनाए रखें।</li>
+            </ul>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Theory Examination (70 Marks)</h2>
+            <p>Theory परीक्षा बोर्ड द्वारा निर्धारित Exam Centre पर होती है।</p>
+
+            <h3 class="red-heading">Theory Structure</h3>
+            <table>
+                <tr>
+                    <th>भाग</th>
+                    <th>अंक</th>
+                </tr>
+                <tr>
+                    <td>Objective</td>
+                    <td>35</td>
+                </tr>
+                <tr>
+                    <td>Subjective</td>
+                    <td>35</td>
+                </tr>
+                <tr>
+                    <td><strong>कुल</strong></td>
+                    <td><strong><span class="highlight-yellow">70</span></strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page">
+            <h2 class="red-heading">Theory का सम्पूर्ण ढाँचा</h2>
+            <div class="tree-container">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="tree-node">Theory<br><span class="highlight-yellow">(70 Marks)</span></div>
+                            <ul>
+                                <li><div class="tree-node">Objective<br>(35 Marks)</div></li>
+                                <li><div class="tree-node">Subjective<br>(35 Marks)</div></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Theory के तीन Sections</h2>
+            <p>पूरे प्रश्नपत्र को तीन भागों में विभाजित किया जाता है।</p>
+            <table>
+                <tr>
+                    <th>Section</th>
+                    <th>प्रश्न का प्रकार</th>
+                </tr>
+                <tr>
+                    <td>Section A</td>
+                    <td>Objective Questions</td>
+                </tr>
+                <tr>
+                    <td>Section B</td>
+                    <td>Short Answer Questions</td>
+                </tr>
+                <tr>
+                    <td>Section C</td>
+                    <td>Long Answer Questions</td>
+                </tr>
+            </table>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Section A : Objective Questions</h2>
+            <p>इसे निम्न नामों से भी जाना जाता है—</p>
+            <ul>
+                <li>Objective Questions</li>
+                <li>MCQ</li>
+                <li>Multiple Choice Questions</li>
+                <li>वस्तुनिष्ठ प्रश्न</li>
+            </ul>
+            <p>इनका उत्तर <span class="highlight-yellow">OMR Sheet</span> पर दिया जाता है।</p>
+
+            <h3 class="red-heading">Objective Pattern</h3>
+            <table>
+                <tr>
+                    <th>विवरण</th>
+                    <th>संख्या</th>
+                </tr>
+                <tr>
+                    <td>कुल प्रश्न</td>
+                    <td>70</td>
+                </tr>
+                <tr>
+                    <td>करने हैं</td>
+                    <td><span class="highlight-yellow">35</span></td>
+                </tr>
+                <tr>
+                    <td>प्रत्येक प्रश्न</td>
+                    <td>1 अंक</td>
+                </tr>
+            </table>
+
+            <div class="formula-box">
+                <p class="bold-blue">Objective का Formula</p>
+                <p>70 Questions</p>
+                <div class="step-down">↓</div>
+                <p>Attempt Any 35</p>
+                <div class="step-down">↓</div>
+                <p><span class="highlight-yellow">35 × 1 = 35 Marks</span></p>
+            </div>
+        </div>
+
+        <div class="page">
+            <div class="callout">महत्वपूर्ण तथ्य</div>
+            <ul>
+                <li>कुल 70 प्रश्न दिए जाते हैं।</li>
+                <li>केवल 35 प्रश्न हल करने होते हैं।</li>
+                <li>सभी प्रश्न 1-1 अंक के होते हैं।</li>
+                <li>उत्तर OMR Sheet पर भरना होता है।</li>
+            </ul>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Section B : Short Answer Questions (SQA)</h2>
+            <p>इसे कहा जाता है—</p>
+            <ul>
+                <li>Short Question Answer</li>
+                <li>Short Answer Questions</li>
+                <li>लघु उत्तरीय प्रश्न</li>
+            </ul>
+
+            <h3 class="red-heading">Short Answer Pattern</h3>
+            <table>
+                <tr>
+                    <th>विवरण</th>
+                    <th>संख्या</th>
+                </tr>
+                <tr>
+                    <td>कुल प्रश्न</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>करने हैं</td>
+                    <td><span class="highlight-yellow">10</span></td>
+                </tr>
+                <tr>
+                    <td>प्रत्येक प्रश्न</td>
+                    <td>2 अंक</td>
+                </tr>
+            </table>
+
+            <div class="formula-box">
+                <p class="bold-blue">Marks Calculation</p>
+                <p>10 Questions<br>×</br>2 Marks<br>=</br><span class="highlight-yellow">20 Marks</span></p>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Section C : Long Answer Questions (LQA)</h2>
+            <p>इसे कहा जाता है—</p>
+            <ul>
+                <li>Long Question Answer</li>
+                <li>Long Answer Questions</li>
+                <li>दीर्घ उत्तरीय प्रश्न</li>
+            </ul>
+
+            <h3 class="red-heading">Long Answer Pattern</h3>
+            <table>
+                <tr>
+                    <th>विवरण</th>
+                    <th>संख्या</th>
+                </tr>
+                <tr>
+                    <td>कुल प्रश्न</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>करने हैं</td>
+                    <td><span class="highlight-yellow">3</span></td>
+                </tr>
+                <tr>
+                    <td>प्रत्येक प्रश्न</td>
+                    <td>5 अंक</td>
+                </tr>
+            </table>
+
+            <div class="formula-box">
+                <p class="bold-blue">Marks Calculation</p>
+                <p>3 Questions<br>×</br>5 Marks<br>=</br><span class="highlight-yellow">15 Marks</span></p>
+            </div>
+        </div>
+
+        <div class="page">
+            <h2 class="red-heading">Subjective Marks Distribution</h2>
+            <table>
+                <tr>
+                    <th>प्रश्न प्रकार</th>
+                    <th>कुल प्रश्न</th>
+                    <th>हल करने हैं</th>
+                    <th>प्रति प्रश्न</th>
+                    <th>कुल अंक</th>
+                </tr>
+                <tr>
+                    <td>Short Answer</td>
+                    <td>20</td>
+                    <td>10</td>
+                    <td>2</td>
+                    <td><span class="highlight-yellow">20</span></td>
+                </tr>
+                <tr>
+                    <td>Long Answer</td>
+                    <td>6</td>
+                    <td>3</td>
+                    <td>5</td>
+                    <td><span class="highlight-yellow">15</span></td>
+                </tr>
+                <tr>
+                    <td><strong>कुल</strong></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong><span class="highlight-yellow">35</span></strong></td>
+                </tr>
+            </table>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">सम्पूर्ण Theory Pattern</h2>
+            <div class="tree-container" style="transform: scale(0.9); transform-origin: top center;">
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="tree-node">Theory<br><span class="highlight-yellow">(70 Marks)</span></div>
+                            <ul>
+                                <li>
+                                    <div class="tree-node">Objective<br>(35 Marks)</div>
+                                    <ul>
+                                        <li><div class="tree-node">70 Questions<br>Attempt 35</div></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="tree-node">Subjective<br>(35 Marks)</div>
+                                    <ul>
+                                        <li>
+                                            <div class="tree-node">Short Answer<br>(20 Marks)</div>
+                                            <ul>
+                                                <li><div class="tree-node">20 Questions<br>Attempt 10</div></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <div class="tree-node">Long Answer<br>(15 Marks)</div>
+                                            <ul>
+                                                <li><div class="tree-node">6 Questions<br>Attempt 3</div></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">सम्पूर्ण Exam Pattern Summary</h2>
+            <table>
+                <tr>
+                    <th>भाग</th>
+                    <th>कुल प्रश्न</th>
+                    <th>हल करने हैं</th>
+                    <th>प्रति प्रश्न</th>
+                    <th>अंक</th>
+                </tr>
+                <tr>
+                    <td>Objective</td>
+                    <td>70</td>
+                    <td>35</td>
+                    <td>1</td>
+                    <td>35</td>
+                </tr>
+                <tr>
+                    <td>Short Answer</td>
+                    <td>20</td>
+                    <td>10</td>
+                    <td>2</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>Long Answer</td>
+                    <td>6</td>
+                    <td>3</td>
+                    <td>5</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <td><strong>Theory Total</strong></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong><span class="highlight-yellow">70</span></strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Practical</strong></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong><span class="highlight-yellow">30</span></strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Grand Total</strong></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong><span class="highlight-yellow">100</span></strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page">
+            <h2 class="red-heading">Mind Map</h2>
+            <div class="svg-container">
+                <svg viewBox="0 0 800 400" width="100%" height="auto" style="font-family: 'Kalam', cursive; font-size: 16px;">
+                    <path d="M 400 30 L 400 80" stroke="#1a428a" stroke-width="2" fill="none"/>
+                    <path d="M 400 120 L 400 150 M 400 150 L 200 150 M 400 150 L 600 150 M 200 150 L 200 200 M 600 150 L 600 200" stroke="#1a428a" stroke-width="2" fill="none"/>
+                    
+                    <path d="M 200 240 L 200 270 M 200 270 L 100 270 M 200 270 L 300 270 M 100 270 L 100 300 M 300 270 L 300 300" stroke="#1a428a" stroke-width="2" fill="none"/>
+                    
+                    <path d="M 300 340 L 300 360 M 300 360 L 230 360 M 300 360 L 370 360 M 230 360 L 230 380 M 370 360 L 370 380" stroke="#1a428a" stroke-width="2" fill="none"/>
+
+                    <path d="M 600 240 L 600 270 M 600 270 L 480 270 M 600 270 L 600 300 M 600 270 L 720 270 M 480 270 L 480 300 M 720 270 L 720 300" stroke="#1a428a" stroke-width="2" fill="none"/>
+
+                    <rect x="330" y="0" width="140" height="30" rx="10" fill="#fff" stroke="#d12020" stroke-width="2" stroke-dasharray="4,2"/>
+                    <text x="400" y="20" fill="#d12020" font-weight="bold" text-anchor="middle">Physics Exam</text>
+
+                    <rect x="340" y="80" width="120" height="40" rx="15" fill="#ffeb3b" fill-opacity="0.6" stroke="#1a428a" stroke-width="2"/>
+                    <text x="400" y="105" fill="#1a428a" font-weight="bold" text-anchor="middle">Total = 100</text>
+
+                    <rect x="140" y="200" width="120" height="40" rx="10" fill="#fff" stroke="#1a428a" stroke-width="2"/>
+                    <text x="200" y="225" fill="#1a428a" font-weight="bold" text-anchor="middle">Theory = 70</text>
+
+                    <rect x="540" y="200" width="120" height="40" rx="10" fill="#fff" stroke="#1a428a" stroke-width="2"/>
+                    <text x="600" y="225" fill="#1a428a" font-weight="bold" text-anchor="middle">Practical = 30</text>
+
+                    <rect x="40" y="300" width="120" height="40" rx="10" fill="#fff" stroke="#1a428a" stroke-width="2"/>
+                    <text x="100" y="325" fill="#1a428a" font-weight="bold" text-anchor="middle">Objective = 35</text>
+
+                    <rect x="240" y="300" width="120" height="40" rx="10" fill="#fff" stroke="#1a428a" stroke-width="2"/>
+                    <text x="300" y="325" fill="#1a428a" font-weight="bold" text-anchor="middle">Subjective = 35</text>
+
+                    <rect x="180" y="380" width="100" height="30" rx="10" fill="#fff" stroke="#1a428a" stroke-width="1"/>
+                    <text x="230" y="400" fill="#1a428a" text-anchor="middle">Short = 20</text>
+
+                    <rect x="320" y="380" width="100" height="30" rx="10" fill="#fff" stroke="#1a428a" stroke-width="1"/>
+                    <text x="370" y="400" fill="#1a428a" text-anchor="middle">Long = 15</text>
+
+                    <rect x="420" y="300" width="120" height="30" rx="10" fill="#fff" stroke="#1a428a" stroke-width="1"/>
+                    <text x="480" y="320" fill="#1a428a" text-anchor="middle">Experiment = 15</text>
+
+                    <rect x="550" y="300" width="100" height="30" rx="10" fill="#fff" stroke="#1a428a" stroke-width="1"/>
+                    <text x="600" y="320" fill="#1a428a" text-anchor="middle">Viva = 10</text>
+
+                    <rect x="660" y="300" width="120" height="30" rx="10" fill="#fff" stroke="#1a428a" stroke-width="1"/>
+                    <text x="720" y="320" fill="#1a428a" text-anchor="middle">Copy = 5</text>
+                </svg>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <div class="callout">Memory Trick</div>
+            <h2 class="red-heading">70 – 35 – 20 – 15 Rule</h2>
+            
+            <div class="formula-box">
+                <p>Theory = 70</p>
+                <div class="step-down">↓</div>
+                <p>Objective = <span class="highlight-yellow">35</span></p>
+                <div class="step-down">↓</div>
+                <p>Subjective = <span class="highlight-yellow">20 + 15</span></p>
+            </div>
+
+            <h2 class="red-heading">30 = 15 + 10 + 5</h2>
+            <div class="formula-box">
+                <p>Practical</p>
+                <div class="step-down">↓</div>
+                <p><span class="highlight-yellow">15</span> Experiment</p>
+                <p><span class="highlight-yellow">10</span> Viva</p>
+                <p><span class="highlight-yellow">5</span> Copy</p>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <div class="callout">Most Important</div>
+            <h2 class="red-heading">Important Exam Points</h2>
+            <ul>
+                <li>Physics कुल <span class="highlight-yellow">100 अंकों</span> का विषय है।</li>
+                <li>Theory = <span class="highlight-yellow">70 Marks</span></li>
+                <li>Practical = <span class="highlight-yellow">30 Marks</span></li>
+                <li>Objective प्रश्न OMR Sheet पर हल किए जाते हैं।</li>
+                <li>Subjective उत्तर Answer Book में लिखे जाते हैं।</li>
+                <li>Objective में <span class="highlight-yellow">70 में से 35</span> प्रश्न करने होते हैं।</li>
+                <li>Short Answer में <span class="highlight-yellow">20 में से 10</span> प्रश्न करने होते हैं।</li>
+                <li>Long Answer में <span class="highlight-yellow">6 में से 3</span> प्रश्न करने होते हैं।</li>
+            </ul>
+        </div>
+
+        <div class="page">
+            <h2 class="red-heading">Common Mistakes</h2>
+            <ul>
+                <li>OMR में गलत Bubble भरना।</li>
+                <li>प्रश्न संख्या गलत लिखना।</li>
+                <li>Viva की तैयारी न करना।</li>
+                <li>Practical File अधूरी रखना।</li>
+                <li>Long Answer में आवश्यक Diagram या Formula न लिखना।</li>
+                <li>Short Answer में अनावश्यक लंबा उत्तर लिखना।</li>
+            </ul>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <div class="callout">Frequently Asked</div>
+            <h2 class="red-heading">Frequently Asked Questions (FAQ)</h2>
+            
+            <h3 class="red-heading">Q1. Physics का कुल पेपर कितने अंक का होता है?</h3>
+            <p><strong>उत्तर:</strong> 100 अंक।</p>
+
+            <h3 class="red-heading">Q2. Theory कितने अंक की होती है?</h3>
+            <p><strong>उत्तर:</strong> 70 अंक।</p>
+
+            <h3 class="red-heading">Q3. Practical कितने अंक का होता है?</h3>
+            <p><strong>उत्तर:</strong> 30 अंक।</p>
+
+            <h3 class="red-heading">Q4. Objective कितने पूछे जाते हैं?</h3>
+            <p><strong>उत्तर:</strong> 70 प्रश्न।</p>
+
+            <h3 class="red-heading">Q5. Objective में कितने करने होते हैं?</h3>
+            <p><strong>उत्तर:</strong> 35 प्रश्न।</p>
+
+            <h3 class="red-heading">Q6. Short Answer कितने अंक के होते हैं?</h3>
+            <p><strong>उत्तर:</strong> प्रत्येक प्रश्न 2 अंक का।</p>
+
+            <h3 class="red-heading">Q7. Long Answer कितने अंक के होते हैं?</h3>
+            <p><strong>उत्तर:</strong> प्रत्येक प्रश्न 5 अंक का।</p>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <div class="callout">Shortcut</div>
+            <h2 class="red-heading">One Page Quick Revision</h2>
+            
+            <h3 class="red-heading">Physics Exam Pattern (2026)</h3>
+            <ul>
+                <li>Total = <span class="highlight-yellow">100 Marks</span></li>
+                <li>Theory = <span class="highlight-yellow">70</span></li>
+                <li>Practical = <span class="highlight-yellow">30</span></li>
+            </ul>
+        </div>
+
+        <div class="page">
+            <h3 class="red-heading">Practical</h3>
+            <ul>
+                <li>Experiment = <span class="highlight-yellow">15</span></li>
+                <li>Viva = <span class="highlight-yellow">10</span></li>
+                <li>Practical Copy = <span class="highlight-yellow">5</span></li>
+            </ul>
+
+            <h3 class="red-heading">Theory</h3>
+            <div class="quote-box">
+                <p class="bold-blue">Section A</p>
+                <ul>
+                    <li>Objective</li>
+                    <li>70 Questions</li>
+                    <li>Attempt 35</li>
+                    <li>35 Marks</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                <p class="bold-blue">Section B</p>
+                <ul>
+                    <li>Short Answer</li>
+                    <li>20 Questions</li>
+                    <li>Attempt 10</li>
+                    <li>2 Marks Each</li>
+                    <li>Total 20 Marks</li>
+                </ul>
+            </div>
+
+            <div class="quote-box">
+                <p class="bold-blue">Section C</p>
+                <ul>
+                    <li>Long Answer</li>
+                    <li>6 Questions</li>
+                    <li>Attempt 3</li>
+                    <li>5 Marks Each</li>
+                    <li>Total 15 Marks</li>
+                </ul>
+            </div>
+
+            <div class="hr-line">~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</div>
+
+            <h2 class="red-heading">Final Revision Formula</h2>
+            <div class="formula-box">
+                <p class="bold-blue">Physics = 100</p>
+                <div class="step-down">↓</div>
+                <p>Theory = <span class="highlight-yellow">70</span></p>
+                <div class="step-down">↓</div>
+                <p>Objective = 35 <br> Short = 20 <br> Long = 15</p>
+                <div class="step-down">↓</div>
+                <p>Practical = <span class="highlight-yellow">30</span></p>
+                <div class="step-down">↓</div>
+                <p>15 + 10 + 5</p>
+            </div>
+
+            <div class="quote-box" style="text-align: center; margin-top: 40px; border-color: #d12020; background: rgba(209,32,32,0.05);">
+                <p class="bold-blue" style="color: #d12020;">यही 2026 बिहार बोर्ड कक्षा 12 Physics परीक्षा का सम्पूर्ण Exam Pattern एवं Marks Distribution है।</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function enterLandscape() {
+            // Request Fullscreen
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+
+            // Lock screen orientation to landscape
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(function(error) {
+                    console.log("Orientation lock failed: " + error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
