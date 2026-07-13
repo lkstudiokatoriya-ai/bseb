@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="Latest Notice - BSEB Student Portal">
+    <title>Latest Notice</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255, 255, 255, 0.5);
+            --skeleton-2: rgba(255, 255, 255, 0.9);
+            --search-bg: rgba(255, 255, 255, 0.75);
+            --badge-new: #ef4444;
+            --badge-file: #3b82f6;
+            
+            --safe-bottom: 80px;
+            --header-height: 125px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(15, 23, 42, 0.5);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(30, 41, 59, 0.6);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0, 0, 0, 0.3);
+                --skeleton-2: rgba(255, 255, 255, 0.08);
+                --search-bg: rgba(0, 0, 0, 0.45);
+                --badge-new: #f87171;
+                --badge-file: #60a5fa;
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+        input { font: inherit; outline: none; border: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; border: none !important; box-shadow: none !important; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .back-btn {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 30px;
+            background: var(--search-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--accent-color), 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           MAIN CONTENT & NOTICE CARDS
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 15px) 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 700px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .notice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .notice-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+            position: relative;
+        }
+        .notice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        /* Pure CSS Notice Icon */
+        .notice-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(78, 84, 200, 0.3);
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            position: relative;
+        }
+        .notice-icon::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .card-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .badges-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+        .badge.new {
+            background: var(--badge-new);
+            animation: pulse-badge 2s infinite;
+        }
+        .badge.type {
+            background: var(--badge-file);
+        }
+
+        @keyframes pulse-badge {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-date {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:active { transform: scale(0.97); }
+        
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            flex: 2;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
+        }
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .empty-state.active { display: flex; }
+        
+        /* Pure CSS Illustration */
+        .illustration {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .ill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            animation: rotate 15s linear infinite;
+        }
+        .ill-bell {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 25px 25px 0 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .ill-bell::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 10px;
+            background: var(--accent-color);
+            border-radius: 0 0 20px 20px;
+        }
+        
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .empty-state h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; }
+        .empty-state p { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        /* Latest Notice is logically under Home, highlighting Home as parent */
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        /* =========================================================
+           SMART STUDY VIEWER (Distraction Free)
+           ========================================================= */
+        .smart-viewer {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .smart-viewer.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(20, 20, 20, 0.95);
+            color: white;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .viewer-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 15px;
+        }
+
+        .viewer-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .viewer-btn.exit { background: #ef4444; border: none; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 9;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb, #4e54c8);
+            background-size: 200% 100%;
+            transition: width 0.3s ease;
+            animation: gradient-shift 2s linear infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        .viewer-content {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y pinch-zoom;
+        }
+
+        /* Desktop Adjustments */
+        @media (min-width: 768px) {
+            .notice-card { flex-direction: row; align-items: center; }
+            .card-actions { border-top: none; padding-top: 0; border-left: 1px solid var(--glass-border); padding-left: 20px; flex-direction: column; width: 160px; justify-content: center; }
+            .card-info { padding-right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header class="glass">
+        <div class="header-top">
+            <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+                &#10094;
+            </a>
+            <h1 class="page-title">Latest Notice</h1>
+        </div>
+        <div class="search-container">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search notices by title or keyword...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div id="noticeList" class="notice-list">
+            <!-- Initial Skeleton Loaders for Premium Feel -->
+            <div class="notice-card glass skeleton">
+                <div class="card-header">
+                    <div class="notice-icon"></div>
+                    <div class="card-info">
+                        <div class="badges-wrapper"><span class="badge"></span></div>
+                        <div class="card-title">Loading Notice Title...</div>
+                        <div class="card-desc">Fetching the latest notice details from the server...</div>
+                        <div class="card-date">Loading...</div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+            <div class="notice-card glass skeleton">
+                <div class="card-header">
+                    <div class="notice-icon"></div>
+                    <div class="card-info">
+                        <div class="badges-wrapper"><span class="badge"></span></div>
+                        <div class="card-title">Loading Notice Title...</div>
+                        <div class="card-desc">Fetching the latest notice details from the server...</div>
+                        <div class="card-date">Loading...</div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="illustration">
+                <div class="ill-circle"></div>
+                <div class="ill-bell"></div>
+            </div>
+            <h3>No Latest Notices Available</h3>
+            <p>Check back later for new updates and announcements.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <!-- Highlighting Home as active since Latest Notice is logically a child of the Home dashboard -->
+        <a href="index.html" class="nav-item active ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="help.html" class="nav-item ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Smart Study Viewer (Full Screen Overlay) -->
+    <div id="smartViewer" class="smart-viewer">
+        <div class="viewer-header">
+            <button class="viewer-btn ripple-target" id="viewerBackBtn">&#10094; Back</button>
+            <div class="viewer-title" id="viewerTitle">Notice Document</div>
+            <button class="viewer-btn exit ripple-target" id="viewerExitBtn">Exit</button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="viewerProgress"></div>
+        </div>
+        <iframe id="viewerFrame" class="viewer-content" allowfullscreen></iframe>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // MOCK DATA (Simulating Infinite Library)
+            // ==========================================
+            const mockNotices = [
+                {
+                    id: 1,
+                    title: "BSEB 12th Admit Card Released 2024",
+                    description: "The official admit cards for Class 12th final examinations have been published. Download yours using your registration number.",
+                    date: "Today, 10:30 AM",
+                    isNew: true,
+                    hasFile: true,
+                    fileType: "PDF",
+                    url: "about:blank" // Replace with real URL in production
+                },
+                {
+                    id: 2,
+                    title: "Change in Exam Schedule for Mathematics",
+                    description: "Due to unforeseen circumstances, the mathematics paper has been postponed. Please check the new routine attached.",
+                    date: "Yesterday, 04:15 PM",
+                    isNew: true,
+                    hasFile: true,
+                    fileType: "HTML",
+                    url: "about:blank"
+                },
+                {
+                    id: 3,
+                    title: "Important Instructions for Exam Center",
+                    description: "All students must strictly adhere to the dress code and bring a valid ID along with the printed admit card. No electronics allowed.",
+                    date: "12 Oct 2023",
+                    isNew: false,
+                    hasFile: false, // Text-only notice
+                    fileType: null,
+                    url: null
+                },
+                {
+                    id: 4,
+                    title: "Model Paper 2024 Correction Notice",
+                    description: "A minor correction has been made in the Science Model Paper Set 2. Please download the updated version.",
+                    date: "10 Oct 2023",
+                    isNew: false,
+                    hasFile: true,
+                    fileType: "DOCX",
+                    url: "about:blank"
+                },
+                {
+                    id: 5,
+                    title: "Practical Examination Dates Announced",
+                    description: "The schedule for Physics, Chemistry, and Biology practical exams is now available in the attached ZIP file.",
+                    date: "05 Oct 2023",
+                    isNew: false,
+                    hasFile: true,
+                    fileType: "ZIP",
+                    url: "about:blank"
+                }
+            ];
+
+            const noticeList = document.getElementById('noticeList');
+            const searchInput = document.getElementById('searchInput');
+            const emptyState = document.getElementById('emptyState');
+
+            // ==========================================
+            // RENDER FUNCTION
+            // ==========================================
+            function renderNotices(data) {
+                noticeList.innerHTML = ''; // Clear existing
+                
+                if (data.length === 0) {
+                    emptyState.classList.add('active');
+                    return;
+                }
+                
+                emptyState.classList.remove('active');
+
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'notice-card glass';
+                    
+                    // Badges Logic
+                    let badgesHTML = '';
+                    if (item.isNew) badgesHTML += `<span class="badge new">NEW</span>`;
+                    if (item.hasFile && item.fileType) badgesHTML += `<span class="badge type">${item.fileType}</span>`;
+
+                    // Actions Logic based on file attachment
+                    let actionsHTML = '';
+                    if (item.hasFile) {
+                        actionsHTML = `
+                            <button class="btn btn-primary ripple-target" onclick="openSmartStudy('${item.title}', '${item.url}', '${item.fileType}')">
+                                📖 Smart Study
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="downloadFile('${item.title}')">
+                                ⬇
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="shareNotice('${item.title}')">
+                                ↗
+                            </button>
+                        `;
+                    } else {
+                        actionsHTML = `
+                            <button class="btn btn-secondary ripple-target" style="flex: 2" onclick="alert('This is a text notice. Read description for details.')">
+                                👁 Read Full Notice
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="shareNotice('${item.title}')">
+                                ↗
+                            </button>
+                        `;
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="notice-icon">N</div>
+                            <div class="card-info">
+                                <div class="badges-wrapper">${badgesHTML}</div>
+                                <h3 class="card-title">${item.title}</h3>
+                                <p class="card-desc">${item.description}</p>
+                                <div class="card-date">🕒 ${item.date}</div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            ${actionsHTML}
+                        </div>
+                    `;
+                    noticeList.appendChild(card);
+                });
+
+                attachRipples(); // Attach animations to new dynamic buttons
+            }
+
+            // Simulate Premium Skeleton Loading Delay
+            setTimeout(() => {
+                renderNotices(mockNotices);
+            }, 1200);
+
+
+            // ==========================================
+            // SEARCH FUNCTIONALITY (Instant)
+            // ==========================================
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = mockNotices.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query)
+                );
+                renderNotices(filtered);
+            });
+
+
+            // ==========================================
+            // FILE ACTIONS
+            // ==========================================
+            window.shareNotice = async (title) => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: title,
+                            text: `Read this latest notice on BSEB Student Portal: ${title}`,
+                            url: window.location.href
+                        });
+                    } catch (err) {
+                        console.log('Error sharing:', err);
+                    }
+                } else {
+                    alert('Sharing is not supported on this browser.');
+                }
+            };
+
+            window.downloadFile = (title) => {
+                // Mock download
+                const a = document.createElement('a');
+                a.href = '#'; 
+                a.download = `BSEB_Notice_${title.replace(/\s+/g, '_')}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+
+            // ==========================================
+            // SMART STUDY VIEWER (Distraction Free)
+            // ==========================================
+            const viewer = document.getElementById('smartViewer');
+            const viewerTitle = document.getElementById('viewerTitle');
+            const viewerFrame = document.getElementById('viewerFrame');
+            const viewerProgress = document.getElementById('viewerProgress');
+            const viewerExitBtn = document.getElementById('viewerExitBtn');
+            const viewerBackBtn = document.getElementById('viewerBackBtn');
+
+            window.openSmartStudy = (title, url, type) => {
+                // Setup UI
+                viewerTitle.textContent = title;
+                viewer.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent bg scrolling
+
+                // Request Full Screen Fallbacks
+                if (viewer.requestFullscreen) {
+                    viewer.requestFullscreen().catch(err => console.log('FS error:', err));
+                } else if (viewer.webkitRequestFullscreen) {
+                    viewer.webkitRequestFullscreen();
+                }
+
+                // Request Landscape Lock Fallbacks
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => console.log('Orientation lock error:', err));
+                }
+
+                // Loading Bar Animation
+                viewerProgress.style.opacity = '1';
+                viewerProgress.style.width = '0%';
+                setTimeout(() => { viewerProgress.style.width = '30%'; }, 100);
+                setTimeout(() => { viewerProgress.style.width = '70%'; }, 600);
+                
+                // Load Content
+                let loadUrl = url;
+                // Docs viewer logic simulation for MS Office formats
+                if (['DOCX', 'PPTX', 'XLS', 'PPT', 'DOC'].includes(type)) {
+                    // loadUrl = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
+                }
+                
+                viewerFrame.src = loadUrl;
+
+                viewerFrame.onload = () => {
+                    viewerProgress.style.width = '100%';
+                    setTimeout(() => { viewerProgress.style.opacity = '0'; }, 400);
+                };
+            };
+
+            const closeSmartStudy = () => {
+                viewer.classList.remove('active');
+                viewerFrame.src = ''; 
+                viewerProgress.style.width = '0%';
+                document.body.style.overflow = 'auto'; 
+
+                // Exit Fullscreen
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                } else if (document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen();
+                }
+
+                // Unlock Orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            };
+
+            viewerExitBtn.addEventListener('click', closeSmartStudy);
+            viewerBackBtn.addEventListener('click', closeSmartStudy);
+
+
+            // ==========================================
+            // RIPPLE EFFECT SYSTEM
+            // ==========================================
+            function attachRipples() {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    target.removeEventListener('mousedown', createRipple);
+                    target.removeEventListener('touchstart', createRipple);
+                    
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            }
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) existingRipple.remove();
+
+                button.appendChild(circle);
+                setTimeout(() => circle.remove(), 600);
+            }
+
+            attachRipples();
+        });
+    </script>
+</body>
+</html>

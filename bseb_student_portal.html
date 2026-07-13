@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="Premium Modern BSEB Student Portal Home Page">
+    <title>BSEB Student Portal</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP (Light/Dark Mode Support)
+           ========================================================= */
+        :root {
+            /* Light Theme Gradients & Colors */
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4e69;
+            --accent: #4e54c8;
+            --ripple-color: rgba(255, 255, 255, 0.6);
+            --skeleton-color-1: rgba(255,255,255,0.1);
+            --skeleton-color-2: rgba(255,255,255,0.3);
+            
+            /* Spacing & Utilities */
+            --safe-bottom: 70px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme Gradients & Colors */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(0, 0, 0, 0.25);
+                --glass-border: rgba(255, 255, 255, 0.1);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+                --text-primary: #f8f9fa;
+                --text-secondary: #ced4da;
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-color-1: rgba(0,0,0,0.1);
+                --skeleton-color-2: rgba(255,255,255,0.1);
+            }
+        }
+
+        /* =========================================================
+           RESET & TYPOGRAPHY
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Animations, Ripple)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Ripple Effect System */
+        .ripple-target {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        /* Skeleton Loading Effect */
+        .skeleton {
+            position: relative;
+            overflow: hidden;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .skeleton::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-color-1) 25%, var(--skeleton-color-2) 50%, var(--skeleton-color-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            border-radius: inherit;
+        }
+        .skeleton > * { visibility: hidden; }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT COMPONENTS
+           ========================================================= */
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        /* Hamburger Button */
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--text-primary);
+        }
+
+        /* Drawer Menu */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            z-index: 199;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -300px; /* Hidden off-screen */
+            width: 280px;
+            height: 100vh;
+            z-index: 200;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-radius: 20px 0 0 20px;
+        }
+        .drawer.active {
+            transform: translateX(-300px);
+        }
+        .drawer-close {
+            align-self: flex-end;
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text-primary);
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 70px 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 600px; /* Mobile first, capped for larger screens */
+            margin: 0 auto;
+        }
+
+        /* Banner Slider */
+        .slider-container {
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 25px;
+            aspect-ratio: 16 / 9;
+        }
+        .slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .slider-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transition: background 0.3s, transform 0.3s;
+        }
+        .dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        /* Main Grid Cards (3x3) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .card {
+            border-radius: 16px;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            aspect-ratio: 1 / 1.15; /* Slightly taller than square */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .card:hover, .card:active {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+        .card img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            /* Fallback styling if image fails to load initially */
+            background-color: transparent; 
+        }
+        .card h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .card p {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent);
+        }
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Floating Notification Button (Bottom Left) */
+        .floating-notification {
+            position: fixed;
+            bottom: 95px;
+            left: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 140;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-notification::before {
+            content: "🔔";
+            font-size: 20px;
+        }
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4757;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        /* Floating Install App Button (Bottom Right) */
+        .floating-install {
+            position: fixed;
+            bottom: 95px;
+            right: 15px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: none; /* Hidden by default, JS handles showing */
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 140;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Responsive Tweaks */
+        @media (min-width: 600px) {
+            .grid-container { gap: 20px; }
+            .card img { width: 48px; height: 48px; }
+            .card h3 { font-size: 0.85rem; }
+            .card p { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header (No Logo, No Title, Hamburger Only) -->
+    <header>
+        <button class="menu-btn glass ripple-target" id="menuToggle" aria-label="Open Menu">
+            ☰
+        </button>
+    </header>
+
+    <!-- Drawer Menu & Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="drawer glass" id="drawer">
+        <button class="drawer-close ripple-target" id="drawerClose" aria-label="Close Menu">
+            &times;
+        </button>
+        <!-- Future Drawer Items can go here -->
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Banner Slider (Skeleton loaded initially) -->
+        <div class="slider-container glass skeleton ripple-target" id="bannerSlider">
+            <div class="slider-track" id="sliderTrack">
+                <div class="slide"><img src="banner1.jpg" alt="Banner 1" onerror="this.style.display='none'"></div>
+                <div class="slide"><img src="banner2.jpg" alt="Banner 2" onerror="this.style.display='none'"></div>
+            </div>
+            <div class="slider-dots" id="sliderDots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <!-- Main Cards Grid (3x3) -->
+        <div class="grid-container">
+            
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="syllabus.png" alt="Syllabus">
+                <h3>SYLLABUS</h3>
+                <p>View Details</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="latest.png" alt="Notice">
+                <h3>LATEST NOTICE</h3>
+                <p>Updates</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="exam.png" alt="Exam Routine">
+                <h3>EXAM ROUTINE</h3>
+                <p>Time Table</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="admit.png" alt="Admit Card">
+                <h3>ADMIT CARD</h3>
+                <p>Download</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="result.png" alt="Result">
+                <h3>RESULT</h3>
+                <p>Check Marks</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="modelpaper.png" alt="Model Paper">
+                <h3>MODEL PAPER</h3>
+                <p>Practice Sets</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="notes.png" alt="Notes & Quiz">
+                <h3>NOTES & QUIZ</h3>
+                <p>Study Material</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="downloads.png" alt="Downloads">
+                <h3>DOWNLOADS</h3>
+                <p>Resources</p>
+            </div>
+
+            <div class="card glass skeleton ripple-target" onclick="void(0)">
+                <img src="about.png" alt="About Us">
+                <h3>ABOUT US</h3>
+                <p>Portal Info</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Floating Notification -->
+    <button class="floating-notification glass ripple-target" aria-label="Notifications">
+        <div class="badge"></div>
+    </button>
+
+    <!-- Floating Install App Button (PWA) -->
+    <button id="installAppBtn" class="floating-install glass ripple-target">
+        Install App ⬇
+    </button>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <a href="#" class="nav-item active ripple-target">
+            <img src="home.png" alt="Home">
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item ripple-target">
+            <img src="study.png" alt="Study">
+            <span>Study</span>
+        </a>
+        <a href="#" class="nav-item ripple-target">
+            <img src="help.png" alt="Help">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // 1. SKELETON LOADING REMOVAL (Simulation)
+            // ==========================================
+            // Simulating loading time for premium feel. 
+            // Removes '.skeleton' class after DOM is fully loaded + slight delay.
+            setTimeout(() => {
+                const skeletons = document.querySelectorAll('.skeleton');
+                skeletons.forEach(el => el.classList.remove('skeleton'));
+            }, 800);
+
+
+            // ==========================================
+            // 2. RIPPLE EFFECT SYSTEM
+            // ==========================================
+            const rippleTargets = document.querySelectorAll('.ripple-target');
+            
+            rippleTargets.forEach(target => {
+                target.addEventListener('mousedown', createRipple);
+                target.addEventListener('touchstart', createRipple, { passive: true });
+            });
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                const rect = button.getBoundingClientRect();
+                
+                // Handle both Mouse and Touch events
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                // Remove existing ripples to prevent DOM clutter
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+
+                button.appendChild(circle);
+
+                setTimeout(() => {
+                    circle.remove();
+                }, 600);
+            }
+
+            // ==========================================
+            // 3. DRAWER MENU LOGIC
+            // ==========================================
+            const menuToggle = document.getElementById('menuToggle');
+            const drawerClose = document.getElementById('drawerClose');
+            const drawer = document.getElementById('drawer');
+            const drawerOverlay = document.getElementById('drawerOverlay');
+
+            const toggleDrawer = () => {
+                drawer.classList.toggle('active');
+                drawerOverlay.classList.toggle('active');
+            };
+
+            menuToggle.addEventListener('click', toggleDrawer);
+            drawerClose.addEventListener('click', toggleDrawer);
+            drawerOverlay.addEventListener('click', toggleDrawer);
+
+
+            // ==========================================
+            // 4. BANNER SLIDER LOGIC
+            // ==========================================
+            const track = document.getElementById('sliderTrack');
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            let slideInterval;
+
+            const updateSlider = (index) => {
+                track.style.transform = `translateX(-${index * 100}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[index].classList.add('active');
+            };
+
+            const nextSlide = () => {
+                currentIndex = (currentIndex + 1) % totalSlides;
+                updateSlider(currentIndex);
+            };
+
+            const prevSlide = () => {
+                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+                updateSlider(currentIndex);
+            };
+
+            // Auto scroll every 5 seconds
+            const startAutoSlide = () => {
+                slideInterval = setInterval(nextSlide, 5000);
+            };
+            const resetAutoSlide = () => {
+                clearInterval(slideInterval);
+                startAutoSlide();
+            };
+            
+            startAutoSlide();
+
+            // Swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            track.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+                clearInterval(slideInterval); // pause on touch
+            }, { passive: true });
+
+            track.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoSlide(); // resume
+            });
+
+            function handleSwipe() {
+                const threshold = 50; // minimum swipe distance
+                if (touchStartX - touchEndX > threshold) nextSlide();
+                if (touchEndX - touchStartX > threshold) prevSlide();
+            }
+
+
+            // ==========================================
+            // 5. BOTTOM NAVIGATION LOGIC
+            // ==========================================
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+
+            // ==========================================
+            // 6. PWA INSTALL BUTTON LOGIC
+            // ==========================================
+            let deferredPrompt;
+            const installBtn = document.getElementById('installAppBtn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                deferredPrompt = e;
+                // Update UI notify the user they can install the PWA
+                installBtn.style.display = 'flex';
+            });
+
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show the install prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    const { outcome } = await deferredPrompt.userChoice;
+                    // We've used the prompt, and can't use it again, throw it away
+                    deferredPrompt = null;
+                    // Hide the button
+                    installBtn.style.display = 'none';
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                // Hide the app-provided install promotion
+                installBtn.style.display = 'none';
+                // Clear the deferredPrompt so it can be garbage collected
+                deferredPrompt = null;
+                console.log('PWA was installed');
+            });
+        });
+    </script>
+</body>
+</html>

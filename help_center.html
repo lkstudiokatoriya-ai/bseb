@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="Help & Support Center - BSEB Student Portal">
+    <title>Help Center</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255, 255, 255, 0.4);
+            --skeleton-2: rgba(255, 255, 255, 0.8);
+            --search-bg: rgba(255, 255, 255, 0.7);
+            
+            --safe-bottom: 80px;
+            --header-height: 130px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(0, 0, 0, 0.3);
+                --glass-border: rgba(255, 255, 255, 0.1);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(15, 23, 42, 0.5);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0, 0, 0, 0.2);
+                --skeleton-2: rgba(255, 255, 255, 0.05);
+                --search-bg: rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+        input, textarea { font: inherit; outline: none; border: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 20px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 20px;
+            border-radius: 25px;
+            background: var(--search-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--accent-color), inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .search-input::placeholder { color: var(--text-secondary); }
+
+        /* =========================================================
+           MAIN CONTENT
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 20px) 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 25px 0 15px 5px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Help Topics Grid */
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .help-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 100px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .help-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .help-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        /* FAQ Accordion */
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        }
+
+        .faq-answer-inner {
+            padding: 0 20px 20px 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        /* Contact Support Cards & Quick Actions */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+        .contact-card:hover { transform: translateY(-3px); }
+        
+        .contact-icon-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-icon-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+            /* Fallback handled via onerror */
+        }
+
+        .contact-card h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .contact-card p {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        /* Report Issue Form */
+        .form-section {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
+        }
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-control::placeholder { color: var(--text-secondary); opacity: 0.7; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.4);
+            transition: opacity 0.2s;
+        }
+        .submit-btn:active { opacity: 0.8; }
+
+        /* Empty State */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            animation: fadeIn 0.5s forwards;
+        }
+        .empty-state.active { display: flex; }
+        
+        /* CSS Pure Illustration */
+        .illustration {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .ill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            animation: rotate 20s linear infinite;
+        }
+        .ill-magnifier {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+        }
+        .ill-magnifier::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            width: 16px;
+            height: 4px;
+            background: var(--accent-color);
+            transform: rotate(45deg);
+            border-radius: 2px;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        /* Hide sections utility for search */
+        .hidden-by-search {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header class="glass">
+        <div class="header-top">
+            <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+                &#10094;
+            </a>
+            <h1 class="page-title">Help Center</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search Help Topics...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+
+        <!-- Empty State (Shows when search has no results) -->
+        <div id="emptyState" class="empty-state">
+            <div class="illustration">
+                <div class="ill-circle"></div>
+                <div class="ill-magnifier"></div>
+            </div>
+            <h3>Help Articles Coming Soon</h3>
+        </div>
+
+        <!-- Help Topics Grid -->
+        <div class="searchable-section" id="topicsSection">
+            <h2 class="section-title skeleton">Topics</h2>
+            <div class="help-grid">
+                <div class="help-card ripple-target skeleton searchable-item" data-title="How to Use This App guide">
+                    <h3>How to Use This App</h3>
+                </div>
+                <div class="help-card ripple-target skeleton searchable-item" data-title="How to Download Files notes study">
+                    <h3>How to Download Files</h3>
+                </div>
+                <div class="help-card ripple-target skeleton searchable-item" data-title="How to Open Smart Study Mode fullscreen reader">
+                    <h3>How to Open Smart Study Mode</h3>
+                </div>
+                <div class="help-card ripple-target skeleton searchable-item" data-title="App Installation Guide PWA install home screen">
+                    <h3>App Installation Guide (PWA)</h3>
+                </div>
+                <div class="help-card ripple-target skeleton searchable-item" data-title="Privacy Policy terms">
+                    <h3>Privacy Policy</h3>
+                </div>
+                <div class="help-card ripple-target skeleton searchable-item" data-title="Terms & Conditions legal">
+                    <h3>Terms & Conditions</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="searchable-section" id="faqSection">
+            <h2 class="section-title skeleton">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item skeleton searchable-item" data-title="What is BSEB Student Portal faq login">
+                    <button class="faq-question ripple-target">
+                        What is the BSEB Student Portal?
+                        <span class="faq-icon">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            It is a dedicated digital platform designed to provide students with syllabus, study materials, latest notices, and exam routines in a seamless, premium interface.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item skeleton searchable-item" data-title="Is the study material free cost fee">
+                    <button class="faq-question ripple-target">
+                        Is the study material free?
+                        <span class="faq-icon">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Yes, all the study materials, notes, model papers, and resources available in the Digital Study Library are completely free for students.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item skeleton searchable-item" data-title="How do I install this app PWA download">
+                    <button class="faq-question ripple-target">
+                        How do I install this app?
+                        <span class="faq-icon">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            Click on the "Install App" button on the home page, or select "Add to Home Screen" from your browser's menu to install it as a Progressive Web App (PWA).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Support Section -->
+        <div class="searchable-section" id="contactSection">
+            <h2 class="section-title skeleton">Contact Support</h2>
+            <div class="contact-grid">
+                
+                <a href="tel:+919296783086" class="contact-card ripple-target skeleton searchable-item" data-title="Call Phone support contact number +91 9296783086">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        C
+                        <img src="phone-icon.png" alt="Phone" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Call Support</h4>
+                    <p>+91 9296783086</p>
+                </a>
+
+                <a href="mailto:lkstudiokatoriya@gmail.com" class="contact-card ripple-target skeleton searchable-item" data-title="Email email support lkstudiokatoriya@gmail.com message">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        E
+                        <img src="email-icon.png" alt="Email" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Send Email</h4>
+                    <p>lkstudiokatoriya@...</p>
+                </a>
+
+                <a href="#" class="contact-card ripple-target skeleton searchable-item" data-title="WhatsApp message chat support">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                        W
+                        <img src="whatsapp-icon.png" alt="WhatsApp" onerror="this.style.display='none'">
+                    </div>
+                    <h4>WhatsApp</h4>
+                    <p>Open Chat</p>
+                </a>
+
+                <a href="#" class="contact-card ripple-target skeleton searchable-item" data-title="Telegram channel group update">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                        T
+                        <img src="telegram-icon.png" alt="Telegram" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Telegram</h4>
+                    <p>Join Channel</p>
+                </a>
+
+                <a href="#" class="contact-card ripple-target skeleton searchable-item" data-title="Instagram social media page">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #d946ef, #c026d3);">
+                        I
+                        <img src="instagram-icon.png" alt="Instagram" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Instagram</h4>
+                    <p>Follow Us</p>
+                </a>
+
+                <a href="#" class="contact-card ripple-target skeleton searchable-item" data-title="Facebook social media page">
+                    <div class="contact-icon-placeholder" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                        F
+                        <img src="facebook-icon.png" alt="Facebook" onerror="this.style.display='none'">
+                    </div>
+                    <h4>Facebook</h4>
+                    <p>Visit Page</p>
+                </a>
+                
+            </div>
+        </div>
+
+        <!-- Report a Problem Section -->
+        <div class="searchable-section" id="formSection">
+            <h2 class="section-title skeleton">Report a Problem</h2>
+            <div class="form-section skeleton">
+                <form id="reportForm" onsubmit="event.preventDefault(); alert('Message Ready! (No backend connected)');">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Describe your issue..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn ripple-target">Send Message</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <a href="index.html" class="nav-item ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="help.html" class="nav-item active ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // 1. SKELETON LOADING REMOVAL (Premium feel)
+            // ==========================================
+            setTimeout(() => {
+                const skeletons = document.querySelectorAll('.skeleton');
+                skeletons.forEach(el => el.classList.remove('skeleton'));
+            }, 800);
+
+
+            // ==========================================
+            // 2. RIPPLE EFFECT SYSTEM
+            // ==========================================
+            const attachRipples = () => {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            };
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+
+                button.appendChild(circle);
+
+                setTimeout(() => {
+                    circle.remove();
+                }, 600);
+            }
+
+            attachRipples();
+
+
+            // ==========================================
+            // 3. FAQ ACCORDION LOGIC
+            // ==========================================
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const btn = item.querySelector('.faq-question');
+                btn.addEventListener('click', () => {
+                    // Close others (Optional, for accordion style)
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current
+                    item.classList.toggle('active');
+                });
+            });
+
+
+            // ==========================================
+            // 4. SEARCH & FILTER LOGIC
+            // ==========================================
+            const searchInput = document.getElementById('searchInput');
+            const searchableItems = document.querySelectorAll('.searchable-item');
+            const sections = document.querySelectorAll('.searchable-section');
+            const emptyState = document.getElementById('emptyState');
+            const formSection = document.getElementById('formSection'); // Hide form during search
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                let hasVisibleItems = false;
+
+                if (query === '') {
+                    // Reset to normal view
+                    searchableItems.forEach(item => item.classList.remove('hidden-by-search'));
+                    sections.forEach(sec => sec.classList.remove('hidden-by-search'));
+                    formSection.classList.remove('hidden-by-search');
+                    emptyState.classList.remove('active');
+                    return;
+                }
+
+                // Hide static form during active search
+                formSection.classList.add('hidden-by-search');
+
+                searchableItems.forEach(item => {
+                    const title = item.getAttribute('data-title').toLowerCase();
+                    if (title.includes(query)) {
+                        item.classList.remove('hidden-by-search');
+                        hasVisibleItems = true;
+                    } else {
+                        item.classList.add('hidden-by-search');
+                    }
+                });
+
+                // Hide empty sections
+                sections.forEach(section => {
+                    if (section.id === 'formSection') return; // Handled separately
+                    
+                    const visibleItemsInSection = section.querySelectorAll('.searchable-item:not(.hidden-by-search)');
+                    if (visibleItemsInSection.length === 0) {
+                        section.classList.add('hidden-by-search');
+                    } else {
+                        section.classList.remove('hidden-by-search');
+                    }
+                });
+
+                // Toggle Empty State
+                if (!hasVisibleItems) {
+                    emptyState.classList.add('active');
+                } else {
+                    emptyState.classList.remove('active');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

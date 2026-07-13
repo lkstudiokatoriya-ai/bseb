@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="Digital Study Library - BSEB Student Portal">
+    <title>Study Library</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.6);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255,255,255,0.4);
+            --skeleton-2: rgba(255,255,255,0.8);
+            --search-bg: rgba(255, 255, 255, 0.7);
+            
+            --safe-bottom: 80px;
+            --header-height: 120px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                --glass-bg: rgba(15, 23, 42, 0.6);
+                --glass-border: rgba(255, 255, 255, 0.1);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(30, 41, 59, 0.6);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0,0,0,0.2);
+                --skeleton-2: rgba(255,255,255,0.05);
+                --search-bg: rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+        input { font: inherit; outline: none; border: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 20px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border-radius: 25px;
+            background: var(--search-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--accent-color), inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .search-input::placeholder { color: var(--text-secondary); }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+
+        /* =========================================================
+           MAIN CONTENT & STUDY CARDS
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 15px) 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .study-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .file-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .file-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Pure CSS File Icon */
+        .file-icon {
+            width: 50px;
+            height: 60px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+        }
+        .file-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-width: 0 16px 16px 0;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.1) var(--card-bg) transparent transparent;
+            border-bottom-left-radius: 4px;
+        }
+        .file-icon span {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #334155;
+            letter-spacing: 1px;
+            z-index: 1;
+            margin-top: 10px;
+        }
+        /* Specific Icon Colors */
+        .file-icon.pdf { background: linear-gradient(135deg, #fecaca 0%, #ef4444 100%); }
+        .file-icon.pdf span { color: white; }
+        .file-icon.docx { background: linear-gradient(135deg, #bfdbfe 0%, #3b82f6 100%); }
+        .file-icon.docx span { color: white; }
+        .file-icon.html { background: linear-gradient(135deg, #fed7aa 0%, #f97316 100%); }
+        .file-icon.html span { color: white; }
+        .file-icon.zip { background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 100%); }
+        .file-icon.zip span { color: white; }
+
+        .card-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+            transition: opacity 0.2s;
+        }
+        .btn:active { opacity: 0.7; }
+        
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            flex: 2;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.4);
+        }
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .empty-state.active { display: flex; }
+        
+        /* CSS Illustration for Empty State */
+        .illustration {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .ill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            animation: rotate 20s linear infinite;
+        }
+        .ill-doc {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 64px;
+            background: var(--accent-gradient);
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .empty-state p { font-size: 0.9rem; color: var(--text-secondary); }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15); /* Soft accent bg */
+        }
+
+        /* =========================================================
+           SMART STUDY VIEWER (Distraction Free)
+           ========================================================= */
+        .smart-viewer {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-gradient);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .smart-viewer.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+        
+        .viewer-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 15px;
+        }
+
+        .viewer-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .viewer-btn.exit { background: #ef4444; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.2);
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            transition: width 0.3s ease;
+        }
+
+        .viewer-content {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white; /* PDF/Docs usually need white bg */
+            overflow: auto;
+            /* Enable smooth scrolling & pinch to zoom natively */
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y pinch-zoom;
+        }
+
+        /* Responsive tweaks */
+        @media (min-width: 768px) {
+            .file-card { flex-direction: row; align-items: center; }
+            .card-actions { border-top: none; padding-top: 0; border-left: 1px solid var(--glass-border); padding-left: 15px; flex-direction: column; width: 150px; }
+            .card-info { padding-right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header class="glass">
+        <div class="header-top">
+            <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+                &#10094;
+            </a>
+            <h1 class="page-title">Study Library</h1>
+        </div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by filename or keyword...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div id="studyList" class="study-list">
+            <!-- Initial Skeleton Loaders -->
+            <div class="file-card glass skeleton">
+                <div class="card-header">
+                    <div class="file-icon"></div>
+                    <div class="card-info">
+                        <div class="card-title">Loading Title...</div>
+                        <div class="card-desc">Loading description text goes here...</div>
+                        <div class="card-meta"><span>Size</span><span>Date</span></div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+            <div class="file-card glass skeleton">
+                <div class="card-header">
+                    <div class="file-icon"></div>
+                    <div class="card-info">
+                        <div class="card-title">Loading Title...</div>
+                        <div class="card-desc">Loading description text goes here...</div>
+                        <div class="card-meta"><span>Size</span><span>Date</span></div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="illustration">
+                <div class="ill-circle"></div>
+                <div class="ill-doc"></div>
+            </div>
+            <h3>No Study Material Found</h3>
+            <p>Try searching with different keywords or check back later for updates.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <a href="index.html" class="nav-item ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item active ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="#" class="nav-item ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Smart Study Viewer (Full Screen Overlay) -->
+    <div id="smartViewer" class="smart-viewer">
+        <div class="viewer-header">
+            <button class="viewer-btn ripple-target" id="viewerBackBtn">&#10094; Back</button>
+            <div class="viewer-title" id="viewerTitle">Document Title</div>
+            <button class="viewer-btn exit ripple-target" id="viewerExitBtn">Exit</button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="viewerProgress"></div>
+        </div>
+        <iframe id="viewerFrame" class="viewer-content" allowfullscreen></iframe>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // MOCK DATA (Simulating unlimited library)
+            // ==========================================
+            const mockData = [
+                {
+                    id: 1,
+                    title: "Mathematics Model Paper 2024",
+                    description: "Complete subjective and objective questions for upcoming board exams.",
+                    type: "pdf",
+                    size: "2.4 MB",
+                    date: "12 Oct 2023",
+                    url: "about:blank" // Using blank for demo. In production, insert real PDF URL.
+                },
+                {
+                    id: 2,
+                    title: "Science Chapter 1 Notes",
+                    description: "Detailed notes on Chemical Reactions and Equations with diagrams.",
+                    type: "docx",
+                    size: "1.1 MB",
+                    date: "05 Oct 2023",
+                    url: "about:blank"
+                },
+                {
+                    id: 3,
+                    title: "History Important Dates Quiz",
+                    description: "Interactive HTML quiz to practice major historical events.",
+                    type: "html",
+                    size: "450 KB",
+                    date: "28 Sep 2023",
+                    url: "about:blank"
+                },
+                {
+                    id: 4,
+                    title: "Hindi Grammar Vyakaran",
+                    description: "Comprehensive Hindi grammar rules and examples.",
+                    type: "pdf",
+                    size: "3.8 MB",
+                    date: "15 Sep 2023",
+                    url: "about:blank"
+                },
+                {
+                    id: 5,
+                    title: "Previous Year Question Bank (ZIP)",
+                    description: "All subjects question papers from 2018 to 2022.",
+                    type: "zip",
+                    size: "15.6 MB",
+                    date: "01 Sep 2023",
+                    url: "about:blank"
+                }
+            ];
+
+            const studyList = document.getElementById('studyList');
+            const searchInput = document.getElementById('searchInput');
+            const emptyState = document.getElementById('emptyState');
+
+            // ==========================================
+            // RENDER FUNCTION
+            // ==========================================
+            function renderList(data) {
+                studyList.innerHTML = ''; // Clear skeletons/old data
+                
+                if (data.length === 0) {
+                    emptyState.classList.add('active');
+                    return;
+                }
+                
+                emptyState.classList.remove('active');
+
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'file-card glass';
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="file-icon ${item.type}">
+                                <span>${item.type.toUpperCase()}</span>
+                            </div>
+                            <div class="card-info">
+                                <h3 class="card-title">${item.title}</h3>
+                                <p class="card-desc">${item.description}</p>
+                                <div class="card-meta">
+                                    <span>💾 ${item.size}</span>
+                                    <span>📅 ${item.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary ripple-target" onclick="openSmartStudy('${item.title}', '${item.url}', '${item.type}')">
+                                📖 Smart Study
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="downloadFile('${item.title}')">
+                                ⬇
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="shareFile('${item.title}')">
+                                ↗
+                            </button>
+                        </div>
+                    `;
+                    studyList.appendChild(card);
+                });
+
+                attachRipples(); // Re-attach ripples to new dynamic buttons
+            }
+
+            // Simulate Network Delay for Skeleton Loading
+            setTimeout(() => {
+                renderList(mockData);
+            }, 1000);
+
+
+            // ==========================================
+            // SEARCH FUNCTIONALITY (Instant Search)
+            // ==========================================
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = mockData.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query)
+                );
+                renderList(filtered);
+            });
+
+
+            // ==========================================
+            // FILE ACTIONS (Share, Download)
+            // ==========================================
+            window.shareFile = async (title) => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: title,
+                            text: `Check out this study material: ${title} on BSEB Portal.`,
+                            url: window.location.href
+                        });
+                    } catch (err) {
+                        console.log('Error sharing:', err);
+                    }
+                } else {
+                    alert('Sharing is not supported on this browser.');
+                }
+            };
+
+            window.downloadFile = (title) => {
+                // Mock download logic
+                const a = document.createElement('a');
+                a.href = '#'; 
+                a.download = title;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+
+            // ==========================================
+            // SMART STUDY VIEWER (Fullscreen & Orientation)
+            // ==========================================
+            const viewer = document.getElementById('smartViewer');
+            const viewerTitle = document.getElementById('viewerTitle');
+            const viewerFrame = document.getElementById('viewerFrame');
+            const viewerProgress = document.getElementById('viewerProgress');
+            const viewerExitBtn = document.getElementById('viewerExitBtn');
+            const viewerBackBtn = document.getElementById('viewerBackBtn');
+
+            window.openSmartStudy = (title, url, type) => {
+                // 1. Setup UI
+                viewerTitle.textContent = title;
+                viewer.classList.add('active');
+                
+                // Hide body scrolling
+                document.body.style.overflow = 'hidden';
+
+                // 2. Request Full Screen (if supported)
+                if (viewer.requestFullscreen) {
+                    viewer.requestFullscreen().catch(err => console.log('FS error:', err));
+                } else if (viewer.webkitRequestFullscreen) {
+                    viewer.webkitRequestFullscreen();
+                }
+
+                // 3. Request Landscape Lock (if supported)
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => console.log('Orientation lock error:', err));
+                }
+
+                // 4. Loading Progress Bar Animation
+                viewerProgress.style.width = '0%';
+                setTimeout(() => { viewerProgress.style.width = '40%'; }, 200);
+                setTimeout(() => { viewerProgress.style.width = '80%'; }, 800);
+                
+                // 5. Load Content
+                // Note: For docs/xls in real life without backend conversion, we use Google Docs Viewer wrapper.
+                let loadUrl = url;
+                if (['docx', 'ppt', 'xls'].includes(type)) {
+                    // Fallback to Google Docs Viewer format if it were a real public URL
+                    // loadUrl = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
+                }
+                
+                viewerFrame.src = loadUrl;
+
+                viewerFrame.onload = () => {
+                    viewerProgress.style.width = '100%';
+                    setTimeout(() => { viewerProgress.style.opacity = '0'; }, 300);
+                };
+            };
+
+            const closeSmartStudy = () => {
+                viewer.classList.remove('active');
+                viewerFrame.src = ''; // Clear frame memory
+                viewerProgress.style.width = '0%';
+                viewerProgress.style.opacity = '1';
+                document.body.style.overflow = 'auto'; // Restore scroll
+
+                // Exit Fullscreen
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                } else if (document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen();
+                }
+
+                // Unlock Orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            };
+
+            viewerExitBtn.addEventListener('click', closeSmartStudy);
+            viewerBackBtn.addEventListener('click', closeSmartStudy);
+
+
+            // ==========================================
+            // RIPPLE EFFECT LOGIC
+            // ==========================================
+            function attachRipples() {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    // Remove old listeners to prevent duplicates if re-rendered
+                    target.removeEventListener('mousedown', createRipple);
+                    target.removeEventListener('touchstart', createRipple);
+                    
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            }
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) existingRipple.remove();
+
+                button.appendChild(circle);
+                setTimeout(() => circle.remove(), 600);
+            }
+
+            attachRipples(); // Initial attachment
+        });
+    </script>
+</body>
+</html>

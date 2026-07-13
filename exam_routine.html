@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4e54c8">
+    <meta name="description" content="Exam Routine Library - BSEB Student Portal">
+    <title>Exam Routine</title>
+
+    <style>
+        /* =========================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================= */
+        :root {
+            /* Light Theme */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-gradient: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            --accent-color: #4e54c8;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --ripple-color: rgba(78, 84, 200, 0.3);
+            --skeleton-1: rgba(255, 255, 255, 0.6);
+            --skeleton-2: rgba(255, 255, 255, 0.9);
+            --search-bg: rgba(255, 255, 255, 0.8);
+            --badge-type: #10b981;
+            
+            --safe-bottom: 85px;
+            --header-height: 135px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme */
+                --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                --glass-bg: rgba(15, 23, 42, 0.5);
+                --glass-border: rgba(255, 255, 255, 0.15);
+                --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
+                --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+                --accent-color: #8b5cf6;
+                --card-bg: rgba(30, 41, 59, 0.65);
+                --ripple-color: rgba(255, 255, 255, 0.2);
+                --skeleton-1: rgba(0, 0, 0, 0.3);
+                --skeleton-2: rgba(255, 255, 255, 0.08);
+                --search-bg: rgba(0, 0, 0, 0.45);
+                --badge-type: #34d399;
+            }
+        }
+
+        /* =========================================================
+           RESET & BASE STYLES
+           ========================================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { border: none; background: none; font: inherit; cursor: pointer; outline: none; }
+        input { font: inherit; outline: none; border: none; }
+
+        /* =========================================================
+           UTILITIES (Glassmorphism, Ripple, Skeletons)
+           ========================================================= */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .ripple-target { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-anim 600ms linear;
+            background-color: var(--ripple-color);
+            pointer-events: none;
+        }
+        @keyframes ripple-anim {
+            to { transform: scale(4); opacity: 0; }
+        }
+
+        .skeleton { position: relative; overflow: hidden; pointer-events: none; border: none !important; box-shadow: none !important; }
+        .skeleton * { visibility: hidden !important; }
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, var(--skeleton-1) 25%, var(--skeleton-2) 50%, var(--skeleton-1) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-load 1.5s infinite;
+            z-index: 10;
+        }
+        @keyframes skeleton-load {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* =========================================================
+           LAYOUT & HEADER
+           ========================================================= */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .back-btn {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border-radius: 30px;
+            background: var(--search-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05), 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--accent-color), 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .search-input::placeholder { color: var(--text-secondary); font-weight: 400; }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           MAIN CONTENT & EXAM ROUTINE CARDS
+           ========================================================= */
+        main {
+            padding: calc(var(--header-height) + 15px) 15px calc(var(--safe-bottom) + 20px) 15px;
+            max-width: 768px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .routine-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .routine-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+        }
+        .routine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        /* Pure CSS File Icon */
+        .file-icon {
+            width: 55px;
+            height: 65px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.1);
+        }
+        .file-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-width: 0 16px 16px 0;
+            border-style: solid;
+            border-color: rgba(0,0,0,0.1) var(--card-bg) transparent transparent;
+            border-bottom-left-radius: 6px;
+        }
+        .file-icon span {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #334155;
+            letter-spacing: 1px;
+            z-index: 1;
+            margin-top: 10px;
+        }
+        
+        /* Dynamic Icon Colors */
+        .file-icon.pdf { background: linear-gradient(135deg, #fecaca 0%, #ef4444 100%); }
+        .file-icon.pdf span { color: white; }
+        .file-icon.jpg, .file-icon.png { background: linear-gradient(135deg, #a7f3d0 0%, #10b981 100%); }
+        .file-icon.jpg span, .file-icon.png span { color: white; }
+        .file-icon.xls { background: linear-gradient(135deg, #bbf7d0 0%, #22c55e 100%); }
+        .file-icon.xls span { color: white; }
+
+        .card-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .badge-wrapper {
+            margin-bottom: 6px;
+        }
+        .badge {
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+            background: var(--badge-type);
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-meta {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:active { transform: scale(0.97); }
+        
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            flex: 2;
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.3);
+        }
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .empty-state.active { display: flex; }
+        
+        /* Pure CSS Illustration (Calendar/Routine Motif) */
+        .illustration {
+            width: 130px;
+            height: 130px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .ill-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 2px dashed var(--glass-border);
+            animation: rotate 15s linear infinite;
+        }
+        .ill-calendar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 70px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .ill-calendar::before {
+            content: '';
+            width: 100%;
+            height: 20px;
+            background: var(--accent-gradient);
+            border-radius: 6px 6px 0 0;
+        }
+        .ill-calendar::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            width: 40px;
+            height: 4px;
+            background: var(--text-secondary);
+            opacity: 0.3;
+            border-radius: 2px;
+            box-shadow: 0 10px 0 rgba(71,85,105,0.3), 0 20px 0 rgba(71,85,105,0.3);
+        }
+        
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .empty-state h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+        .empty-state p { font-size: 0.95rem; color: var(--text-secondary); font-weight: 500; }
+
+        /* =========================================================
+           BOTTOM NAVIGATION
+           ========================================================= */
+        .bottom-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 35px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 150;
+            padding: 0 10px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            gap: 4px;
+        }
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            object-fit: contain;
+        }
+        .nav-item span {
+            font-size: 0.65rem;
+            font-weight: 700;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        /* Setting Home as active per portal dashboard hierarchy */
+        .nav-item.active img,
+        .nav-item.active span {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+        .nav-item.active {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        /* =========================================================
+           SMART STUDY VIEWER (Distraction Free)
+           ========================================================= */
+        .smart-viewer {
+            position: fixed;
+            inset: 0;
+            background: #0f172a; /* Dark premium background for viewer */
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .smart-viewer.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .viewer-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 15px;
+        }
+
+        .viewer-btn {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .viewer-btn.exit { background: #ef4444; border: none; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 9;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb, #4e54c8);
+            background-size: 200% 100%;
+            transition: width 0.3s ease;
+            animation: gradient-shift 2s linear infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        .viewer-content {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff; /* Documents generally need white bg */
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x pan-y pinch-zoom;
+        }
+
+        /* Desktop Adjustments */
+        @media (min-width: 768px) {
+            .routine-card { flex-direction: row; align-items: center; }
+            .card-actions { border-top: none; padding-top: 0; border-left: 1px solid var(--glass-border); padding-left: 20px; flex-direction: column; width: 180px; justify-content: center; }
+            .card-info { padding-right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Search -->
+    <header class="glass">
+        <div class="header-top">
+            <a href="index.html" class="back-btn ripple-target" aria-label="Go Back">
+                &#10094;
+            </a>
+            <h1 class="page-title">Exam Routine</h1>
+        </div>
+        <div class="search-container">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search exam routine by name...">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div id="routineList" class="routine-list">
+            <!-- Premium Skeleton Loaders -->
+            <div class="routine-card glass skeleton">
+                <div class="card-header">
+                    <div class="file-icon"></div>
+                    <div class="card-info">
+                        <div class="badge-wrapper"><span class="badge"></span></div>
+                        <div class="card-title">Loading Exam Routine...</div>
+                        <div class="card-desc">Fetching the official routine documents from the portal...</div>
+                        <div class="card-meta"><span>Size</span><span>Date</span></div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+            <div class="routine-card glass skeleton">
+                <div class="card-header">
+                    <div class="file-icon"></div>
+                    <div class="card-info">
+                        <div class="badge-wrapper"><span class="badge"></span></div>
+                        <div class="card-title">Loading Exam Routine...</div>
+                        <div class="card-desc">Fetching the official routine documents from the portal...</div>
+                        <div class="card-meta"><span>Size</span><span>Date</span></div>
+                    </div>
+                </div>
+                <div class="card-actions"><div class="btn"></div></div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <div class="illustration">
+                <div class="ill-circle"></div>
+                <div class="ill-calendar"></div>
+            </div>
+            <h3>No Exam Routine Available</h3>
+            <p>Routines will be published here once announced by the board.</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav glass">
+        <!-- Highlight Home as Exam Routine is a core dashboard module -->
+        <a href="index.html" class="nav-item active ripple-target">
+            <img src="home.png" alt="Home" onerror="this.style.display='none'">
+            <span>Home</span>
+        </a>
+        <a href="notes.html" class="nav-item ripple-target">
+            <img src="study.png" alt="Study" onerror="this.style.display='none'">
+            <span>Study</span>
+        </a>
+        <a href="help.html" class="nav-item ripple-target">
+            <img src="help.png" alt="Help" onerror="this.style.display='none'">
+            <span>Help</span>
+        </a>
+    </nav>
+
+    <!-- Smart Study Viewer (Full Screen Overlay) -->
+    <div id="smartViewer" class="smart-viewer">
+        <div class="viewer-header">
+            <button class="viewer-btn ripple-target" id="viewerBackBtn">&#10094; Back</button>
+            <div class="viewer-title" id="viewerTitle">Document Title</div>
+            <button class="viewer-btn exit ripple-target" id="viewerExitBtn">Exit</button>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="viewerProgress"></div>
+        </div>
+        <iframe id="viewerFrame" class="viewer-content" allowfullscreen></iframe>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ==========================================
+            // MOCK DATA (Simulating Infinite Routine Library)
+            // ==========================================
+            const mockRoutines = [
+                {
+                    id: 1,
+                    title: "Class 12th Final Board Exam Routine 2024",
+                    description: "Official schedule for Science, Arts, and Commerce streams.",
+                    type: "PDF",
+                    size: "1.5 MB",
+                    date: "Updated: 10 Nov 2023",
+                    url: "about:blank" // Insert real document URL here
+                },
+                {
+                    id: 2,
+                    title: "Class 10th Matriculation Exam Time Table",
+                    description: "Complete shift-wise details and examination center guidelines.",
+                    type: "JPG",
+                    size: "800 KB",
+                    date: "Updated: 05 Nov 2023",
+                    url: "about:blank"
+                },
+                {
+                    id: 3,
+                    title: "Practical Examination Schedule (All Subjects)",
+                    description: "Date sheet for Physics, Chemistry, Biology, and Geography practicals.",
+                    type: "PDF",
+                    size: "1.1 MB",
+                    date: "Updated: 20 Oct 2023",
+                    url: "about:blank"
+                },
+                {
+                    id: 4,
+                    title: "Sent-Up Examination Routine (Class 12)",
+                    description: "Internal school level testing schedule prior to final boards.",
+                    type: "XLS",
+                    size: "450 KB",
+                    date: "Updated: 15 Sep 2023",
+                    url: "about:blank"
+                }
+            ];
+
+            const routineList = document.getElementById('routineList');
+            const searchInput = document.getElementById('searchInput');
+            const emptyState = document.getElementById('emptyState');
+
+            // ==========================================
+            // RENDER FUNCTION
+            // ==========================================
+            function renderRoutines(data) {
+                routineList.innerHTML = ''; 
+                
+                if (data.length === 0) {
+                    emptyState.classList.add('active');
+                    return;
+                }
+                
+                emptyState.classList.remove('active');
+
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'routine-card glass';
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="file-icon ${item.type.toLowerCase()}">
+                                <span>${item.type}</span>
+                            </div>
+                            <div class="card-info">
+                                <div class="badge-wrapper"><span class="badge">${item.type}</span></div>
+                                <h3 class="card-title">${item.title}</h3>
+                                <p class="card-desc">${item.description}</p>
+                                <div class="card-meta">
+                                    <span>💾 ${item.size}</span>
+                                    <span>📅 ${item.date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary ripple-target" onclick="openSmartStudy('${item.title}', '${item.url}', '${item.type}')">
+                                📖 Smart Study
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="downloadFile('${item.title}')">
+                                ⬇ Download
+                            </button>
+                            <button class="btn btn-secondary ripple-target" onclick="shareFile('${item.title}')">
+                                ↗ Share
+                            </button>
+                        </div>
+                    `;
+                    routineList.appendChild(card);
+                });
+
+                attachRipples(); // Re-bind ripples to new dynamic buttons
+            }
+
+            // Simulate Network Fetch & Premium Skeleton Loader Delay
+            setTimeout(() => {
+                renderRoutines(mockRoutines);
+            }, 1000);
+
+
+            // ==========================================
+            // SEARCH FUNCTIONALITY (Instant)
+            // ==========================================
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const filtered = mockRoutines.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    item.description.toLowerCase().includes(query) ||
+                    item.type.toLowerCase().includes(query)
+                );
+                renderRoutines(filtered);
+            });
+
+
+            // ==========================================
+            // FILE ACTIONS
+            // ==========================================
+            window.shareFile = async (title) => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: title,
+                            text: `Check out the Exam Routine: ${title} from BSEB Student Portal`,
+                            url: window.location.href
+                        });
+                    } catch (err) {
+                        console.log('Error sharing:', err);
+                    }
+                } else {
+                    alert('Sharing is not supported on this browser.');
+                }
+            };
+
+            window.downloadFile = (title) => {
+                // Mock native download behavior
+                const a = document.createElement('a');
+                a.href = '#'; 
+                a.download = `BSEB_Exam_Routine_${title.replace(/\s+/g, '_')}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+
+            // ==========================================
+            // SMART STUDY VIEWER (Distraction Free)
+            // ==========================================
+            const viewer = document.getElementById('smartViewer');
+            const viewerTitle = document.getElementById('viewerTitle');
+            const viewerFrame = document.getElementById('viewerFrame');
+            const viewerProgress = document.getElementById('viewerProgress');
+            const viewerExitBtn = document.getElementById('viewerExitBtn');
+            const viewerBackBtn = document.getElementById('viewerBackBtn');
+
+            window.openSmartStudy = (title, url, type) => {
+                // Setup UI
+                viewerTitle.textContent = title;
+                viewer.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Lock background scrolling
+
+                // 1. Request Full Screen Mode (with fallbacks)
+                if (viewer.requestFullscreen) {
+                    viewer.requestFullscreen().catch(err => console.log('FS error:', err));
+                } else if (viewer.webkitRequestFullscreen) {
+                    viewer.webkitRequestFullscreen();
+                }
+
+                // 2. Request Landscape Lock (if supported)
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => {
+                        console.log('Orientation lock unavailable or denied:', err);
+                    });
+                }
+
+                // 3. Loading Bar Animation
+                viewerProgress.style.opacity = '1';
+                viewerProgress.style.width = '0%';
+                setTimeout(() => { viewerProgress.style.width = '50%'; }, 200);
+                setTimeout(() => { viewerProgress.style.width = '85%'; }, 600);
+                
+                // 4. Load Content
+                let loadUrl = url;
+                // Docs viewer wrapper for MS Office formats (Production ready strategy)
+                if (['DOCX', 'PPTX', 'XLS', 'PPT', 'DOC'].includes(type.toUpperCase())) {
+                    // loadUrl = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
+                }
+                
+                viewerFrame.src = loadUrl;
+
+                viewerFrame.onload = () => {
+                    viewerProgress.style.width = '100%';
+                    setTimeout(() => { viewerProgress.style.opacity = '0'; }, 300);
+                };
+            };
+
+            const closeSmartStudy = () => {
+                viewer.classList.remove('active');
+                viewerFrame.src = ''; // Clear iframe memory
+                viewerProgress.style.width = '0%';
+                document.body.style.overflow = 'auto'; // Unlock scroll
+
+                // Exit Fullscreen
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                } else if (document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen();
+                }
+
+                // Unlock Orientation
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            };
+
+            viewerExitBtn.addEventListener('click', closeSmartStudy);
+            viewerBackBtn.addEventListener('click', closeSmartStudy);
+
+
+            // ==========================================
+            // RIPPLE EFFECT SYSTEM
+            // ==========================================
+            function attachRipples() {
+                const rippleTargets = document.querySelectorAll('.ripple-target');
+                rippleTargets.forEach(target => {
+                    // Remove old listeners to prevent duplication
+                    target.removeEventListener('mousedown', createRipple);
+                    target.removeEventListener('touchstart', createRipple);
+                    
+                    target.addEventListener('mousedown', createRipple);
+                    target.addEventListener('touchstart', createRipple, { passive: true });
+                });
+            }
+
+            function createRipple(event) {
+                const button = event.currentTarget;
+                const circle = document.createElement('span');
+                const diameter = Math.max(button.clientWidth, button.clientHeight);
+                const radius = diameter / 2;
+                const rect = button.getBoundingClientRect();
+                
+                let clientX, clientY;
+                if(event.touches) {
+                    clientX = event.touches[0].clientX;
+                    clientY = event.touches[0].clientY;
+                } else {
+                    clientX = event.clientX;
+                    clientY = event.clientY;
+                }
+
+                circle.style.width = circle.style.height = `${diameter}px`;
+                circle.style.left = `${clientX - rect.left - radius}px`;
+                circle.style.top = `${clientY - rect.top - radius}px`;
+                circle.classList.add('ripple');
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) existingRipple.remove();
+
+                button.appendChild(circle);
+                setTimeout(() => circle.remove(), 600);
+            }
+
+            // Initial binding for static elements
+            attachRipples();
+        });
+    </script>
+</body>
+</html>
