@@ -1,93 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Bihar Student Portal PDF Viewer</title>
 
-<meta name="theme-color" content="#0f172a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="description"
-content="Professional PDF Viewer">
-
-<link rel="icon" href="../assets/logo.png">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
-
-<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
 <style>
 
-:root{
-
---bg:#08101f;
---bg2:#111827;
---card:#1e293b;
---blue:#2563eb;
---blue2:#3b82f6;
---red:#ef4444;
---green:#22c55e;
---yellow:#facc15;
---white:#ffffff;
---gray:#94a3b8;
---radius:14px;
---shadow:0 15px 40px rgba(0,0,0,.45);
-
-}
-
 *{
-
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
-
-}
-
-html{
-
-scroll-behavior:smooth;
-
 }
 
 body{
-
-width:100%;
-height:100vh;
-background:var(--bg);
-overflow:hidden;
+background:#0f172a;
 color:#fff;
-
+height:100vh;
+display:flex;
+flex-direction:column;
+overflow:hidden;
 }
 
-::-webkit-scrollbar{
+/* ---------- Header ---------- */
 
-width:8px;
-height:8px;
-
+header{
+height:65px;
+background:#111827;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px;
+border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-::-webkit-scrollbar-thumb{
-
-background:#2b3b58;
-border-radius:20px;
-
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:18px;
+font-weight:bold;
 }
 
-::-webkit-scrollbar-track{
-
-background:#08101f;
-
+.logo span{
+width:42px;
+height:42px;
+background:#2563eb;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
 }
 
-#loadingScreen{
+.controls{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
 
+button,
+select{
+height:40px;
+border:none;
+outline:none;
+border-radius:10px;
+padding:0 14px;
+background:#1e293b;
+color:#fff;
+cursor:pointer;
+font-size:14px;
+}
+
+button:hover,
+select:hover{
+background:#2563eb;
+}
+
+/* ---------- Viewer ---------- */
+
+#viewer{
+flex:1;
+overflow:auto;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding:20px;
+background:#0b1220;
+}
+
+canvas{
+background:#fff;
+box-shadow:0 0 25px rgba(0,0,0,.45);
+border-radius:8px;
+margin-bottom:30px;
+max-width:100%;
+}
+
+/* ---------- Footer ---------- */
+
+footer{
+height:70px;
+background:#111827;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.pageInfo{
+font-size:15px;
+font-weight:bold;
+}
+
+.downloadBtn{
+background:#16a34a;
+font-weight:bold;
+}
+
+.downloadBtn:hover{
+background:#15803d;
+}
+
+/* ---------- Loading ---------- */
+
+#loading{
 position:fixed;
 left:0;
 top:0;
@@ -95,299 +139,49 @@ width:100%;
 height:100%;
 background:#08101f;
 display:flex;
-align-items:center;
 justify-content:center;
-z-index:999999;
-
+align-items:center;
+z-index:9999;
 }
 
 .loader{
-
-width:70px;
-height:70px;
+width:60px;
+height:60px;
 border-radius:50%;
-border:6px solid rgba(255,255,255,.08);
+border:6px solid rgba(255,255,255,.15);
 border-top:6px solid #2563eb;
 animation:spin 1s linear infinite;
-
 }
 
 @keyframes spin{
-
 100%{
-
 transform:rotate(360deg);
-
+}
 }
 
-}
+/* ---------- Mobile ---------- */
+
+@media(max-width:768px){
 
 header{
-
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:65px;
-background:#111827;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 14px;
-z-index:999;
-border-bottom:1px solid rgba(255,255,255,.08);
-
-}
-
-.logoBox{
-
-display:flex;
-align-items:center;
-gap:10px;
-
-}
-
-.logo{
-
-width:42px;
-height:42px;
-border-radius:50%;
-background:#2563eb;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:18px;
-font-weight:bold;
-
-}
-
-.title{
-
-display:flex;
-flex-direction:column;
-
-}
-
-.title h2{
-
-font-size:17px;
-font-weight:700;
-
-}
-
-.title p{
-
-font-size:11px;
-color:#b7c3d8;
-
-}
-
-.toolbar{
-
-display:flex;
-align-items:center;
-gap:8px;
-flex-wrap:wrap;
-
-}
-
-.toolBtn{
-
-height:42px;
-padding:0 14px;
-border:none;
-background:#1e293b;
-color:#fff;
-border-radius:12px;
-cursor:pointer;
-font-size:15px;
-transition:.25s;
-
-}
-
-.toolBtn:hover{
-
-background:#2563eb;
-
-}
-
-.toolBtn:active{
-
-transform:scale(.96);
-
-}
-
-.zoomSelect{
-
-height:42px;
-border:none;
-padding:0 12px;
-border-radius:12px;
-background:#1e293b;
-color:white;
-font-size:14px;
-outline:none;
-
-}
-
-#viewerContainer{
-
-position:fixed;
-left:0;
-right:0;
-top:65px;
-bottom:72px;
-overflow:auto;
-padding:25px;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-background:#0b1220;
-
-}
-
-#pdfCanvas{
-
-background:white;
-box-shadow:0 0 25px rgba(0,0,0,.45);
-border-radius:8px;
-margin-bottom:50px;
-
-}
-
-.bottomBar{
-
-position:fixed;
-left:0;
-bottom:0;
-width:100%;
-height:72px;
-background:#111827;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 15px;
-border-top:1px solid rgba(255,255,255,.08);
-
-}
-
-.pageBox{
-
-display:flex;
-align-items:center;
-gap:10px;
-
-}
-
-.downloadBox{
-
-display:flex;
-align-items:center;
-gap:10px;
-
-}
-
-.downloadBtn{
-
-height:48px;
-padding:0 18px;
-background:#16a34a;
-border:none;
-color:white;
-border-radius:12px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
-
-}
-
-.downloadBtn:hover{
-
-background:#15803d;
-
-}
-
-.fullBtn{
-
-background:#2563eb;
-
-}
-
-.fullBtn:hover{
-
-background:#1d4ed8;
-
-}
-
-.infoCard{
-
-position:fixed;
-right:18px;
-bottom:92px;
-width:250px;
-background:#111827;
-border-radius:16px;
-padding:15px;
-box-shadow:var(--shadow);
-display:none;
-z-index:500;
-
-}
-
-.infoCard h3{
-
-font-size:16px;
-margin-bottom:8px;
-
-}
-
-.infoCard p{
-
-font-size:13px;
-line-height:1.6;
-color:#d7d7d7;
-
-}
-
-.toast{
-
-position:fixed;
-left:50%;
-bottom:100px;
-transform:translateX(-50%);
-background:#2563eb;
-padding:12px 20px;
-border-radius:12px;
-display:none;
-z-index:99999;
-font-weight:bold;
-
-}
-
-@media(max-width:900px){
-
-header{
-
 height:auto;
-padding:10px;
+padding:12px;
 flex-direction:column;
 align-items:flex-start;
-
+gap:12px;
 }
 
-.toolbar{
-
-margin-top:10px;
+.controls{
 width:100%;
 overflow:auto;
 padding-bottom:5px;
-
 }
 
-#viewerContainer{
-
-top:118px;
-
+footer{
+flex-direction:column;
+height:auto;
+gap:10px;
+padding:12px;
 }
 
 }
@@ -398,1925 +192,229 @@ top:118px;
 
 <body>
 
-<div id="loadingScreen">
-
+<div id="loading">
 <div class="loader"></div>
-
-</div>
-
-<div class="toast" id="toast">
-Loading PDF...
-</div>
-
-<div class="infoCard" id="infoCard">
-
-<h3>PDF Information</h3>
-
-<p id="pdfInformation">
-Loading...
-</p>
-
 </div>
 
 <header>
 
-<div class="logoBox">
-
 <div class="logo">
-
-📘
-
+<span>📘</span>
+<div>
+<div>Bihar Student Portal</div>
+<small>Professional PDF Viewer</small>
+</div>
 </div>
 
-<div class="title">
+<div class="controls">
 
-<h2>Bihar Student Portal</h2>
+<button id="prevBtn">◀</button>
 
-<p>Professional PDF Viewer</p>
-
+<div id="pageText">
+1 / 1
 </div>
 
-</div>
+<button id="nextBtn">▶</button>
 
-<div class="toolbar">
-
-<button class="toolBtn"
-id="menuBtn">
-
-☰
-
-</button>
-
-<button class="toolBtn"
-id="prevPage">
-
-◀
-
-</button>
-
-<div
-class="toolBtn"
-style="display:flex;align-items:center;gap:8px;cursor:default;">
-
-Page
-
-<span id="pageNumber">
-
-1
-
-</span>
-
-/
-
-<span id="pageCount">
-
-0
-
-</span>
-
-</div>
-
-<button
-class="toolBtn"
-id="nextPage">
-
-▶
-
-</button>
-
-<button
-class="toolBtn"
-id="zoomOut">
-
-－
-
-</button>
-
-<select
-class="zoomSelect"
-id="zoomSelect">
-
-<option value="auto">
-Original Size
-</option>
-
-<option value=".50">
-50%
-</option>
-
-<option value=".60">
-60%
-</option>
-
-<option value=".70">
-70%
-</option>
-
-<option value=".80">
-80%
-</option>
-
-<option value=".90">
-90%
-</option>
-
-<option value="1"
-selected>
-100%
-</option>
-
-<option value="1.10">
-110%
-</option>
-
-<option value="1.20">
-120%
-</option>
-
-<option value="1.30">
-130%
-</option>
-
-<option value="1.40">
-140%
-</option>
-
-<option value="1.50">
-150%
-</option>
-
-<option value="1.75">
-175%
-</option>
-
-<option value="2">
-200%
-</option>
-
-<option value="2.50">
-250%
-</option>
-
-<option value="3">
-300%
-</option>
-
-<option value="fitWidth">
-Fit Width
-</option>
-
-<option value="fitPage">
-Fit Page
-</option>
-
+<select id="zoomSelect">
+<option value="auto">Original Size</option>
+<option value="0.5">50%</option>
+<option value="0.75">75%</option>
+<option value="1" selected>100%</option>
+<option value="1.25">125%</option>
+<option value="1.5">150%</option>
+<option value="2">200%</option>
+<option value="3">300%</option>
+<option value="fitWidth">Fit Width</option>
+<option value="fitPage">Fit Page</option>
 </select>
-
-<button
-class="toolBtn"
-id="zoomIn">
-
-＋
-
-</button>
-
-<button
-class="toolBtn fullBtn"
-id="fullscreen">
-
-⛶
-
-</button>
-<button
-class="toolBtn"
-id="rotateLeft">
-
-⟲
-
-</button>
-
-<button
-class="toolBtn"
-id="rotateRight">
-
-⟳
-
-</button>
-
-<button
-class="toolBtn"
-id="fitWidthBtn">
-
-↔
-
-</button>
-
-<button
-class="toolBtn"
-id="fitPageBtn">
-
-⬜
-
-</button>
-
-<button
-class="toolBtn"
-id="searchBtn">
-
-🔍
-
-</button>
-
-<button
-class="toolBtn"
-id="bookmarkBtn">
-
-🔖
-
-</button>
-
-<button
-class="toolBtn"
-id="themeBtn">
-
-🌙
-
-</button>
-
-<button
-class="toolBtn"
-id="infoBtn">
-
-ℹ
-
-</button>
 
 </div>
 
 </header>
 
-<div id="viewerContainer">
-
-<canvas
-id="pdfCanvas">
-</canvas>
-
+<div id="viewer">
+<canvas id="pdfCanvas"></canvas>
 </div>
 
-<div
-class="bottomBar">
+<footer>
 
-<div
-class="pageBox">
-
-<button
-class="toolBtn"
-id="firstPage">
-
-⏮
-
-</button>
-
-<button
-class="toolBtn"
-id="prevBottom">
-
-◀
-
-</button>
-
-<input
-type="number"
-id="gotoPage"
-value="1"
-min="1"
-style="
-width:70px;
-height:42px;
-background:#1e293b;
-border:none;
-border-radius:10px;
-color:white;
-text-align:center;
-font-size:15px;">
-
-<button
-class="toolBtn"
-id="goPage">
-
-GO
-
-</button>
-
-<button
-class="toolBtn"
-id="nextBottom">
-
-▶
-
-</button>
-
-<button
-class="toolBtn"
-id="lastPage">
-
-⏭
-
-</button>
-
+<div class="pageInfo">
+Page <span id="pageNo">1</span> of <span id="pageCount">0</span>
 </div>
 
-<div
-class="downloadBox">
-
-<button
-class="downloadBtn"
-id="downloadPdf">
-
+<button class="downloadBtn" id="downloadBtn">
 ⬇ Download PDF
-
 </button>
 
-</div>
-
-</div>
-
-<div
-id="leftDrawer"
-style="
-
-position:fixed;
-left:-330px;
-top:0;
-width:330px;
-height:100%;
-background:#111827;
-z-index:9999;
-overflow:auto;
-transition:.35s;
-box-shadow:0 0 30px rgba(0,0,0,.45);
-
-">
-
-<div
-style="
-
-padding:20px;
-font-size:20px;
-font-weight:bold;
-border-bottom:1px solid rgba(255,255,255,.08);
-
-">
-
-📄 PDF Menu
-
-</div>
-
-<div
-style="padding:15px;">
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="openOutline">
-
-Bookmarks
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="openThumbnail">
-
-Thumbnails
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="sharePdf">
-
-Share PDF
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="copyLink">
-
-Copy Link
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="printPdf">
-
-Print PDF
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="refreshPdf">
-
-Refresh
-
-</button>
-
-<button
-class="toolBtn"
-style="width:100%;margin-bottom:12px;"
-id="closeDrawer">
-
-Close Menu
-
-</button>
-
-</div>
-
-</div>
-
-<div
-id="overlay"
-
-style="
-
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.45);
-display:none;
-z-index:9998;
-
-">
-
-</div>
-
-<div
-id="searchPanel"
-
-style="
-
-position:fixed;
-right:20px;
-top:85px;
-width:320px;
-background:#111827;
-padding:15px;
-border-radius:15px;
-display:none;
-z-index:99999;
-box-shadow:0 0 25px rgba(0,0,0,.5);
-
-">
-
-<h3
-style="margin-bottom:15px;">
-
-Search In PDF
-
-</h3>
-
-<input
-type="text"
-id="searchText"
-placeholder="Search..."
-
-style="
-
-width:100%;
-height:45px;
-border:none;
-border-radius:10px;
-padding:0 15px;
-background:#1e293b;
-color:white;
-margin-bottom:12px;
-
-">
-
-<button
-class="toolBtn"
-style="width:100%;"
-id="startSearch">
-
-Search
-
-</button>
-
-</div>
+</footer>
 
 <script>
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
 
-const canvas =
-document.getElementById("pdfCanvas");
+const canvas = document.getElementById("pdfCanvas");
+const ctx = canvas.getContext("2d");
 
-const ctx =
-canvas.getContext("2d");
+const pageNo = document.getElementById("pageNo");
+const pageCount = document.getElementById("pageCount");
+const pageText = document.getElementById("pageText");
+const zoomSelect = document.getElementById("zoomSelect");
+const loading = document.getElementById("loading");
 
-let pdfDoc = null;
+const pdfFile =
+new URLSearchParams(location.search).get("file");
 
-let currentPage = 1;
+let pdf = null;
+let pageNum = 1;
+let scale = 1;
+let rendering = false;
 
-let totalPages = 0;
+async function loadPDF(){
 
-let zoom = 1;
-
-let rotation = 0;
-
-let renderTask = null;
-
-let pdfFile = "";
-
-const params =
-new URLSearchParams(window.location.search);
-
-pdfFile =
-params.get("file") || "../pdf/sample.pdf";
-
-const pageNumber =
-document.getElementById("pageNumber");
-
-const pageCount =
-document.getElementById("pageCount");
-
-const loadingScreen =
-document.getElementById("loadingScreen");
-
-const toast =
-document.getElementById("toast");
-
-const viewerContainer =
-document.getElementById("viewerContainer");
-
-const gotoPage =
-document.getElementById("gotoPage");
-
-const zoomSelect =
-document.getElementById("zoomSelect");
-
-const infoCard =
-document.getElementById("infoCard");
-
-const infoText =
-document.getElementById("pdfInformation");
-
-async function loadPDF() {
-    try {
-
-        toast.style.display = "block";
-        toast.innerHTML = "Loading PDF...";
-
-        pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
-
-        totalPages = pdfDoc.numPages;
-
-        pageCount.innerHTML = totalPages;
-        gotoPage.max = totalPages;
-
-        loadingScreen.style.display = "none";
-
-        await renderPage(currentPage);
-
-        infoText.innerHTML =
-            "Pages : " + totalPages + "<br>File : " + pdfFile;
-
-        toast.style.display = "none";
-
-    } catch (error) {
-
-        console.error(error);
-
-        loadingScreen.style.display = "none";
-
-        toast.style.display = "block";
-        toast.innerHTML = "❌ PDF Load Failed";
-
-        alert("PDF Load Failed!\n\nFile: " + pdfFile + "\n\n" + error.message);
+    if(!pdfFile){
+        loading.style.display="none";
+        alert("PDF file not found.");
+        return;
     }
-}
-async function renderPage(pageNumberValue){
 
-if(renderTask){
+    try{
 
-try{
+        pdf =
+        await pdfjsLib.getDocument(pdfFile).promise;
 
-renderTask.cancel();
+        pageCount.textContent = pdf.numPages;
 
-}catch(e){}
+        loading.style.display="none";
 
-}
+        renderPage(pageNum);
 
-const page =
-await pdfDoc.getPage(pageNumberValue);
+    }catch(err){
 
-const viewport =
-page.getViewport({
-scale:zoom,
-rotation:rotation
-});
+        loading.style.display="none";
 
-canvas.width =
-viewport.width;
+        alert("Unable to load PDF.\n\n"+err.message);
 
-canvas.height =
-viewport.height;
-
-const renderContext={
-
-canvasContext:ctx,
-
-viewport:viewport
-
-};
-
-renderTask=
-page.render(renderContext);
-
-await renderTask.promise;
-
-pageNumber.innerHTML=
-pageNumberValue;
-
-gotoPage.value=
-pageNumberValue;
-
-toast.style.display="none";
+    }
 
 }
 
-loadPDF();
+async function renderPage(num){
 
-document
-.getElementById("nextPage")
-.onclick=function(){
+    if(rendering) return;
 
-if(currentPage<totalPages){
+    rendering=true;
 
-currentPage++;
+    const page =
+    await pdf.getPage(num);
 
-renderPage(currentPage);
+    let viewport =
+    page.getViewport({scale:scale});
 
-}
+    if(zoomSelect.value=="fitWidth"){
 
-};
+        scale =
+        document.getElementById("viewer").clientWidth /
+        viewport.width;
 
-document
-.getElementById("prevPage")
-.onclick=function(){
+        viewport =
+        page.getViewport({scale:scale});
 
-if(currentPage>1){
+    }
 
-currentPage--;
+    if(zoomSelect.value=="fitPage"){
 
-renderPage(currentPage);
+        scale =
+        Math.min(
+        document.getElementById("viewer").clientWidth/viewport.width,
+        document.getElementById("viewer").clientHeight/viewport.height
+        );
 
-}
+        viewport =
+        page.getViewport({scale:scale});
 
-};
+    }
 
-document
-.getElementById("nextBottom")
-.onclick=function(){
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-if(currentPage<totalPages){
+    await page.render({
 
-currentPage++;
+        canvasContext:ctx,
+        viewport:viewport
 
-renderPage(currentPage);
+    }).promise;
 
-}
+    pageNo.textContent=num;
+    pageText.innerHTML=num+" / "+pdf.numPages;
 
-};
-
-document
-.getElementById("prevBottom")
-.onclick=function(){
-
-if(currentPage>1){
-
-currentPage--;
-
-renderPage(currentPage);
+    rendering=false;
 
 }
 
-};
+/* Previous */
 
-document
-.getElementById("firstPage")
-.onclick=function(){
+document.getElementById("prevBtn").onclick=()=>{
 
-currentPage=1;
+    if(pageNum>1){
 
-renderPage(currentPage);
+        pageNum--;
 
-};
+        renderPage(pageNum);
 
-document
-.getElementById("lastPage")
-.onclick=function(){
-
-currentPage=totalPages;
-
-renderPage(currentPage);
+    }
 
 };
 
-document
-.getElementById("goPage")
-.onclick=function(){
+/* Next */
 
-const page=
-parseInt(gotoPage.value);
+document.getElementById("nextBtn").onclick=()=>{
 
-if(page>=1 && page<=totalPages){
+    if(pageNum<pdf.numPages){
 
-currentPage=page;
+        pageNum++;
 
-renderPage(currentPage);
+        renderPage(pageNum);
 
-}
+    }
 
 };
+
+/* Zoom */
 
 zoomSelect.onchange=function(){
 
-const value=this.value;
+    if(this.value=="auto"){
 
-if(value=="fitWidth"){
+        scale=1;
 
-zoom=
-viewerContainer.clientWidth/
-canvas.width;
+    }else if(this.value!="fitWidth" && this.value!="fitPage"){
 
-}
-
-else if(value=="fitPage"){
-
-zoom=Math.min(
-
-viewerContainer.clientWidth/
-canvas.width,
-
-viewerContainer.clientHeight/
-canvas.height
-
-);
-
-}
-
-else if(value=="auto"){
-
-zoom=1;
-
-}
-
-else{
-
-zoom=parseFloat(value);
-
-}
-
-renderPage(currentPage);
-
-};
-
-document
-.getElementById("zoomIn")
-.onclick=function(){
-
-zoom+=0.10;
-
-zoomSelect.value="";
-
-renderPage(currentPage);
-
-};
-
-document
-.getElementById("zoomOut")
-.onclick=function(){
-
-if(zoom>0.30){
-
-zoom-=0.10;
-
-zoomSelect.value="";
-
-renderPage(currentPage);
-
-}
-
-};
-
-document
-.getElementById("rotateLeft")
-.onclick=function(){
-
-rotation-=90;
-
-renderPage(currentPage);
-
-};
-
-document
-.getElementById("rotateRight")
-.onclick=function(){
-
-rotation+=90;
-
-renderPage(currentPage);
-
-};
-
-document
-.getElementById("fullscreen")
-.onclick=function(){
-
-if(!document.fullscreenElement){
-
-document.documentElement
-.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
-
-};
-
-document
-.getElementById("menuBtn")
-.onclick=function(){
-
-leftDrawer.style.left="0";
-
-overlay.style.display="block";
-
-};
-
-document
-.getElementById("closeDrawer")
-.onclick=function(){
-
-leftDrawer.style.left="-330px";
-
-overlay.style.display="none";
-
-};
-
-overlay.onclick=function(){
-
-leftDrawer.style.left="-330px";
-
-overlay.style.display="none";
-
-};
-
-document
-.getElementById("infoBtn")
-.onclick=function(){
-
-if(infoCard.style.display=="block"){
-
-infoCard.style.display="none";
-
-}else{
-
-infoCard.style.display="block";
-
-}
-
-};
-
-document
-.getElementById("themeBtn")
-.onclick=function(){
-
-if(document.body.style.background=="white"){
-
-document.body.style.background="#08101f";
-
-document.body.style.color="white";
-
-}else{
-
-document.body.style.background="white";
-
-document.body.style.color="black";
-
-}
-
-};
-
-document
-.getElementById("searchBtn")
-.onclick=function(){
-
-const panel=
-document.getElementById("searchPanel");
-
-panel.style.display=
-panel.style.display=="block"
-?
-"none"
-:
-"block";
-
-};
-
-document
-.getElementById("refreshPdf")
-.onclick=function(){
-
-location.reload();
-
-};
-
-document
-.getElementById("copyLink")
-.onclick=function(){
-
-navigator.clipboard
-.writeText(location.href);
-
-alert("Link Copied");
-
-};
-
-document
-.getElementById("sharePdf")
-.onclick=async function(){
-
-if(navigator.share){
-
-navigator.share({
-
-title:"PDF",
-
-url:location.href
-
-});
-
-}else{
-
-alert("Sharing Not Supported");
-
-}
-
-};
-
-document
-.getElementById("printPdf")
-.onclick=function(){
-
-window.print();
-
-};
-document
-.getElementById("downloadPdf")
-.onclick = async function () {
-
-try{
-
-toast.style.display="block";
-toast.innerHTML="Preparing Secure PDF...";
-
-const existingPdfBytes =
-await fetch(pdfFile).then(res=>res.arrayBuffer());
-
-const pdfDoc =
-await PDFLib.PDFDocument.load(existingPdfBytes);
-
-const pages =
-pdfDoc.getPages();
-
-const helvetica =
-await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-
-for(const page of pages){
-
-const width =
-page.getWidth();
-
-const height =
-page.getHeight();
-
-page.drawText("Bihar Student Portal",{
-
-x:width/2-220,
-
-y:height/2,
-
-size:42,
-
-font:helvetica,
-
-color:PDFLib.rgb(1,0,0),
-
-opacity:0.16,
-
-rotate:PDFLib.degrees(45)
-
-});
-
-page.drawText("Bihar Student Portal",{
-
-x:40,
-
-y:40,
-
-size:11,
-
-font:helvetica,
-
-color:PDFLib.rgb(.80,0,0),
-
-opacity:.70
-
-});
-
-page.drawText(
-
-"Downloaded From Bihar Student Portal",
-
-{
-
-x:40,
-
-y:22,
-
-size:9,
-
-font:helvetica,
-
-color:PDFLib.rgb(.55,.55,.55)
-
-}
-
-);
-
-}
-
-const pdfBytes =
-await pdfDoc.save();
-
-const blob =
-new Blob([pdfBytes],{
-
-type:"application/pdf"
-
-});
-
-const url =
-URL.createObjectURL(blob);
-
-const a =
-document.createElement("a");
-
-a.href=url;
-
-a.download="Bihar_Student_Portal.pdf";
-
-document.body.appendChild(a);
-
-a.click();
-
-document.body.removeChild(a);
-
-URL.revokeObjectURL(url);
-
-toast.innerHTML="Download Complete";
-
-setTimeout(()=>{
-
-toast.style.display="none";
-
-},1500);
-
-}catch(error){
-
-console.log(error);
-
-toast.innerHTML="Download Failed";
-
-setTimeout(()=>{
-
-toast.style.display="none";
-
-},2000);
-
-}
-
-};
-
-document
-.getElementById("startSearch")
-.onclick=function(){
-
-const keyword=
-
-document
-.getElementById("searchText")
-.value
-.trim();
-
-if(keyword==""){
-
-alert("Enter Keyword");
-
-return;
-
-}
-
-alert(
-"PDF.js text search will be added in next update.\nKeyword : "+keyword
-);
-
-};
-
-document
-.addEventListener(
-
-"keydown",
-
-function(e){
-
-if(e.key==="ArrowRight"){
-
-if(currentPage<totalPages){
-
-currentPage++;
-
-renderPage(currentPage);
-
-}
-
-}
-
-if(e.key==="ArrowLeft"){
-
-if(currentPage>1){
-
-currentPage--;
-
-renderPage(currentPage);
-
-}
-
-}
-
-if(e.key==="+" || e.key==="="){
-
-zoom+=0.10;
-
-renderPage(currentPage);
-
-}
-
-if(e.key==="-"){
-
-if(zoom>0.30){
-
-zoom-=0.10;
-
-renderPage(currentPage);
-
-}
-
-}
-
-if(e.key==="Home"){
-
-currentPage=1;
-
-renderPage(currentPage);
-
-}
-
-if(e.key==="End"){
-
-currentPage=totalPages;
-
-renderPage(currentPage);
-
-}
-
-if(e.key==="Escape"){
-
-infoCard.style.display="none";
-
-document.getElementById("searchPanel").style.display="none";
-
-leftDrawer.style.left="-330px";
-
-overlay.style.display="none";
-
-}
-
-}
-
-);
-
-viewerContainer.addEventListener(
-
-"wheel",
-
-function(e){
-
-if(e.ctrlKey){
-
-e.preventDefault();
-
-if(e.deltaY<0){
-
-zoom+=0.05;
-
-}else{
-
-if(zoom>0.30){
-
-zoom-=0.05;
-
-}
-
-}
-
-renderPage(currentPage);
-
-}
-
-},
-
-{passive:false}
-
-);
-
-let touchStartDistance=0;
-let touchCurrentDistance=0;
-let initialZoom=1;
-
-viewerContainer.addEventListener(
-
-"touchstart",
-
-function(e){
-
-if(e.touches.length==2){
-
-touchStartDistance=
-
-Math.hypot(
-
-e.touches[0].pageX-
-e.touches[1].pageX,
-
-e.touches[0].pageY-
-e.touches[1].pageY
-
-);
-
-initialZoom=zoom;
-
-}
-
-}
-
-);
-
-viewerContainer.addEventListener(
-
-"touchmove",
-
-function(e){
-
-if(e.touches.length==2){
-
-touchCurrentDistance=
-
-Math.hypot(
-
-e.touches[0].pageX-
-e.touches[1].pageX,
-
-e.touches[0].pageY-
-e.touches[1].pageY
-
-);
-
-zoom=
-
-initialZoom*
-(touchCurrentDistance/touchStartDistance);
-
-renderPage(currentPage);
-
-}
-
-}
-
-);
-let autoHideTimer = null;
-
-function showToast(message,time=2000){
-
-toast.innerHTML = message;
-
-toast.style.display = "block";
-
-clearTimeout(autoHideTimer);
-
-autoHideTimer = setTimeout(()=>{
-
-toast.style.display = "none";
-
-},time);
-
-}
-
-function saveReadingProgress(){
-
-localStorage.setItem(
-
-"pdf_last_page_"+pdfFile,
-
-currentPage
-
-);
-
-localStorage.setItem(
-
-"pdf_last_zoom_"+pdfFile,
-
-zoom
-
-);
-
-localStorage.setItem(
-
-"pdf_last_rotation_"+pdfFile,
-
-rotation
-
-);
-
-}
-
-function restoreReadingProgress(){
-
-const savedPage = parseInt(
-
-localStorage.getItem(
-
-"pdf_last_page_"+pdfFile
-
-)
-
-);
-
-const savedZoom = parseFloat(
-
-localStorage.getItem(
-
-"pdf_last_zoom_"+pdfFile
-
-)
-
-);
-
-const savedRotation = parseInt(
-
-localStorage.getItem(
-
-"pdf_last_rotation_"+pdfFile
-
-)
-
-);
-
-if(savedPage){
-
-currentPage = savedPage;
-
-}
-
-if(savedZoom){
-
-zoom = savedZoom;
-
-}
-
-if(savedRotation){
-
-rotation = savedRotation;
-
-}
-
-}
-
-setInterval(saveReadingProgress,1000);
-
-window.addEventListener(
-
-"beforeunload",
-
-saveReadingProgress
-
-);
-
-document.addEventListener(
-
-"contextmenu",
-
-function(e){
-
-e.preventDefault();
-
-showToast("Right Click Disabled");
-
-}
-
-);
-
-document.addEventListener(
-
-"copy",
-
-function(e){
-
-e.preventDefault();
-
-showToast("Copy Disabled");
-
-}
-
-);
-
-document.addEventListener(
-
-"cut",
-
-function(e){
-
-e.preventDefault();
-
-showToast("Cut Disabled");
-
-}
-
-);
-
-document.addEventListener(
-
-"dragstart",
-
-function(e){
-
-e.preventDefault();
-
-}
-
-);
-
-document.addEventListener(
-    "selectstart",
-    function(e){
-
-        if(e.target.tagName != "INPUT"){
-            e.preventDefault();
-        }
+        scale=parseFloat(this.value);
 
     }
-);
 
-window.addEventListener(
-
-"blur",
-
-function(){
-
-showToast(
-
-"Viewer Inactive"
-
-);
-
-}
-
-);
-
-window.addEventListener(
-
-"focus",
-
-function(){
-
-showToast(
-
-"Welcome Back"
-
-);
-
-}
-
-);
-
-function updateTitle(){
-
-document.title =
-
-"Page "+
-
-currentPage+
-
-" / "+
-
-totalPages+
-
-" - Bihar Student Portal";
-
-}
-
-setInterval(
-
-updateTitle,
-
-500
-
-);
-
-document
-
-.getElementById("bookmarkBtn")
-
-.onclick=function(){
-
-localStorage.setItem(
-
-"bookmark_"+pdfFile,
-
-currentPage
-
-);
-
-showToast(
-
-"Bookmark Saved"
-
-);
+    renderPage(pageNum);
 
 };
 
-function openBookmark(){
+/* Download */
 
-const page=
+document.getElementById("downloadBtn").onclick=function(){
 
-parseInt(
+    const a=document.createElement("a");
 
-localStorage.getItem(
+    a.href=pdfFile;
 
-"bookmark_"+pdfFile
+    a.download=pdfFile.split("/").pop();
 
-)
-
-);
-
-if(page){
-
-currentPage=page;
-
-renderPage(currentPage);
-
-showToast(
-
-"Bookmark Opened"
-
-);
-
-}
-
-}
-
-document
-
-.getElementById("openOutline")
-
-.onclick=function(){
-
-openBookmark();
+    a.click();
 
 };
 
-document
-
-.getElementById("fitWidthBtn")
-
-.onclick=function(){
-
-zoom=
-
-viewerContainer.clientWidth/
-
-canvas.width;
-
-renderPage(currentPage);
-
-};
-
-document
-
-.getElementById("fitPageBtn")
-
-.onclick=function(){
-
-zoom=Math.min(
-
-viewerContainer.clientWidth/
-
-canvas.width,
-
-viewerContainer.clientHeight/
-
-canvas.height
-
-);
-
-renderPage(currentPage);
-
-};
-
-let readingSeconds=0;
-
-setInterval(function(){
-
-readingSeconds++;
-
-},1000);
-
-window.addEventListener(
-
-"beforeunload",
-
-function(){
-
-localStorage.setItem(
-
-"reading_time_"+pdfFile,
-
-readingSeconds
-
-);
-
-}
-
-);
-
-restoreReadingProgress();
-
-showToast(
-
-"PDF Viewer Ready"
-
-);
-
-function hideLoading(){
-
-loadingScreen.style.display="none";
-
-}
-
-window.addEventListener(
-
-"load",
-
-function(){
-
-setTimeout(
-
-hideLoading,
-
-500
-
-);
-
-}
-
-);
-
-window.addEventListener(
-
-"resize",
-
-function(){
-
-renderPage(currentPage);
-
-}
-
-);
-
-function formatTime(seconds){
-
-const h=Math.floor(seconds/3600);
-
-const m=Math.floor((seconds%3600)/60);
-
-const s=Math.floor(seconds%60);
-
-return (
-
-String(h).padStart(2,"0")
-
-+":"
-
-+
-
-String(m).padStart(2,"0")
-
-+":"
-
-+
-
-String(s).padStart(2,"0")
-
-);
-
-}
-
-setInterval(function(){
-
-document.title=
-
-"📄 "+currentPage+
-
-"/"+totalPages+
-
-" | "+
-
-formatTime(readingSeconds);
-
-},1000);
-
-console.log(
-
-"%c Bihar Student Portal",
-
-"font-size:22px;color:#2563eb;font-weight:bold"
-
-);
-
-console.log(
-
-"%c Professional PDF Viewer Loaded",
-
-"font-size:14px;color:#22c55e"
-
-);
-
-console.log(
-
-"%c Developed for Educational Purpose",
-
-"font-size:13px;color:#facc15"
-
-);
-
-document.addEventListener(
-
-"visibilitychange",
-
-function(){
-
-if(document.hidden){
-
-showToast("Viewer Paused");
-
-}else{
-
-showToast("Viewer Active");
-
-}
-
-}
-
-);
-
-viewerContainer.addEventListener(
-
-"scroll",
-
-function(){
-
-const top=
-
-viewerContainer.scrollTop;
-
-const height=
-
-viewerContainer.scrollHeight-
-
-viewerContainer.clientHeight;
-
-if(height>0){
-
-const progress=
-
-Math.round(
-
-(top/height)*100
-
-);
-
-console.log(
-
-"Reading Progress : "+
-
-progress+"%"
-
-);
-
-}
-
-}
-
-);
-
-window.onerror=function(){
-
-showToast(
-
-"Unexpected Error"
-
-);
-
-};
-
-window.onoffline=function(){
-
-showToast(
-
-"No Internet Connection"
-
-);
-
-};
-
-window.ononline=function(){
-
-showToast(
-
-"Internet Connected"
-
-);
-
-};
-
-if(
-
-"serviceWorker"
-
-in navigator
-
-){
-
-navigator.serviceWorker
-
-.getRegistrations()
-
-.then(function(){});
-
-}
-
-const version="1.0.0";
-
-console.log(
-
-"Viewer Version : "+version
-
-);
-
-showToast(
-
-"Welcome to Bihar Student Portal PDF Viewer",
-
-2500
-
-);
+loadPDF();
 
 </script>
-
 </body>
-
 </html>
