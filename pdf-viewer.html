@@ -1883,21 +1883,14 @@ e.preventDefault();
 );
 
 document.addEventListener(
+    "selectstart",
+    function(e){
 
-"selectstart",
+        if(e.target.tagName != "INPUT"){
+            e.preventDefault();
+        }
 
-function(e){
-
-if(
-
-e.target.tagName!="INPUT"
-
-){
-
-e.preventDefault();
-
-}
-
+    }
 );
 
 window.addEventListener(
