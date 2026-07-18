@@ -971,32 +971,40 @@ document.getElementById("infoCard");
 const infoText =
 document.getElementById("pdfInformation");
 
-async function loadPDF(){
+async function loadPDF() {
+    try {
 
-toast.style.display="block";
+        toast.style.display = "block";
+        toast.innerHTML = "Loading PDF...";
 
-toast.innerHTML="Loading PDF...";
+        pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
 
-pdfDoc =
-await pdfjsLib.getDocument(pdfFile).promise;
+        totalPages = pdfDoc.numPages;
 
-totalPages =
-pdfDoc.numPages;
+        pageCount.innerHTML = totalPages;
+        gotoPage.max = totalPages;
 
-pageCount.innerHTML =
-totalPages;
+        loadingScreen.style.display = "none";
 
-gotoPage.max =
-totalPages;
+        await renderPage(currentPage);
 
-loadingScreen.style.display="none";
+        infoText.innerHTML =
+            "Pages : " + totalPages + "<br>File : " + pdfFile;
 
-renderPage(currentPage);
+        toast.style.display = "none";
 
-infoText.innerHTML=
-"Pages : "+totalPages+"<br>File : "+pdfFile;
+    } catch (error) {
+
+        console.error(error);
+
+        loadingScreen.style.display = "none";
+
+        toast.style.display = "block";
+        toast.innerHTML = "❌ PDF Load Failed";
+
+        alert("PDF Load Failed!\n\nFile: " + pdfFile + "\n\n" + error.message);
+    }
 }
-
 async function renderPage(pageNumberValue){
 
 if(renderTask){
