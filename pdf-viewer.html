@@ -1,420 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Viewer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background-color: #1e1e1e; color: #fff; }
+    
+    .header {
+      height: 60px;
+      background: #2d2d2d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: fixed;
+      top: 0; width: 100%; z-index: 100;
+    }
+    .title { font-size: 18px; font-weight: bold; }
+    
+    .btn-download {
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .btn-download:hover { background: #0056b3; }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>Bihar Student Portal PDF Viewer</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-background:#0f172a;
-color:#fff;
-height:100vh;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-/* ---------- Header ---------- */
-
-header{
-height:65px;
-background:#111827;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 15px;
-border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.logo{
-display:flex;
-align-items:center;
-gap:10px;
-font-size:18px;
-font-weight:bold;
-}
-
-.logo span{
-width:42px;
-height:42px;
-background:#2563eb;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:20px;
-}
-
-.controls{
-display:flex;
-align-items:center;
-gap:8px;
-flex-wrap:wrap;
-}
-
-button,
-select{
-height:40px;
-border:none;
-outline:none;
-border-radius:10px;
-padding:0 14px;
-background:#1e293b;
-color:#fff;
-cursor:pointer;
-font-size:14px;
-}
-
-button:hover,
-select:hover{
-background:#2563eb;
-}
-
-/* ---------- Viewer ---------- */
-
-#viewer{
-flex:1;
-overflow:auto;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-padding:20px;
-background:#0b1220;
-}
-
-canvas{
-background:#fff;
-box-shadow:0 0 25px rgba(0,0,0,.45);
-border-radius:8px;
-margin-bottom:30px;
-max-width:100%;
-}
-
-/* ---------- Footer ---------- */
-
-footer{
-height:70px;
-background:#111827;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 15px;
-border-top:1px solid rgba(255,255,255,.08);
-}
-
-.pageInfo{
-font-size:15px;
-font-weight:bold;
-}
-
-.downloadBtn{
-background:#16a34a;
-font-weight:bold;
-}
-
-.downloadBtn:hover{
-background:#15803d;
-}
-
-/* ---------- Loading ---------- */
-
-#loading{
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:#08101f;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-}
-
-.loader{
-width:60px;
-height:60px;
-border-radius:50%;
-border:6px solid rgba(255,255,255,.15);
-border-top:6px solid #2563eb;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-100%{
-transform:rotate(360deg);
-}
-}
-
-/* ---------- Mobile ---------- */
-
-@media(max-width:768px){
-
-header{
-height:auto;
-padding:12px;
-flex-direction:column;
-align-items:flex-start;
-gap:12px;
-}
-
-.controls{
-width:100%;
-overflow:auto;
-padding-bottom:5px;
-}
-
-footer{
-flex-direction:column;
-height:auto;
-gap:10px;
-padding:12px;
-}
-
-}
-
-</style>
-
+    .pdf-container {
+      margin-top: 60px;
+      height: calc(100vh - 60px);
+      width: 100%;
+    }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
 </head>
-
 <body>
 
-<div id="loading">
-<div class="loader"></div>
-</div>
+  <div class="header">
+    <div class="title" id="pdfTitle">Document Viewer</div>
+    <a id="downloadBtn" class="btn-download" href="integrationone.pdf" download>Download PDF</a>
+  </div>
 
-<header>
+  <div class="pdf-container">
+    <iframe id="pdfFrame" src=""></iframe>
+  </div>
 
-<div class="logo">
-<span>📘</span>
-<div>
-<div>Bihar Student Portal</div>
-<small>Professional PDF Viewer</small>
-</div>
-</div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const pdfUrl = urlParams.get('file');
 
-<div class="controls">
-
-<button id="prevBtn">◀</button>
-
-<div id="pageText">
-1 / 1
-</div>
-
-<button id="nextBtn">▶</button>
-
-<select id="zoomSelect">
-<option value="auto">Original Size</option>
-<option value="0.5">50%</option>
-<option value="0.75">75%</option>
-<option value="1" selected>100%</option>
-<option value="1.25">125%</option>
-<option value="1.5">150%</option>
-<option value="2">200%</option>
-<option value="3">300%</option>
-<option value="fitWidth">Fit Width</option>
-<option value="fitPage">Fit Page</option>
-</select>
-
-</div>
-
-</header>
-
-<div id="viewer">
-<canvas id="pdfCanvas"></canvas>
-</div>
-
-<footer>
-
-<div class="pageInfo">
-Page <span id="pageNo">1</span> of <span id="pageCount">0</span>
-</div>
-
-<button class="downloadBtn" id="downloadBtn">
-⬇ Download PDF
-</button>
-
-</footer>
-
-<script>
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
-
-const canvas = document.getElementById("pdfCanvas");
-const ctx = canvas.getContext("2d");
-
-const pageNo = document.getElementById("pageNo");
-const pageCount = document.getElementById("pageCount");
-const pageText = document.getElementById("pageText");
-const zoomSelect = document.getElementById("zoomSelect");
-const loading = document.getElementById("loading");
-
-const pdfFile =
-new URLSearchParams(location.search).get("file");
-
-let pdf = null;
-let pageNum = 1;
-let scale = 1;
-let rendering = false;
-
-async function loadPDF(){
-
-    if(!pdfFile){
-        loading.style.display="none";
-        alert("PDF file not found.");
-        return;
+    if (pdfUrl) {
+      const viewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
+      document.getElementById('pdfFrame').src = viewerUrl;
+      document.getElementById('downloadBtn').href = pdfUrl;
+      
+      const fileName = pdfUrl.split('/').pop();
+      document.getElementById('pdfTitle').innerText = fileName;
+    } else {
+      document.body.innerHTML = "<h2 style='text-align:center; padding-top:100px;'>No PDF file specified.</h2>";
     }
+  </script>
 
-    try{
-
-        pdf =
-        await pdfjsLib.getDocument(pdfFile).promise;
-
-        pageCount.textContent = pdf.numPages;
-
-        loading.style.display="none";
-
-        renderPage(pageNum);
-
-    }catch(err){
-
-        loading.style.display="none";
-
-        alert("Unable to load PDF.\n\n"+err.message);
-
-    }
-
-}
-
-async function renderPage(num){
-
-    if(rendering) return;
-
-    rendering=true;
-
-    const page =
-    await pdf.getPage(num);
-
-    let viewport =
-    page.getViewport({scale:scale});
-
-    if(zoomSelect.value=="fitWidth"){
-
-        scale =
-        document.getElementById("viewer").clientWidth /
-        viewport.width;
-
-        viewport =
-        page.getViewport({scale:scale});
-
-    }
-
-    if(zoomSelect.value=="fitPage"){
-
-        scale =
-        Math.min(
-        document.getElementById("viewer").clientWidth/viewport.width,
-        document.getElementById("viewer").clientHeight/viewport.height
-        );
-
-        viewport =
-        page.getViewport({scale:scale});
-
-    }
-
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-
-    await page.render({
-
-        canvasContext:ctx,
-        viewport:viewport
-
-    }).promise;
-
-    pageNo.textContent=num;
-    pageText.innerHTML=num+" / "+pdf.numPages;
-
-    rendering=false;
-
-}
-
-/* Previous */
-
-document.getElementById("prevBtn").onclick=()=>{
-
-    if(pageNum>1){
-
-        pageNum--;
-
-        renderPage(pageNum);
-
-    }
-
-};
-
-/* Next */
-
-document.getElementById("nextBtn").onclick=()=>{
-
-    if(pageNum<pdf.numPages){
-
-        pageNum++;
-
-        renderPage(pageNum);
-
-    }
-
-};
-
-/* Zoom */
-
-zoomSelect.onchange=function(){
-
-    if(this.value=="auto"){
-
-        scale=1;
-
-    }else if(this.value!="fitWidth" && this.value!="fitPage"){
-
-        scale=parseFloat(this.value);
-
-    }
-
-    renderPage(pageNum);
-
-};
-
-/* Download */
-
-document.getElementById("downloadBtn").onclick=function(){
-
-    const a=document.createElement("a");
-
-    a.href=pdfFile;
-
-    a.download=pdfFile.split("/").pop();
-
-    a.click();
-
-};
-
-loadPDF();
-
-</script>
 </body>
 </html>
+
